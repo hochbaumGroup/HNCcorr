@@ -1,0 +1,13 @@
+language: python
+python:
+  - "3.6"
+cache:
+  pip: true
+install:
+  - pip install -r requirements.txt
+  - pip install .
+script:
+  # - pylint --rcfile=.pylintrc src/nytaximdp
+  # - pydocstyle src/ --explain
+  - pycodestyle src/ tests/
+  - pytest
