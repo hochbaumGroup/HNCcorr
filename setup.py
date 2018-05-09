@@ -13,7 +13,7 @@ def license():
         return f.read()
 
 
-setup(name=NAME,
+setup(name='HNCcorr',
       version='0.1dev',
       classifiers=[
           'Development Status :: 3 - Alpha',
@@ -21,15 +21,15 @@ setup(name=NAME,
           'Programming Language :: Python :: 3.5',
       ],
       description=None,
-      keywords=None,
-      url=None,
+      keywords=['Cell detection', 'Neuroscience', 'Calcium imaging'],
+      url='https://github.com/quic0/HNCcorr-python',
       author='Quico Spaen',
       author_email='qspaen@berkeley.edu',
       license=license(),
       long_description=readme(),
       packages=find_packages('src'),
       package_dir={'': 'src'},
-      install_requires=[],  # required packages here
+      install_requires=['numpy'],  # required packages here
       setup_requires=['pytest-runner', ],
       tests_require=['pytest', 'mock'],
       zip_safe=False
