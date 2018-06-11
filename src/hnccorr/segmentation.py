@@ -20,7 +20,8 @@ class Segmentations(object):
         for s in self._segmentations:
             print(len(s.selection))
         return [
-            s for s in self._segmentations
+            s
+            for s in self._segmentations
             if self._min_size <= len(s.selection) <= self._max_size
         ]
 
@@ -30,13 +31,11 @@ class Segmentations(object):
         if len(candidates) == 0:
             return None
         size = np.array([len(c.selection) for c in candidates])
-        best_index = np.argmin(np.abs(np.sqrt(size) - np.sqrt(self._pref_size)))
+        best_index = np.argmin(
+            np.abs(np.sqrt(size) - np.sqrt(self._pref_size))
+        )
 
         return candidates[best_index]
-
-
-
-
 
 
 class Segmentation(object):
@@ -60,16 +59,16 @@ class Segmentation(object):
     def _select_largest_component(self):
         shape = self._patch.shape
         n = np.product(shape)
-        zero_tuple = (0, ) * len(shape)
+        zero_tuple = (0,) * len(shape)
 
         def tuple_add(x, y):
             return tuple(i + j for i, j in zip(x, y))
 
-        max_tuple = tuple_add(shape, (-1, ) * len(shape))
+        max_tuple = tuple_add(shape, (-1,) * len(shape))
 
         def neighborhood(num_dims):
             for dim, change in product(range(num_dims), (-1, 1)):
-                shift = [0, ] * num_dims
+                shift = [0] * num_dims
                 shift[dim] = change
                 yield shift
 
@@ -86,8 +85,7 @@ class Segmentation(object):
         components = list(nx.connected_components(G))
 
         overlap = [
-            len(c.intersection(self._patch.positive_seeds))
-            for c in components
+            len(c.intersection(self._patch.positive_seeds)) for c in components
         ]
 
         best_component = components[np.argmax(overlap)]

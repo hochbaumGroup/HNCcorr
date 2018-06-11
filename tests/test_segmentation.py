@@ -15,14 +15,18 @@ def P():
 def S1(P):
     from hnccorr.segmentation import Segmentation
 
-    return Segmentation(P, set([(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)]), 0.5)
+    return Segmentation(
+        P,
+        set([(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)]),
+        0.5,
+    )
 
 
 @pytest.fixture
 def S2(P):
     from hnccorr.segmentation import Segmentation
 
-    return Segmentation(P, set([(1, 0), ]), 0.5)
+    return Segmentation(P, set([(1, 0)]), 0.5)
 
 
 @pytest.fixture
@@ -34,7 +38,19 @@ def SS(S1, S2):
 
 def test_segmentation_clean(S1):
     S1.clean()
-    assert S1.selection == set([(0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)])
+    assert S1.selection == set(
+        [
+            (0, 0),
+            (1, 0),
+            (2, 0),
+            (0, 1),
+            (1, 1),
+            (2, 1),
+            (0, 2),
+            (1, 2),
+            (2, 2),
+        ]
+    )
 
 
 def test_segmentations_clean(SS, S1):
