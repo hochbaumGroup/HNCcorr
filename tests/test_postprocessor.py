@@ -1,4 +1,6 @@
 import pytest
+# Temporary hardcopy from segmentation
+# TODO: Creat fixture file
 
 
 @pytest.fixture
@@ -22,18 +24,19 @@ def S1(P):
     )
 
 
-def test_segmentation_clean(S1):
-    S1.clean()
-    assert S1.selection == set(
-        [
-            (0, 0),
-            (1, 0),
-            (2, 0),
-            (0, 1),
-            (1, 1),
-            (2, 1),
-            (0, 2),
-            (1, 2),
-            (2, 2),
-        ]
-    )
+@pytest.fixture
+def S2(P):
+    from hnccorr.segmentation import Segmentation
+
+    return Segmentation(P, set([(1, 0)]), 0.5)
+
+
+@pytest.fixture
+def PP():
+    from hnccorr.postprocessor import SizePostprocessor
+
+    return SizePostprocessor(2, 10, 3)
+
+
+def test_size_postprocessor_select(PP, S1, S2):
+    assert PP.select([S1, S2]).weight == S1.weight
