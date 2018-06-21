@@ -4,40 +4,6 @@ from scipy.ndimage.morphology import binary_fill_holes
 from itertools import product
 
 
-class Segmentations(object):
-    def __init__(self, segmentations, min_size, max_size, pref_size):
-        self._segmentations = segmentations
-        self._min_size = min_size
-        self._max_size = max_size
-        self._pref_size = pref_size
-
-    def clean(self):
-        """Keep largest component and fill holes"""
-        for s in self._segmentations:
-            s.clean()
-
-    def _filter(self):
-        for s in self._segmentations:
-            print(len(s.selection))
-        return [
-            s
-            for s in self._segmentations
-            if self._min_size <= len(s.selection) <= self._max_size
-        ]
-
-    def select(self):
-        """Select best candidate segmentation"""
-        candidates = self._filter()
-        if len(candidates) == 0:
-            return None
-        size = np.array([len(c.selection) for c in candidates])
-        best_index = np.argmin(
-            np.abs(np.sqrt(size) - np.sqrt(self._pref_size))
-        )
-
-        return candidates[best_index]
-
-
 class Segmentation(object):
     def __init__(self, patch, selection, weight):
         self._patch = patch
