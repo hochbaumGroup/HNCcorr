@@ -79,6 +79,16 @@ class Movie(object):
         """Access data directly from underlying numpy array"""
         return self._data.__getitem__(key)
 
+    def is_valid_pixel_index(self, index):
+        if self.num_dimensions == len(index):
+            zero_tuple = (0, ) * self.num_dimensions
+            for i, l, u in zip(index, zero_tuple, self.pixel_size):
+                if i < l or i >= u:
+                    return False
+            return True
+        else:
+            return False
+
     @property
     def pixel_size(self):
         return self.data_size[1:]

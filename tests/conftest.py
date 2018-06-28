@@ -18,6 +18,9 @@ def MM():
             A[2, :] = np.arange(10) / 10
             return A.__getitem__(key)
 
+        def is_valid_pixel_index(self, index):
+            return index[0] >= 0 and index[0] < 10
+
     return MockMovie()
 
 
