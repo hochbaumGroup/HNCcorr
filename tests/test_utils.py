@@ -11,3 +11,8 @@ def test_add_set_offset():
         (2, 3),
         (3, 3),
     }
+
+def test_add_time_index():
+    from hnccorr.utils import add_time_index
+
+    assert add_time_index((5, 4)) == (slice(None, None), 5, 4)
