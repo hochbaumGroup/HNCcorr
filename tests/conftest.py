@@ -2,6 +2,29 @@ import pytest
 
 
 @pytest.fixture
+def MM():
+    import numpy as np
+
+    class MockMovie:
+        def __getitem__(self, key):
+            A = np.zeros((3, 10))
+            A[0, :] = 1
+            A[1, :] = -1
+            A[2, :] = np.arange(10) / 10
+            return A.__getitem__(key)
+
+        @property
+        def pixel_size(self):
+            return (10, )
+
+        @property
+        def num_frames(self):
+            return 3
+
+    return MockMovie()
+
+
+@pytest.fixture
 def P():
     class Mock_Patch(object):
         def __init__(self):
