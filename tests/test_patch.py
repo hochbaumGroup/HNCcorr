@@ -26,6 +26,7 @@ def test_patch(P, MM):
     assert P.pixel_size == (7, )
     assert P.num_frames == 3
     assert P.positive_seeds == set([(2, ), (3, ), (4,)])
+    assert P.coordinate_offset == (2,)
 
     np.testing.assert_equal(P[:], MM[:, 2:9])
 
