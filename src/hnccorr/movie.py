@@ -86,3 +86,7 @@ class Movie(object):
     @property
     def num_pixels(self):
         return np.product(self.data_size[1:])
+
+    @property
+    def num_dimensions(self):
+        return len(self.data_size[1:])
