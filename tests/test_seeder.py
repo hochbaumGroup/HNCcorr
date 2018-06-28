@@ -1,5 +1,7 @@
 import pytest
 
+from hnccorr.utils import add_offset_set_coordinates
+
 
 @pytest.fixture
 def LCS(MM):
@@ -10,9 +12,13 @@ def LCS(MM):
 
 def test_local_corr_seeder(LCS):
     patch = LCS.next()
-    assert patch.positive_seeds == set([(0,), (1,)])
+    assert add_offset_set_coordinates(
+        patch.positive_seeds, patch.coordinate_offset
+    ) == set([(8,), (9,)])
 
     patch = LCS.next()
-    assert patch.positive_seeds == set([(0,), (1,), (2,)])
+    assert add_offset_set_coordinates(
+        patch.positive_seeds, patch.coordinate_offset
+    ) == set([(7,), (8,), (9,)])
 
     assert LCS.next() is None
