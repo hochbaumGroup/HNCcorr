@@ -2,23 +2,22 @@ from itertools import product
 import numpy as np
 
 from hnccorr.utils import add_offset_set_coordinates, add_time_index
-from hnccorr.patch import Patch
 
 
 class LocalCorrelationSeeder(object):
     def __init__(
         self,
         movie,
+        patch_factory,
         neighborhood_size=3,
         positive_seed_size=3,
         keep_fraction=0.4,
-        window_size=31,
     ):
         self._neighborhood_size = neighborhood_size
         self._positive_seed_size = positive_seed_size
         self._keep_fraction = keep_fraction
-        self._window_size = window_size
         self._movie = movie
+        self._patch_factory = patch_factory
 
         self._select_seeds()
 
@@ -87,7 +86,7 @@ class LocalCorrelationSeeder(object):
             for seed in positive_seeds
             if self._movie.is_valid_pixel_index(seed)
         }
-        return Patch(self._movie, seed, self._window_size, positive_seeds)
+        return self._patch_factory.construct(seed, positive_seeds)
 
     def next(self):
         if self._current_index < len(self._seeds):
