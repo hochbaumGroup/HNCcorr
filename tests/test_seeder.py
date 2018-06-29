@@ -7,7 +7,13 @@ from hnccorr.utils import add_offset_set_coordinates
 def LCS(MM):
     from hnccorr.seeder import LocalCorrelationSeeder
 
-    return LocalCorrelationSeeder(MM, 3, 3, 0.2)
+    return LocalCorrelationSeeder(
+        MM,
+        positive_seed_size=3,
+        neighborhood_size=3,
+        keep_fraction=0.2,
+        window_size=7,
+    )
 
 
 def test_local_corr_seeder(LCS):

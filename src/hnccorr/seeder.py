@@ -12,17 +12,19 @@ class LocalCorrelationSeeder(object):
         neighborhood_size=3,
         positive_seed_size=3,
         keep_fraction=0.4,
+        window_size=31,
     ):
-        self.neighborhood_size = neighborhood_size
-        self.positive_seed_size = positive_seed_size
-        self.keep_fraction = keep_fraction
+        self._neighborhood_size = neighborhood_size
+        self._positive_seed_size = positive_seed_size
+        self._keep_fraction = keep_fraction
+        self._window_size = window_size
         self._movie = movie
 
         self._select_seeds()
 
     def _select_seeds(self):
         # helpful constants
-        max_shift = int((self.neighborhood_size - 1) / 2)
+        max_shift = int((self._neighborhood_size - 1) / 2)
 
         # generate all offsets of neighbors
         neighbor_offsets = self._generate_offsets(max_shift)
@@ -59,7 +61,7 @@ class LocalCorrelationSeeder(object):
             mean_neighbor_corr, key=lambda x: x[1], reverse=True
         )
 
-        num_keep = int(self.keep_fraction * len(mean_neighbor_corr))
+        num_keep = int(self._keep_fraction * len(mean_neighbor_corr))
 
         # store best seeds
         self._seeds = [seed for seed, _ in mean_neighbor_corr[:num_keep]]
@@ -74,7 +76,7 @@ class LocalCorrelationSeeder(object):
 
     def _construct_patch(self, seed):
         # compute offsets for neighboring points
-        max_shift = int((self.positive_seed_size - 1) / 2)
+        max_shift = int((self._positive_seed_size - 1) / 2)
         offsets = self._generate_offsets(max_shift)
 
         # compute positive seeds
@@ -85,7 +87,7 @@ class LocalCorrelationSeeder(object):
             for seed in positive_seeds
             if self._movie.is_valid_pixel_index(seed)
         }
-        return Patch(self._movie, seed, 7, positive_seeds)
+        return Patch(self._movie, seed, self._window_size, positive_seeds)
 
     def next(self):
         if self._current_index < len(self._seeds):
