@@ -60,8 +60,7 @@ class Patch(object):
     def _movie_indices(self):
         """Compute movie index range of patch"""
         bottomright_coordinates = add_offset_coordinates(
-            self.coordinate_offset,
-            (self._window_size,) * self._num_dimensions,
+            self.coordinate_offset, (self._window_size,) * self._num_dimensions
         )
 
         idx = [slice(None, None)]

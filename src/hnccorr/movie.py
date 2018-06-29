@@ -17,10 +17,7 @@ class Movie(object):
         num_frames (int): Number of frames in movie
     """
 
-    def __init__(self,
-                 name,
-                 image_dir,
-                 num_images):
+    def __init__(self, name, image_dir, num_images):
         self.name = name
         self.num_frames = num_images
 
@@ -35,8 +32,8 @@ class Movie(object):
         Returns:
             list: Sorted list of paths of tiff files in folder.
         """
-        files_tif = glob.glob(os.path.join(folder, '*.tiff'))
-        files_tiff = glob.glob(os.path.join(folder, '*.tif'))
+        files_tif = glob.glob(os.path.join(folder, "*.tiff"))
+        files_tiff = glob.glob(os.path.join(folder, "*.tif"))
 
         # check if only one file extension is used
         assert len(files_tif) == 0 or len(files_tiff) == 0
@@ -61,13 +58,15 @@ class Movie(object):
         with Image.open(first_image) as im:
             meta = {TAGS[key]: im.tag[key] for key in im.tag}
 
-        if meta['BitsPerSample'][0] != 16:
-            raise ValueError('Only 16 bit images are currently supported')
+        if meta["BitsPerSample"][0] != 16:
+            raise ValueError("Only 16 bit images are currently supported")
 
         # set size of data
-        self.data_size = (len(images),
-                          meta['ImageLength'][0],
-                          meta['ImageWidth'][0])
+        self.data_size = (
+            len(images),
+            meta["ImageLength"][0],
+            meta["ImageWidth"][0],
+        )
 
         self._data = np.zeros(self.data_size, np.uint16)
 
@@ -81,7 +80,7 @@ class Movie(object):
 
     def is_valid_pixel_index(self, index):
         if self.num_dimensions == len(index):
-            zero_tuple = (0, ) * self.num_dimensions
+            zero_tuple = (0,) * self.num_dimensions
             for i, l, u in zip(index, zero_tuple, self.pixel_size):
                 if i < l or i >= u:
                     return False
