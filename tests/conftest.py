@@ -29,7 +29,7 @@ def P():
     class Mock_Patch(object):
         def __init__(self):
             self.shape = (5, 5)
-            self.positive_seeds = set([(1, 0)])
+            self.positive_seeds = {(1, 0)}
 
     return Mock_Patch()
 
@@ -40,7 +40,7 @@ def S1(P):
 
     return Segmentation(
         P,
-        set([(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)]),
+        {(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)},
         0.5,
     )
 
@@ -49,7 +49,7 @@ def S1(P):
 def S2(P):
     from hnccorr.segmentation import Segmentation
 
-    return Segmentation(P, set([(1, 0)]), 0.5)
+    return Segmentation(P, {(1, 0)}, 0.5)
 
 
 @pytest.fixture

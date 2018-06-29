@@ -30,6 +30,7 @@ def test_movie_init(M):
     assert M.data_size == (3, 5, 10)
     assert M.pixel_size == (5, 10)
 
+
 def test_is_valid_pixel_index(M):
     assert not M.is_valid_pixel_index((0, -1))
     assert not M.is_valid_pixel_index((4, 11))

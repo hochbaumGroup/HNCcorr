@@ -20,11 +20,11 @@ def test_local_corr_seeder(LCS):
     patch = LCS.next()
     assert add_offset_set_coordinates(
         patch.positive_seeds, patch.coordinate_offset
-    ) == set([(8,), (9,)])
+    ) == {(8,), (9,)}
 
     patch = LCS.next()
     assert add_offset_set_coordinates(
         patch.positive_seeds, patch.coordinate_offset
-    ) == set([(7,), (8,), (9,)])
+    ) == {(7,), (8,), (9,)}
 
     assert LCS.next() is None
