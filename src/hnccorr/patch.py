@@ -22,8 +22,12 @@ class Patch(object):
         self.positive_seeds = add_offset_set_coordinates(
             positive_seeds, offset
         )
+        self.negative_seeds = self._select_negative_seeds()
 
         self._data = self._movie[self._movie_indices()]
+
+    def _select_negative_seeds(self):
+        pass
 
     def _compute_coordinate_offset(self):
         half_width = int((self._window_size - 1) / 2)
