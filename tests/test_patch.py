@@ -20,7 +20,7 @@ def PF(MM):
 def P_boundary_max(MM):
     from hnccorr.patch import Patch
 
-    return Patch(MM, (9,), 7, 2, {(8,), (9,)})
+    return Patch(MM, (9,), 7, 3, {(8,), (9,)})
 
 
 @pytest.fixture
@@ -50,6 +50,7 @@ def test_patch_boundary(P_boundary_min, P_boundary_max, MM):
     assert P_boundary_max.pixel_size == (7,)
     assert P_boundary_max.num_frames == 3
     assert P_boundary_max.positive_seeds == {(5,), (6,)}
+    assert P_boundary_max.negative_seeds == {(3,)}
 
     np.testing.assert_equal(P_boundary_max[:], MM[:, 3:])
 
