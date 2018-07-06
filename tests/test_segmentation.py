@@ -1,18 +1,17 @@
 import pytest
 
 
-def test_weight(S, SS1):
-    assert S(SS1).weight == 0.5
+def test_weight(S1):
+    assert S1.weight == 0.5
 
 
-def test_selection(S, SS1):
-    assert S(SS1).selection == SS1
+def test_selection(S1, SS1):
+    assert S1.selection == SS1
 
 
-def test_clean(S, SS1):
-    segmentation = S(SS1)
-    segmentation.clean()
-    assert segmentation.selection == {
+def test_clean(S1):
+    S1.clean()
+    assert S1.selection == {
         (0, 0),
         (1, 0),
         (2, 0),

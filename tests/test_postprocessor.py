@@ -8,8 +8,31 @@ def PP():
     return SizePostprocessor(2, 10, 3)
 
 
-def test_size_postprocessor_select(PP, S, SS1, S2):
-    S1 = S(SS1)
+@pytest.fixture
+def S2(S):
+    return S({(1, 0)})
+
+
+@pytest.fixture
+def S3(S):
+    return S(
+        {
+            (0, 0),
+            (1, 0),
+            (2, 0),
+            (0, 1),
+            (2, 1),
+            (0, 2),
+            (1, 2),
+            (2, 2),
+            (3, 0),
+            (3, 1),
+            (3, 2),
+        }
+    )
+
+
+def test_size_postprocessor_select(PP, S1, S2):
     assert PP.select([S1, S2]) == S1
 
 
