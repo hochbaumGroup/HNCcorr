@@ -1,5 +1,3 @@
-import glob
-import os
 import numpy as np
 from PIL import Image
 from PIL.TiffTags import TAGS
