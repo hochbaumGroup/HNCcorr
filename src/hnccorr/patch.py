@@ -1,4 +1,3 @@
-from itertools import product
 import numpy as np
 
 from hnccorr.utils import (
@@ -51,7 +50,7 @@ class Patch(object):
             and self.positive_seeds == other.positive_seeds
             and self.negative_seeds == other.negative_seeds
             and self.coordinate_offset == other.coordinate_offset
-        )
+        )  # pylint: disable=W0212
 
     def _select_negative_seeds(self):
         dist = np.zeros(

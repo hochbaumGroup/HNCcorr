@@ -17,7 +17,7 @@ class SizePostprocessor(object):
     def select(self, segmentations):
         """Select best candidate segmentation"""
         candidates = self._filter(segmentations)
-        if len(candidates) == 0:
+        if not candidates:
             return None
         size = np.array([len(c.selection) for c in candidates])
         best_index = np.argmin(

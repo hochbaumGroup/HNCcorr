@@ -39,8 +39,8 @@ class Movie(object):
 
         # read image meta data
         first_image = images[0]
-        with Image.open(first_image) as im:
-            meta = {TAGS[key]: im.tag[key] for key in im.tag}
+        with Image.open(first_image) as image:
+            meta = {TAGS[key]: image.tag[key] for key in image.tag}
 
         # set size of data
         self.data_size = (
@@ -52,8 +52,8 @@ class Movie(object):
         self._data = np.zeros(self.data_size, np.uint16)
 
         for i, filename in enumerate(images):
-            with Image.open(filename) as im:
-                self._data[i, :, :] = np.array(im)
+            with Image.open(filename) as image:
+                self._data[i, :, :] = np.array(image)
 
     def __getitem__(self, key):
         """Access data directly from underlying numpy array"""
@@ -62,12 +62,11 @@ class Movie(object):
     def is_valid_pixel_index(self, index):
         if self.num_dimensions == len(index):
             zero_tuple = (0,) * self.num_dimensions
-            for i, l, u in zip(index, zero_tuple, self.pixel_size):
-                if i < l or i >= u:
+            for i, lower, upper in zip(index, zero_tuple, self.pixel_size):
+                if i < lower or i >= upper:
                     return False
             return True
-        else:
-            return False
+        return False
 
     @property
     def pixel_size(self):

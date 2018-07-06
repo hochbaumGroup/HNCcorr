@@ -1,19 +1,19 @@
 import glob
 import os
+from itertools import product
 import numpy as np
 from scipy.ndimage.morphology import binary_fill_holes
 import networkx as nx
-from itertools import product
 
 
-def add_offset_set_coordinates(x, offset):
+def add_offset_set_coordinates(iterable, offset):
     """Add offset to each coordinate in set"""
-    return set(add_offset_coordinates(c, offset) for c in x)
+    return set(add_offset_coordinates(c, offset) for c in iterable)
 
 
-def add_offset_coordinates(x, offset):
+def add_offset_coordinates(coordinates, offset):
     """Add offset"""
-    return tuple(a + b for a, b in zip(x, offset))
+    return tuple(a + b for a, b in zip(coordinates, offset))
 
 
 def add_time_index(index):
@@ -47,9 +47,6 @@ def fill_holes(selection, patch_shape):
 
 
 def select_max_seed_component(selection, seeds, num_dims):
-    def tuple_add(x, y):
-        return tuple(i + j for i, j in zip(x, y))
-
     def neighborhood(num_dims):
         for dim, change in product(range(num_dims), (-1, 1)):
             shift = [0] * num_dims
@@ -58,15 +55,15 @@ def select_max_seed_component(selection, seeds, num_dims):
 
     neighbors = tuple(neighborhood(num_dims))
 
-    G = nx.Graph()
-    G.add_nodes_from(selection)
+    graph = nx.Graph()
+    graph.add_nodes_from(selection)
 
     for index, shift in product(selection, neighbors):
-        neighbor = tuple_add(index, shift)
-        if neighbor in G:
-            G.add_edge(index, neighbor)
+        neighbor = tuple(map(lambda a, b: a + b, index, shift))
+        if neighbor in graph:
+            graph.add_edge(index, neighbor)
 
-    components = list(nx.connected_components(G))
+    components = list(nx.connected_components(graph))
 
     overlap = [len(c.intersection(seeds)) for c in components]
 

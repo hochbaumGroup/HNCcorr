@@ -90,5 +90,4 @@ class LocalCorrelationSeeder(object):
             self._current_index += 1
 
             return patch
-        else:
-            return None
+        return None
