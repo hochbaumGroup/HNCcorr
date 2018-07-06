@@ -65,17 +65,7 @@ def P2(MM2):
 
 
 @pytest.fixture
-def MP():
-    class MockPatch(object):
-        def __init__(self):
-            self.shape = (5, 5)
-            self.positive_seeds = {(1, 0)}
-
-    return MockPatch()
-
-
-@pytest.fixture
-def MPF(MM, MP):
+def MPF():
     class MockPatchFactory:
         def construct(self, center_seed, positive_seeds):
             return {
@@ -98,18 +88,18 @@ def S1(P2):
 
 
 @pytest.fixture
-def S2(MP):
+def S2(P2):
     from hnccorr.segmentation import Segmentation
 
-    return Segmentation(MP, {(1, 0)}, 0.5)
+    return Segmentation(P2, {(1, 0)}, 0.5)
 
 
 @pytest.fixture
-def S3(MP):
+def S3(P2):
     from hnccorr.segmentation import Segmentation
 
     return Segmentation(
-        MP,
+        P2,
         {
             (0, 0),
             (1, 0),
