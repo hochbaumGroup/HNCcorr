@@ -31,6 +31,40 @@ def MM():
 
 
 @pytest.fixture
+def MM2():
+    import numpy as np
+
+    class MockMovie:
+        def __init__(self):
+            self.num_dimensions = 2
+            self.num_frames = 1
+
+            self._A = np.zeros((1, 10, 10))
+            self.pixel_size = self._A.shape[1:]
+
+        def __getitem__(self, key):
+
+            return self._A.__getitem__(key)
+
+        def is_valid_pixel_index(self, index):
+            return (
+                index[0] >= 0
+                and index[0] < 10
+                and index[1] >= 0
+                and index[1] < 10
+            )
+
+    return MockMovie()
+
+
+@pytest.fixture
+def P2(MM2):
+    from hnccorr.patch import Patch
+
+    return Patch(MM2, (5, 5), 3, 2, {(1, 2)})
+
+
+@pytest.fixture
 def MP():
     class MockPatch(object):
         def __init__(self):
@@ -53,11 +87,11 @@ def MPF(MM, MP):
 
 
 @pytest.fixture
-def S1(MP):
+def S1(P2):
     from hnccorr.segmentation import Segmentation
 
     return Segmentation(
-        MP,
+        P2,
         {(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)},
         0.5,
     )

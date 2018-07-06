@@ -10,6 +10,8 @@ class Segmentation(object):
     def clean(self):
         """Remove left over points / fill holes"""
         self.selection = select_max_seed_component(
-            self.selection, self._patch.positive_seeds, len(self._patch.shape)
+            self.selection,
+            self._patch.positive_seeds,
+            len(self._patch.pixel_size),
         )
-        self.selection = fill_holes(self.selection, self._patch.shape)
+        self.selection = fill_holes(self.selection, self._patch.pixel_size)
