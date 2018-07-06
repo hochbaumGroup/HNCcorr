@@ -1,6 +1,10 @@
 import pytest
 
 
+def test_segmentation(S1):
+    assert S1.weight == 10
+
+
 def test_segmentation_clean(S1):
     S1.clean()
     assert S1.selection == {
