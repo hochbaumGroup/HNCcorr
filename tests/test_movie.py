@@ -46,6 +46,7 @@ def test_pixel_size(M):
 def test_is_valid_pixel_index(M):
     assert not M.is_valid_pixel_index((0, -1))
     assert not M.is_valid_pixel_index((4, 11))
+    assert not M.is_valid_pixel_index((4,))
     assert M.is_valid_pixel_index((4, 9))
 
 
