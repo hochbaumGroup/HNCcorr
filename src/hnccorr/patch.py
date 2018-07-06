@@ -1,7 +1,11 @@
 from itertools import product
 import numpy as np
 
-from hnccorr.utils import add_offset_coordinates, add_offset_set_coordinates
+from hnccorr.utils import (
+    add_offset_coordinates,
+    add_offset_set_coordinates,
+    eight_neighborhood,
+)
 
 
 class Patch(object):
@@ -53,9 +57,8 @@ class Patch(object):
             (2 * self._negative_seed_radius + 1,) * self._num_dimensions
         )
 
-        for coordinates in product(
-            range(-self._negative_seed_radius, self._negative_seed_radius + 1),
-            repeat=self._num_dimensions,
+        for coordinates in eight_neighborhood(
+            self._num_dimensions, self._negative_seed_radius
         ):
             coordinates = np.array(coordinates)
             index = coordinates + self._negative_seed_radius
