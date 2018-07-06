@@ -18,17 +18,10 @@ def PF(MM):
 
 
 @pytest.fixture
-def P_boundary_max(MM):
+def P_boundary(MM, request):
     from hnccorr.patch import Patch
 
-    return Patch(MM, (9,), 7, 3, {(8,), (9,)})
-
-
-@pytest.fixture
-def P_boundary_min(MM):
-    from hnccorr.patch import Patch
-
-    return Patch(MM, (1,), 7, 2, {(0,), (1,), (2,)})
+    return Patch(MM, request.param, 7, 3, {(5,)})
 
 
 def test_pixel_size(P):
@@ -44,27 +37,15 @@ def test_seeds(P):
     assert P.negative_seeds == {(1,), (5,)}
 
 
-def test_offset(P):
-    assert P.coordinate_offset == (2,)
-
-
 def test_data(P, MM):
     np.testing.assert_equal(P[:], MM[:, 2:9])
 
 
-def test_patch_boundary(P_boundary_min, P_boundary_max, MM):
-    assert P_boundary_min.pixel_size == (7,)
-    assert P_boundary_min.num_frames == 3
-    assert P_boundary_min.positive_seeds == {(0,), (1,), (2,)}
-
-    np.testing.assert_equal(P_boundary_min[:], MM[:, :7])
-
-    assert P_boundary_max.pixel_size == (7,)
-    assert P_boundary_max.num_frames == 3
-    assert P_boundary_max.positive_seeds == {(5,), (6,)}
-    assert P_boundary_max.negative_seeds == {(3,)}
-
-    np.testing.assert_equal(P_boundary_max[:], MM[:, 3:])
+@pytest.mark.parametrize(
+    "P_boundary, offset", ([(1,), (0,)], [(9,), (3,)]), indirect=["P_boundary"]
+)
+def test_offset(P_boundary, offset):
+    assert P_boundary.coordinate_offset == offset
 
 
 def test_patch_equal(P):
