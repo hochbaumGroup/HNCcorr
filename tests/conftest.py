@@ -65,15 +65,10 @@ def P2(MM2):
 
 
 @pytest.fixture
-def MPF():
-    class MockPatchFactory:
-        def construct(self, center_seed, positive_seeds):
-            return {
-                "center_seed": center_seed,
-                "positive_seeds": positive_seeds,
-            }
+def PF(MM):
+    from hnccorr.patch import PatchFactory
 
-    return MockPatchFactory()
+    return PatchFactory(MM, 7, 2)
 
 
 @pytest.fixture

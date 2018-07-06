@@ -20,13 +20,6 @@ def P1(P):
     return P((5,))
 
 
-@pytest.fixture
-def PF(MM):
-    from hnccorr.patch import PatchFactory
-
-    return PatchFactory(MM, 7, 2)
-
-
 def test_pixel_size(P1):
     assert P1.pixel_size == (7,)
 
