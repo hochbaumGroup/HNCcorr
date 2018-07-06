@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+from copy import copy, deepcopy
 
 
 @pytest.fixture
@@ -64,6 +65,11 @@ def test_patch_boundary(P_boundary_min, P_boundary_max, MM):
     assert P_boundary_max.negative_seeds == {(3,)}
 
     np.testing.assert_equal(P_boundary_max[:], MM[:, 3:])
+
+
+def test_patch_equal(P):
+    assert P == copy(P)
+    assert P != deepcopy(P)
 
 
 def test_patch_factory(PF, MM, P):
