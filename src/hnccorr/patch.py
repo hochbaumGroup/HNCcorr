@@ -5,6 +5,7 @@ from hnccorr.utils import (
     add_offset_coordinates,
     add_offset_set_coordinates,
     eight_neighborhood,
+    add_time_index,
 )
 
 
@@ -122,12 +123,12 @@ class Patch(object):
             self.coordinate_offset, (self._window_size,) * self._num_dimensions
         )
 
-        idx = [slice(None, None)]
+        idx = []
         for start, stop in zip(
             self.coordinate_offset, bottomright_coordinates
         ):
             idx.append(slice(start, stop))
-        return idx
+        return add_time_index(tuple(idx))
 
     def __getitem__(self, key):
         return self._data[key]
