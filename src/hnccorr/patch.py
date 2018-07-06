@@ -20,9 +20,6 @@ class Patch(object):
         negative_seed_radius,
         positive_seeds,
     ):
-        if window_size % 2 == 0:
-            raise ValueError("window_size (%d) should be an odd number.")
-
         self._num_dimensions = movie.num_dimensions
         self._window_size = window_size
         self._negative_seed_radius = negative_seed_radius
@@ -30,6 +27,9 @@ class Patch(object):
         self.pixel_size = (window_size,) * self._num_dimensions
         self.num_frames = movie.num_frames
         self._center_seed = center_seed
+
+        if window_size % 2 == 0:
+            raise ValueError("window_size (%d) should be an odd number.")
 
         self.coordinate_offset = self._compute_coordinate_offset()
 

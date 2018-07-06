@@ -20,6 +20,13 @@ def P1(P):
     return P((5,))
 
 
+def test_even_windowsize(MM, pos_seeds):
+    from hnccorr.patch import Patch
+
+    with pytest.raises(ValueError):
+        Patch(MM, (5,), 6, 2, pos_seeds)
+
+
 def test_pixel_size(P1):
     assert P1.pixel_size == (7,)
 
