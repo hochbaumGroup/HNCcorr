@@ -42,9 +42,6 @@ class Movie(object):
         with Image.open(first_image) as im:
             meta = {TAGS[key]: im.tag[key] for key in im.tag}
 
-        if meta["BitsPerSample"][0] != 16:
-            raise ValueError("Only 16 bit images are currently supported")
-
         # set size of data
         self.data_size = (
             len(images),
