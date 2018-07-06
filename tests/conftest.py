@@ -77,14 +77,15 @@ def MPF():
 
 
 @pytest.fixture
-def S1(P2):
+def SS1():
+    return {(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)}
+
+
+@pytest.fixture
+def S(P2):
     from hnccorr.segmentation import Segmentation
 
-    return Segmentation(
-        P2,
-        {(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)},
-        0.5,
-    )
+    return lambda x: Segmentation(P2, x, 0.5)
 
 
 @pytest.fixture
@@ -113,5 +114,5 @@ def S3(P2):
             (3, 1),
             (3, 2),
         },
-        0.75,
+        0.5,
     )

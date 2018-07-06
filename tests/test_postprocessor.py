@@ -8,7 +8,8 @@ def PP():
     return SizePostprocessor(2, 10, 3)
 
 
-def test_size_postprocessor_select(PP, S1, S2):
+def test_size_postprocessor_select(PP, S, SS1, S2):
+    S1 = S(SS1)
     assert PP.select([S1, S2]) == S1
 
 
