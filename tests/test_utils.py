@@ -45,3 +45,11 @@ def test_fill_holes():
     from hnccorr.utils import fill_holes
 
     assert fill_holes({(1,), (3,)}, (5,)) == {(1,), (2,), (3,)}
+
+
+def test_select_max_seed_component():
+    from hnccorr.utils import select_max_seed_component
+
+    assert select_max_seed_component(
+        {(1,), (2,), (5,), (6,)}, {(1,), (2,), (5,)}, 1
+    ) == {(1,), (2,)}
