@@ -37,6 +37,17 @@ class Patch(object):
 
         self._data = self._movie[self._movie_indices()]
 
+    def __eq__(self, other):
+        return (
+            self._movie == other._movie
+            and self._center_seed == other._center_seed
+            and self.pixel_size == other.pixel_size
+            and self._negative_seed_radius == other._negative_seed_radius
+            and self.positive_seeds == other.positive_seeds
+            and self.negative_seeds == other.negative_seeds
+            and self.coordinate_offset == other.coordinate_offset
+        )
+
     def _select_negative_seeds(self):
         dist = np.zeros(
             (2 * self._negative_seed_radius + 1,) * self._num_dimensions

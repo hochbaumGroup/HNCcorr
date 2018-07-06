@@ -30,13 +30,24 @@ def P_boundary_min(MM):
     return Patch(MM, (1,), 7, 2, {(0,), (1,), (2,)})
 
 
-def test_patch(P, MM):
+def test_pixel_size(P):
     assert P.pixel_size == (7,)
+
+
+def test_num_frames(P):
     assert P.num_frames == 3
+
+
+def test_seeds(P):
     assert P.positive_seeds == {(2,), (3,), (4,)}
     assert P.negative_seeds == {(1,), (5,)}
+
+
+def test_offset(P):
     assert P.coordinate_offset == (2,)
 
+
+def test_data(P, MM):
     np.testing.assert_equal(P[:], MM[:, 2:9])
 
 
@@ -55,9 +66,6 @@ def test_patch_boundary(P_boundary_min, P_boundary_max, MM):
     np.testing.assert_equal(P_boundary_max[:], MM[:, 3:])
 
 
-def test_patch_factory(PF, MM):
-    P = PF.construct((5,), {(4,), (5,), (6,)})
-    assert P.pixel_size == (7,)
-    assert P.num_frames == 3
-    assert P.positive_seeds == {(2,), (3,), (4,)}
-    assert P.negative_seeds == {(1,), (5,)}
+def test_patch_factory(PF, MM, P):
+    patch = PF.construct((5,), {(4,), (5,), (6,)})
+    assert patch == P
