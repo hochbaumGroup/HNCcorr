@@ -1,3 +1,11 @@
+import os
+
+
+TEST_DATA_DIR = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), "test_data"
+)
+
+
 def test_add_offset():
     from hnccorr.utils import add_offset_coordinates
 
@@ -17,3 +25,20 @@ def test_add_time_index():
     from hnccorr.utils import add_time_index
 
     assert add_time_index((5, 4)) == (slice(None, None), 5, 4)
+
+
+def test_list_images():
+    from hnccorr.utils import list_images
+
+    images = list_images(TEST_DATA_DIR)
+    expected_images = map(
+        lambda x: os.path.join("./test_data/simple_movie", x),
+        [
+            "simple_movie00000.tif",
+            "simple_movie00001.tif",
+            "simple_movie00002.tif",
+        ],
+    )
+
+    for i, e in zip(images, expected_images):
+        assert os.path.abspath(i) == os.path.abspath(e)

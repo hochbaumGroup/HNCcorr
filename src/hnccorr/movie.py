@@ -4,6 +4,8 @@ import numpy as np
 from PIL import Image
 from PIL.TiffTags import TAGS
 
+from hnccorr.utils import list_images
+
 
 class Movie(object):
     """2-dimensional calcium imaging movie stored in memory.
@@ -23,22 +25,6 @@ class Movie(object):
 
         self._load_images(image_dir, num_images)
 
-    def _read_sort_images(self, folder):
-        """List and sort tiff images
-
-        Args:
-            folder: folder containing tif(f) files.
-
-        Returns:
-            list: Sorted list of paths of tiff files in folder.
-        """
-        files_tif = glob.glob(os.path.join(folder, "*.tiff"))
-        files_tiff = glob.glob(os.path.join(folder, "*.tif"))
-
-        # check if only one file extension is used
-        assert len(files_tif) == 0 or len(files_tiff) == 0
-        return sorted(files_tif + files_tiff)
-
     def _load_images(self, image_dir, num_images):
         """Load images from directory.
 
@@ -49,7 +35,7 @@ class Movie(object):
             image_dir (str): Path of image folder
             num_images (int): Number of images in the folder.
         """
-        images = self._read_sort_images(image_dir)
+        images = list_images(image_dir)
 
         assert len(images) == num_images
 
