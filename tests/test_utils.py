@@ -53,3 +53,21 @@ def test_select_max_seed_component():
     assert select_max_seed_component(
         {(1,), (2,), (5,), (6,)}, {(1,), (2,), (5,)}, 1
     ) == {(1,), (2,)}
+
+
+def test_eight_neighborhood():
+    from hnccorr.utils import eight_neighborhood
+
+    assert eight_neighborhood(1, 1) == {(-1,), (0,), (1,)}
+    assert eight_neighborhood(1, 2) == {(-2,), (-1,), (0,), (1,), (2,)}
+    assert eight_neighborhood(2, 1) == {
+        (-1, -1),
+        (-1, 0),
+        (-1, 1),
+        (0, -1),
+        (0, 0),
+        (0, 1),
+        (1, -1),
+        (1, 0),
+        (1, 1),
+    }

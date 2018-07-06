@@ -1,7 +1,11 @@
 from itertools import product
 import numpy as np
 
-from hnccorr.utils import add_offset_set_coordinates, add_time_index
+from hnccorr.utils import (
+    add_offset_set_coordinates,
+    add_time_index,
+    eight_neighborhood,
+)
 
 
 class LocalCorrelationSeeder(object):
@@ -18,6 +22,7 @@ class LocalCorrelationSeeder(object):
         self._keep_fraction = keep_fraction
         self._movie = movie
         self._patch_factory = patch_factory
+        self._num_dims = self._movie.num_dimensions
 
         self._select_seeds()
 
@@ -26,11 +31,9 @@ class LocalCorrelationSeeder(object):
         max_shift = int((self._neighborhood_size - 1) / 2)
 
         # generate all offsets of neighbors
-        neighbor_offsets = self._generate_offsets(max_shift)
+        neighbor_offsets = eight_neighborhood(self._num_dims, max_shift)
         # remove point as neighbor
-        neighbor_offsets = neighbor_offsets - {
-            (0,) * self._movie.num_dimensions
-        }
+        neighbor_offsets = neighbor_offsets - {(0,) * self._num_dims}
 
         mean_neighbor_corr = []
 
@@ -66,17 +69,10 @@ class LocalCorrelationSeeder(object):
         self._seeds = [seed for seed, _ in mean_neighbor_corr[:num_keep]]
         self._current_index = 0
 
-    def _generate_offsets(self, radius):
-        return set(
-            product(
-                range(-radius, radius + 1), repeat=self._movie.num_dimensions
-            )
-        )
-
     def _construct_patch(self, seed):
         # compute offsets for neighboring points
         max_shift = int((self._positive_seed_size - 1) / 2)
-        offsets = self._generate_offsets(max_shift)
+        offsets = eight_neighborhood(max_shift, self._num_dims)
 
         # compute positive seeds
         positive_seeds = add_offset_set_coordinates(offsets, seed)
