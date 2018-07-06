@@ -1,7 +1,8 @@
 import networkx as nx
 import numpy as np
-from scipy.ndimage.morphology import binary_fill_holes
 from itertools import product
+
+from hnccorr.utils import fill_holes
 
 
 class Segmentation(object):
@@ -9,18 +10,6 @@ class Segmentation(object):
         self._patch = patch
         self.selection = set(selection)
         self.weight = weight
-
-    def _fill_holes(self):
-        shape = self._patch.shape
-        mask = np.full(shape, False, dtype=np.bool)
-
-        indices = list(zip(*self.selection))
-        mask[indices] = True
-
-        filled_mask = binary_fill_holes(mask)
-
-        index_arrays = [a.tolist() for a in np.where(filled_mask)]
-        self.selection = set(zip(*index_arrays))
 
     def _select_largest_component(self):
         shape = self._patch.shape
@@ -61,4 +50,4 @@ class Segmentation(object):
     def clean(self):
         """Remove left over points / fill holes"""
         self._select_largest_component()
-        self._fill_holes()
+        self.selection = fill_holes(self.selection, self._patch.shape)

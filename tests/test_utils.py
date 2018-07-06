@@ -39,3 +39,9 @@ def test_list_images():
 
     for i, e in zip(images, expected_images):
         assert os.path.abspath(i) == os.path.abspath(e)
+
+
+def test_fill_holes():
+    from hnccorr.utils import fill_holes
+
+    assert fill_holes({(1,), (3,)}, (5,)) == {(1,), (2,), (3,)}
