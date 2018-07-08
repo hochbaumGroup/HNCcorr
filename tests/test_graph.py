@@ -4,7 +4,7 @@ import pytest
 @pytest.fixture
 def MES():
     class MockEdgeSelector:
-        def select_edges():
+        def select_edges(self):
             return [((0,), (1,)), ((0,), (2,))]
 
     return MockEdgeSelector()
@@ -15,6 +15,8 @@ def ME():
     class MockEmbedding:
         def distance(self, first, second):
             return second[0]
+
+    return MockEmbedding()
 
 
 def test_graph_constructor(P, MES, ME):
@@ -32,4 +34,4 @@ def test_graph_constructor(P, MES, ME):
     assert ((0,), (1,)) in G.edges
     assert ((0,), (2,)) in G.edges
     assert G[(0,)][(1,)]["weight"] == 1
-    assert G[(0,)][(1,)]["weight"] == 2
+    assert G[(0,)][(2,)]["weight"] == 2
