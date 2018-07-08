@@ -4,8 +4,11 @@ from hnccorr.utils import add_time_index
 
 
 class CorrelationEmbedding(object):
-    def __init__(self, P):
-        self.embedding = np.corrcoef(P[:].T)
+    def __init__(self, patch):
+        print(patch[:].shape)
+        data = patch[:].reshape(-1, np.product(patch.pixel_size))
+        self.embedding = np.corrcoef(data.T).reshape(-1, *patch.pixel_size)
+        self.embedding[np.isnan(self.embedding)] = 0
         self._length = self.embedding.shape[0]
 
     def distance(self, first, second):
