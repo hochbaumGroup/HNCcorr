@@ -3,22 +3,25 @@ import numpy as np
 
 
 @pytest.fixture
-def CE(P):
+def CE():
     from hnccorr.embeddings import CorrelationEmbedding
 
-    return CorrelationEmbedding(P((0,)))
+    return lambda x: CorrelationEmbedding(x)
 
 
 @pytest.fixture
-def CE2(P2):
-    from hnccorr.embeddings import CorrelationEmbedding
-
-    return CorrelationEmbedding(P2)
+def CE1(CE, P):
+    return CE(P((0,)))
 
 
-def test_embedding(CE, CE2):
+@pytest.fixture
+def CE2(CE, P2):
+    return CE(P2)
+
+
+def test_embedding(CE1, CE2):
     np.testing.assert_allclose(
-        CE.embedding[0],
+        CE1.embedding[0],
         [
             1.,
             0.99833749,
@@ -34,6 +37,6 @@ def test_embedding(CE, CE2):
     )
 
 
-def test_correlation_embedding(CE, CE2):
-    CE.distance((0,), (1,)) == pytest.approx(0.003866)
+def test_correlation_embedding(CE1, CE2):
+    CE1.distance((0,), (1,)) == pytest.approx(0.003866)
     CE2.distance((0,), (1,)) == pytest.approx(0.)
