@@ -23,3 +23,7 @@ class CorrelationEmbedding(object):
             )
             / self._length
         )
+
+
+def exponential_distance_decay(embedding, alpha, first, second):
+    return np.exp(-alpha * embedding.distance(first, second))
