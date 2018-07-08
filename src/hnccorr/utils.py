@@ -74,3 +74,7 @@ def select_max_seed_component(selection, seeds, num_dims):
 
 def eight_neighborhood(num_dims, max_radius):
     return set(product(range(-max_radius, max_radius + 1), repeat=num_dims))
+
+
+def generate_pixels(shape):
+    return product(*[range(n) for n in shape])

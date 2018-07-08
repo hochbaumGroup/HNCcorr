@@ -1,10 +1,10 @@
-from itertools import product
 import numpy as np
 
 from hnccorr.utils import (
     add_offset_set_coordinates,
     add_time_index,
     eight_neighborhood,
+    generate_pixels,
 )
 
 
@@ -37,7 +37,7 @@ class LocalCorrelationSeeder(object):
 
         mean_neighbor_corr = []
 
-        for pixel in product(*[range(n) for n in self._movie.pixel_size]):
+        for pixel in generate_pixels(self._movie.pixel_size):
             pixel_data = self._movie[add_time_index(pixel)].reshape(1, -1)
 
             # compute neighbors

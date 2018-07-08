@@ -71,3 +71,9 @@ def test_eight_neighborhood():
         (1, 0),
         (1, 1),
     }
+
+
+def test_generate_pixles():
+    from hnccorr.utils import generate_pixels
+
+    assert set(generate_pixels((1, 2))) == {(0, 0), (0, 1)}
