@@ -8,6 +8,7 @@ class GraphConstructor(object):
         self._patch = patch
         self._edge_selector = edge_selector
         self._weight_function = weight_function
+        self.arc_weight = "weight"
 
     def construct(self):
         G = nx.Graph()

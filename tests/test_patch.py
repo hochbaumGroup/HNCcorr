@@ -37,11 +37,8 @@ def test_patch_equal(P1):
     assert P1 != deepcopy(P1)
 
 
-def test_segment(P1):
-    P1.segment() == [
-        # all pixels except negative seeds
-        Segmentation(patch, {(0,), (1,), (3,), (4,), (5,), (6,)}, 2.0)
-    ]
+def test_segment(P1, S4):
+    assert P1.segment() == [S4]
 
 
 def test_patch_factory(PF, MM, P1, pos_seeds):

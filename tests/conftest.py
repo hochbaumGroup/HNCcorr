@@ -108,3 +108,11 @@ def S1(S, SS1):
 @pytest.fixture
 def S2(S):
     return S({(1, 0)})
+
+
+@pytest.fixture
+def S4(P1):
+    from hnccorr.segmentation import Segmentation
+
+    # all pixels except negative seeds
+    return Segmentation(P1, {(0,), (2,), (3,), (4,), (6,)}, 2.0)

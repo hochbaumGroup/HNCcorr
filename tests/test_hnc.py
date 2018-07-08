@@ -3,7 +3,7 @@ import networkx as nx
 from hnccorr.utils import generate_pixels
 
 
-def test_hnc(P1):
+def test_hnc(P1, S4):
     from hnccorr.hnc import HNC
     from hnccorr.segmentation import Segmentation
 
@@ -12,7 +12,4 @@ def test_hnc(P1):
 
     h = HNC(P1, G, "weight")
 
-    assert h.solve_parametric(0, 2) == [
-        # all pixels except negative seeds
-        Segmentation(P1, {(0,), (2,), (3,), (4,), (6,)}, 2.0)
-    ]
+    assert h.solve_parametric(0, 2) == [S4]

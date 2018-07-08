@@ -22,6 +22,5 @@ class HNC:
         ]
 
     def solve_parametric(self, low, high):
-        print(self._patch.negative_seeds)
         cuts, breakpoints = self._hnc.solve_parametric(low, high)
         return self._construct_segmentations(cuts, breakpoints)

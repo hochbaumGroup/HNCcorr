@@ -1,11 +1,15 @@
 import numpy as np
 
+from hnccorr.segmentation import Segmentation
 from hnccorr.utils import (
     add_offset_coordinates,
     add_offset_set_coordinates,
     eight_neighborhood,
     add_time_index,
 )
+from hnccorr.hnc import HNC
+from hnccorr.graph import GraphConstructor
+from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
 
 
 class Patch(object):
@@ -131,6 +135,22 @@ class Patch(object):
 
     def __getitem__(self, key):
         return self._data[key]
+
+    def segment(self):
+        embedding = CorrelationEmbedding(self)
+
+        class MES:
+            def select_edges(self):
+                return []
+
+        graph_constructor = GraphConstructor(
+            self,
+            MES(),
+            lambda a, b: exponential_distance_decay(embedding, 0, a, b),
+        )
+        graph = graph_constructor.construct()
+        hnc = HNC(self, graph, graph_constructor.arc_weight)
+        return hnc.solve_parametric(0, 2)
 
 
 class PatchFactory(object):
