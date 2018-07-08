@@ -11,18 +11,14 @@ def MES():
 
 
 @pytest.fixture
-def ME():
-    class MockEmbedding:
-        def distance(self, first, second):
-            return second[0]
-
-    return MockEmbedding()
+def MW():
+    return lambda a, b: b[0]
 
 
-def test_graph_constructor(P, MES, ME):
+def test_graph_constructor(P, MES, MW):
     from hnccorr.graph import GraphConstructor
 
-    GC = GraphConstructor(P((0,)), MES, ME)
+    GC = GraphConstructor(P((0,)), MES, MW)
     G = GC.construct()
 
     num_nodes = 7
