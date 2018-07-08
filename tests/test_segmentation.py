@@ -1,4 +1,5 @@
 import pytest
+from copy import copy
 
 
 def test_weight(S1):
@@ -22,3 +23,8 @@ def test_clean(S1):
         (1, 2),
         (2, 2),
     }
+
+
+def test_equal(S1, S2):
+    assert S1 == copy(S1)
+    assert S1 != S2

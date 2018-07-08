@@ -14,10 +14,7 @@ def test_hnc(P):
 
     h = HNC(patch, G, "weight")
 
-    segms = h.solve_parametric(0, 2)
-    seg = segms[0]
-    assert len(segms) == 1
-    assert seg.weight == 2.
-    # all except negative seeds
-    assert seg.selection == {(0,), (1,), (3,), (4,), (5,), (6,)}
-    assert seg._patch == patch
+    assert h.solve_parametric(0, 2) == [
+        # all pixels except negative seeds
+        Segmentation(patch, {(0,), (1,), (3,), (4,), (5,), (6,)}, 2.0)
+    ]

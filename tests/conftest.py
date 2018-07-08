@@ -89,12 +89,17 @@ def SS1():
 
 
 @pytest.fixture
+def S(P2):
+    from hnccorr.segmentation import Segmentation
+
+    return lambda x: Segmentation(P2, x, 0.5)
+
+
+@pytest.fixture
 def S1(S, SS1):
     return S(SS1)
 
 
 @pytest.fixture
-def S(P2):
-    from hnccorr.segmentation import Segmentation
-
-    return lambda x: Segmentation(P2, x, 0.5)
+def S2(S):
+    return S({(1, 0)})

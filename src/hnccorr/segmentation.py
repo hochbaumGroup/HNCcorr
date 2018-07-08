@@ -7,6 +7,13 @@ class Segmentation(object):
         self.selection = set(selection)
         self.weight = weight
 
+    def __eq__(self, other):
+        return (
+            self._patch == other._patch
+            and self.selection == other.selection
+            and self.weight == other.weight
+        )
+
     def clean(self):
         """Remove left over points / fill holes"""
         self.selection = select_max_seed_component(

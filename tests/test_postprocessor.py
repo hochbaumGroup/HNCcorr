@@ -9,11 +9,6 @@ def PP():
 
 
 @pytest.fixture
-def S2(S):
-    return S({(1, 0)})
-
-
-@pytest.fixture
 def S3(S):
     return S(
         {
