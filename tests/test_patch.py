@@ -3,11 +3,6 @@ import numpy as np
 from copy import copy, deepcopy
 
 
-@pytest.fixture
-def P1(P):
-    return P((5,))
-
-
 def test_even_windowsize(MM, pos_seeds):
     from hnccorr.patch import Patch
 
@@ -40,6 +35,13 @@ def test_offset(P, center_seed, offset):
 def test_patch_equal(P1):
     assert P1 == copy(P1)
     assert P1 != deepcopy(P1)
+
+
+def test_segment(P1):
+    P1.segment() == [
+        # all pixels except negative seeds
+        Segmentation(patch, {(0,), (1,), (3,), (4,), (5,), (6,)}, 2.0)
+    ]
 
 
 def test_patch_factory(PF, MM, P1, pos_seeds):

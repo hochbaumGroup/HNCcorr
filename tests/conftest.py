@@ -70,6 +70,11 @@ def P(MM, pos_seeds):
 
 
 @pytest.fixture
+def P1(P):
+    return P((5,))
+
+
+@pytest.fixture
 def P2(MM2):
     from hnccorr.patch import Patch
 
