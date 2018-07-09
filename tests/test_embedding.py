@@ -19,6 +19,7 @@ def CE2(CE, P2):
     return CE(P2)
 
 
+@pytest.mark.filterwarnings("ignore::RuntimeWarning")
 def test_embedding(CE1, CE2):
     np.testing.assert_allclose(
         CE1.embedding[0],
@@ -32,13 +33,16 @@ def test_embedding(CE1, CE2):
             0.94491118,
         ],
     )
+
     np.testing.assert_allclose(
         CE2.embedding[(0, 0, slice(None, None))], [0, 0, 0]
     )
 
 
+@pytest.mark.filterwarnings("ignore::RuntimeWarning")
 def test_correlation_embedding(CE1, CE2):
     CE1.distance((0,), (1,)) == pytest.approx(0.003866)
+    np.seterr(divide="ignore")
     CE2.distance((0,), (1,)) == pytest.approx(0.)
 
 

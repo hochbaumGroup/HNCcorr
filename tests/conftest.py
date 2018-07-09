@@ -39,7 +39,7 @@ def MM2():
             self.num_dimensions = 2
             self.num_frames = 1
 
-            self._A = np.zeros((1, 10, 10))
+            self._A = np.zeros((2, 10, 10))
             self.pixel_size = self._A.shape[1:]
 
         def __getitem__(self, key):
