@@ -4,7 +4,7 @@ import pytest
 @pytest.fixture
 def MES():
     class MockEdgeSelector:
-        def select_edges(self):
+        def select_edges(self, embedding):
             return [((0,), (1,)), ((0,), (2,))]
 
     return MockEdgeSelector()
@@ -19,7 +19,7 @@ def test_graph_constructor(P, MES, MW):
     from hnccorr.graph import GraphConstructor
 
     GC = GraphConstructor(P((0,)), MES, MW)
-    G = GC.construct()
+    G = GC.construct(None)
 
     num_nodes = 7
     assert len(G.nodes) == num_nodes
