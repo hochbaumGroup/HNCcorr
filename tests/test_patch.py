@@ -1,6 +1,7 @@
 import pytest
 import numpy as np
 from copy import copy, deepcopy
+from pytest_mock import mocker
 
 
 def test_even_windowsize(MM, pos_seeds):
@@ -37,7 +38,12 @@ def test_patch_equal(P1):
     assert P1 != deepcopy(P1)
 
 
-def test_segment(P1, S4):
+def test_segment(mocker, P1, S4):
+    from hnccorr.edge_selection import SparseComputation
+
+    mocker.patch.object(SparseComputation, "select_edges")
+    SparseComputation.select_edges.return_value = []
+
     assert P1.segment() == [S4]
 
 

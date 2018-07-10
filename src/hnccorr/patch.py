@@ -10,6 +10,7 @@ from hnccorr.utils import (
 from hnccorr.hnc import HNC
 from hnccorr.graph import GraphConstructor
 from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
+from hnccorr.edge_selection import SparseComputation
 
 
 class Patch(object):
@@ -139,16 +140,12 @@ class Patch(object):
     def segment(self):
         embedding = CorrelationEmbedding(self)
 
-        class MES:
-            def select_edges(self):
-                return []
-
         graph_constructor = GraphConstructor(
             self,
-            MES(),
+            SparseComputation(3, 1 / 25.0),
             lambda a, b: exponential_distance_decay(embedding, 0, a, b),
         )
-        graph = graph_constructor.construct()
+        graph = graph_constructor.construct(embedding)
         hnc = HNC(self, graph, graph_constructor.arc_weight)
         return hnc.solve_parametric(0, 2)
 
