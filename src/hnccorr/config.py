@@ -1,6 +1,15 @@
+from copy import deepcopy
+
+
 class Config:
     def __init__(self, **entries):
-        self.entries = entries
+        self._entries = entries
 
-        for key, value in entries.items():
+        for key, value in self._entries.items():
             setattr(self, key, value)
+
+    def __add__(self, other):
+        entries = deepcopy(self._entries)
+        entries.update(other._entries)
+
+        return Config(**entries)
