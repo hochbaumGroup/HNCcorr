@@ -21,20 +21,20 @@ class Patch(object):
         self,
         movie,
         center_seed,
-        window_size,
+        patch_size,
         negative_seed_radius,
         positive_seeds,
     ):
         self._num_dimensions = movie.num_dimensions
-        self._window_size = window_size
+        self._patch_size = patch_size
         self._negative_seed_radius = negative_seed_radius
         self._movie = movie
-        self.pixel_size = (window_size,) * self._num_dimensions
+        self.pixel_size = (patch_size,) * self._num_dimensions
         self.num_frames = movie.num_frames
         self._center_seed = center_seed
 
-        if window_size % 2 == 0:
-            raise ValueError("window_size (%d) should be an odd number.")
+        if patch_size % 2 == 0:
+            raise ValueError("patch_size (%d) should be an odd number.")
 
         self.coordinate_offset = self._compute_coordinate_offset()
 
@@ -94,7 +94,7 @@ class Patch(object):
         )
 
     def _compute_coordinate_offset(self):
-        half_width = int((self._window_size - 1) / 2)
+        half_width = int((self._patch_size - 1) / 2)
 
         topleft_coordinates = add_offset_coordinates(
             self._center_seed, (-half_width,) * self._num_dimensions
@@ -104,7 +104,7 @@ class Patch(object):
 
         # bottomright corners (python-style index so not included)
         bottomright_coordinates = add_offset_coordinates(
-            topleft_coordinates, (self._window_size,) * self._num_dimensions
+            topleft_coordinates, (self._patch_size,) * self._num_dimensions
         )
         # shift right such that bottom right corner exists
         bottomright_coordinates = list(
@@ -116,7 +116,7 @@ class Patch(object):
 
         topleft_coordinates = add_offset_coordinates(
             bottomright_coordinates,
-            (-self._window_size,) * self._num_dimensions,
+            (-self._patch_size,) * self._num_dimensions,
         )
 
         return topleft_coordinates
@@ -124,7 +124,7 @@ class Patch(object):
     def _movie_indices(self):
         """Compute movie index range of patch"""
         bottomright_coordinates = add_offset_coordinates(
-            self.coordinate_offset, (self._window_size,) * self._num_dimensions
+            self.coordinate_offset, (self._patch_size,) * self._num_dimensions
         )
 
         idx = []
@@ -151,16 +151,16 @@ class Patch(object):
 
 
 class PatchFactory(object):
-    def __init__(self, movie, window_size, negative_seed_radius):
+    def __init__(self, movie, patch_size, negative_seed_radius):
         self._movie = movie
-        self._window_size = window_size
+        self._patch_size = patch_size
         self._negative_seed_radius = negative_seed_radius
 
     def construct(self, center_seed, positive_seeds):
         return Patch(
             self._movie,
             center_seed,
-            self._window_size,
+            self._patch_size,
             self._negative_seed_radius,
             positive_seeds,
         )
