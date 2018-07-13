@@ -1,4 +1,4 @@
-def test_configuration():
+def test_config():
     from hnccorr.config import Config
 
     c = Config(patch_size=31, negative_seed_radius=10)
