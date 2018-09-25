@@ -28,13 +28,13 @@ class Patch(object):
         positive_seeds,
     ):
         self._num_dimensions = movie.num_dimensions
+        self._center_seed = center_seed
         self._config = config
         self._patch_size = patch_size
         self._negative_seed_radius = negative_seed_radius
         self._movie = movie
         self.pixel_size = (patch_size,) * self._num_dimensions
         self.num_frames = movie.num_frames
-        self._center_seed = center_seed
 
         if patch_size % 2 == 0:
             raise ValueError("patch_size (%d) should be an odd number.")
@@ -44,14 +44,14 @@ class Patch(object):
         offset = list(-x for x in self.coordinate_offset)
         positive_seeds = add_offset_set_coordinates(positive_seeds, offset)
         negative_seeds = self._select_negative_seeds()
-        self.seeds = Seeds(positive_seeds, negative_seeds)
+        self.seeds = Seeds(center_seed, positive_seeds, negative_seeds)
 
         self._data = self._movie[self._movie_indices()]
 
     def __eq__(self, other):
         return (
             self._movie == other._movie
-            and self._center_seed == other._center_seed
+            and self.seeds.center_seed == other.seeds.center_seed
             and self.pixel_size == other.pixel_size
             and self._negative_seed_radius == other._negative_seed_radius
             and self.seeds.positive_seeds == other.seeds.positive_seeds
