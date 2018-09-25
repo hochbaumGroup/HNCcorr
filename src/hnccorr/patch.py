@@ -138,7 +138,7 @@ class Patch(object):
         return self._data[key]
 
     def segment(self):
-        embedding = CorrelationEmbedding(self)
+        embedding = CorrelationEmbedding(self, 0.5)
 
         graph_constructor = GraphConstructor(
             self,

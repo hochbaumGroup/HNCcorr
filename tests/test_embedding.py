@@ -6,7 +6,7 @@ import numpy as np
 def CE():
     from hnccorr.embedding import CorrelationEmbedding
 
-    return lambda x: CorrelationEmbedding(x)
+    return lambda x: CorrelationEmbedding(x, 0.5)
 
 
 @pytest.fixture
@@ -49,6 +49,6 @@ def test_correlation_embedding(CE1, CE2):
 def test_exponential_distance_decay(CE1):
     from hnccorr.embedding import exponential_distance_decay
 
-    exponential_distance_decay(CE1, 0.5, (0,), (1,)) == pytest.approx(
+    exponential_distance_decay(CE1, (0,), (1,)) == pytest.approx(
         np.exp(-0.003866 * 0.5)
     )
