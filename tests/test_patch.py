@@ -20,8 +20,8 @@ def test_num_frames(P1):
 
 
 def test_seeds(P1):
-    assert P1.positive_seeds == {(2,), (3,), (4,)}
-    assert P1.negative_seeds == {(1,), (5,)}
+    assert P1.seeds.positive_seeds == {(2,), (3,), (4,)}
+    assert P1.seeds.negative_seeds == {(1,), (5,)}
 
 
 def test_data(P1, MM):

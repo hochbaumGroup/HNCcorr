@@ -10,8 +10,8 @@ class HNC:
 
         self._hnc = HNC_Closure(
             deepcopy(graph),
-            self._patch.positive_seeds,
-            self._patch.negative_seeds,
+            self._patch.seeds.positive_seeds,
+            self._patch.seeds.negative_seeds,
             arc_weight=arc_weight,
         )
 

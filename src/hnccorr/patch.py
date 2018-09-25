@@ -8,6 +8,7 @@ from hnccorr.utils import (
     add_time_index,
 )
 from hnccorr.hnc import HNC
+from hnccorr.seeds import Seeds
 from hnccorr.graph import GraphConstructor
 from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
 from hnccorr.edge_selection import SparseComputation
@@ -41,10 +42,9 @@ class Patch(object):
         self.coordinate_offset = self._compute_coordinate_offset()
 
         offset = list(-x for x in self.coordinate_offset)
-        self.positive_seeds = add_offset_set_coordinates(
-            positive_seeds, offset
-        )
-        self.negative_seeds = self._select_negative_seeds()
+        positive_seeds = add_offset_set_coordinates(positive_seeds, offset)
+        negative_seeds = self._select_negative_seeds()
+        self.seeds = Seeds(positive_seeds, negative_seeds)
 
         self._data = self._movie[self._movie_indices()]
 
@@ -54,8 +54,8 @@ class Patch(object):
             and self._center_seed == other._center_seed
             and self.pixel_size == other.pixel_size
             and self._negative_seed_radius == other._negative_seed_radius
-            and self.positive_seeds == other.positive_seeds
-            and self.negative_seeds == other.negative_seeds
+            and self.seeds.positive_seeds == other.seeds.positive_seeds
+            and self.seeds.negative_seeds == other.seeds.negative_seeds
             and self.coordinate_offset == other.coordinate_offset
         )
 
