@@ -12,6 +12,7 @@ from hnccorr.seeds import Seeds
 from hnccorr.graph import GraphConstructor
 from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
 from hnccorr.edge_selection import SparseComputation
+from hnccorr.utils import eight_neighborhood
 
 
 class Patch(object):
@@ -19,19 +20,14 @@ class Patch(object):
     """
 
     def __init__(
-        self,
-        movie,
-        config,
-        center_seed,
-        patch_size,
-        negative_seed_radius,
-        positive_seeds,
+        self, movie, config, center_seed, patch_size, negative_seed_radius
     ):
         self._num_dimensions = movie.num_dimensions
         self._center_seed = center_seed
         self._config = config
         self._patch_size = patch_size
         self._negative_seed_radius = negative_seed_radius
+        self._positive_seed_size = 3
         self._movie = movie
         self.pixel_size = (patch_size,) * self._num_dimensions
         self.num_frames = movie.num_frames
@@ -42,11 +38,28 @@ class Patch(object):
         self.coordinate_offset = self._compute_coordinate_offset()
 
         offset = list(-x for x in self.coordinate_offset)
+
+        positive_seeds = self._select_positive_seeds()
+
         positive_seeds = add_offset_set_coordinates(positive_seeds, offset)
         negative_seeds = self._select_negative_seeds()
         self.seeds = Seeds(center_seed, positive_seeds, negative_seeds)
 
         self._data = self._movie[self._movie_indices()]
+
+    def _select_positive_seeds(self):
+        # compute offsets for neighboring points
+        max_shift = int((self._positive_seed_size - 1) / 2)
+        offsets = eight_neighborhood(self._num_dimensions, max_shift)
+        # compute positive seeds
+        positive_seeds = add_offset_set_coordinates(offsets, self._center_seed)
+        # check if seeds are within boundaries
+        positive_seeds = {
+            seed
+            for seed in positive_seeds
+            if self._movie.is_valid_pixel_index(seed)
+        }
+        return positive_seeds
 
     def __eq__(self, other):
         return (

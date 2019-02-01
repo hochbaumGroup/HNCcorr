@@ -8,7 +8,7 @@ def test_even_windowsize(MM, pos_seeds):
     from hnccorr.patch import Patch
 
     with pytest.raises(ValueError):
-        Patch(MM, {}, (5,), 6, 2, pos_seeds)
+        Patch(MM, {}, (5,), 6, 2)
 
 
 def test_pixel_size(P1):

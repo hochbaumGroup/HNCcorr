@@ -66,7 +66,7 @@ def pos_seeds():
 def P(MM, pos_seeds):
     from hnccorr.patch import Patch
 
-    return lambda x: Patch(MM, {}, x, 7, 2, pos_seeds)
+    return lambda x: Patch(MM, {}, x, 7, 2)
 
 
 @pytest.fixture
@@ -78,7 +78,7 @@ def P1(P):
 def P2(MM2):
     from hnccorr.patch import Patch
 
-    return Patch(MM2, {}, (5, 5), 3, 2, {(1, 2)})
+    return Patch(MM2, {}, (5, 5), 3, 2)
 
 
 @pytest.fixture
