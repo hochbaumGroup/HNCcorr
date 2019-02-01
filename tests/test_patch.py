@@ -45,8 +45,3 @@ def test_segment(mocker, P1, S4):
     SparseComputation.select_edges.return_value = []
 
     assert P1.segment() == [S4]
-
-
-def test_patch_factory(PF, MM, P1, pos_seeds):
-    patch = PF.construct((5,), pos_seeds)
-    assert patch == P1

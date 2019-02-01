@@ -61,21 +61,6 @@ class LocalCorrelationSeeder(object):
         self._seeds = [seed for seed, _ in mean_neighbor_corr[:num_keep]]
         self._current_index = 0
 
-    def _construct_patch(self, seed):
-        # compute offsets for neighboring points
-        max_shift = int((self._positive_seed_size - 1) / 2)
-        offsets = eight_neighborhood(max_shift, self._num_dims)
-
-        # compute positive seeds
-        positive_seeds = add_offset_set_coordinates(offsets, seed)
-        # check if seeds are within boundaries
-        positive_seeds = {
-            seed
-            for seed in positive_seeds
-            if self._movie.is_valid_pixel_index(seed)
-        }
-        return self._patch_factory.construct(seed, positive_seeds)
-
     def next(self):
         if self._current_index < len(self._seeds):
             center_seed = self._seeds[self._current_index]

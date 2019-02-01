@@ -163,21 +163,3 @@ class Patch(object):
         graph = graph_constructor.construct(embedding)
         hnc = HNC(self, graph, graph_constructor.arc_weight)
         return hnc.solve_parametric(0, 2)
-
-
-class PatchFactory(object):
-    def __init__(self, movie, config, patch_size, negative_seed_radius):
-        self._movie = movie
-        self._config = config
-        self._patch_size = patch_size
-        self._negative_seed_radius = negative_seed_radius
-
-    def construct(self, center_seed, positive_seeds):
-        return Patch(
-            self._movie,
-            self._config,
-            center_seed,
-            self._patch_size,
-            self._negative_seed_radius,
-            positive_seeds,
-        )

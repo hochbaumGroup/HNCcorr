@@ -78,13 +78,6 @@ def P2(MM2):
 
 
 @pytest.fixture
-def PF(MM):
-    from hnccorr.patch import PatchFactory
-
-    return PatchFactory(MM, {}, 7, 2)
-
-
-@pytest.fixture
 def SS1():
     return {(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)}
 
