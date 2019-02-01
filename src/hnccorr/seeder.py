@@ -9,19 +9,11 @@ from hnccorr.utils import (
 
 
 class LocalCorrelationSeeder(object):
-    def __init__(
-        self,
-        movie,
-        patch_factory,
-        neighborhood_size=3,
-        positive_seed_size=3,
-        keep_fraction=0.4,
-    ):
+    def __init__(self, movie, neighborhood_size=3, keep_fraction=0.4):
         self._neighborhood_size = neighborhood_size
-        self._positive_seed_size = positive_seed_size
         self._keep_fraction = keep_fraction
         self._movie = movie
-        self._patch_factory = patch_factory
+
         self._num_dims = self._movie.num_dimensions
 
         self._select_seeds()
@@ -86,8 +78,8 @@ class LocalCorrelationSeeder(object):
 
     def next(self):
         if self._current_index < len(self._seeds):
-            patch = self._construct_patch(self._seeds[self._current_index])
+            center_seed = self._seeds[self._current_index]
             self._current_index += 1
 
-            return patch
+            return center_seed
         return None
