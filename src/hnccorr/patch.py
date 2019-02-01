@@ -20,14 +20,20 @@ class Patch(object):
     """
 
     def __init__(
-        self, movie, config, center_seed, patch_size, negative_seed_radius
+        self,
+        movie,
+        config,
+        center_seed,
+        patch_size,
+        positive_seed_size,
+        negative_seed_radius,
     ):
         self._num_dimensions = movie.num_dimensions
         self._center_seed = center_seed
         self._config = config
         self._patch_size = patch_size
         self._negative_seed_radius = negative_seed_radius
-        self._positive_seed_size = 3
+        self._positive_seed_size = positive_seed_size
         self._movie = movie
         self.pixel_size = (patch_size,) * self._num_dimensions
         self.num_frames = movie.num_frames
