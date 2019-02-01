@@ -1,6 +1,6 @@
 import pytest
 import os
-
+import numpy as np
 
 TEST_DATA_DIR = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "test_data"
@@ -9,8 +9,6 @@ TEST_DATA_DIR = os.path.join(
 
 @pytest.fixture
 def MM():
-    import numpy as np
-
     class MockMovie:
         def __init__(self):
             self.num_frames = 3
@@ -32,8 +30,6 @@ def MM():
 
 @pytest.fixture
 def MM2():
-    import numpy as np
-
     class MockMovie:
         def __init__(self):
             self.num_dimensions = 2
