@@ -36,12 +36,3 @@ def test_offset(P, center_seed, offset):
 def test_patch_equal(P1):
     assert P1 == copy(P1)
     assert P1 != deepcopy(P1)
-
-
-def test_segment(mocker, P1, S4):
-    from hnccorr.edge_selection import SparseComputation
-
-    mocker.patch.object(SparseComputation, "select_edges")
-    SparseComputation.select_edges.return_value = []
-
-    assert P1.segment() == [S4]

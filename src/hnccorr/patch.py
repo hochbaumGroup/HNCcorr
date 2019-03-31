@@ -157,15 +157,3 @@ class Patch(object):
 
     def __getitem__(self, key):
         return self._data[key]
-
-    def segment(self):
-        embedding = CorrelationEmbedding(self, 0.5)
-
-        graph_constructor = GraphConstructor(
-            self,
-            SparseComputation(3, 1 / 25.0),
-            lambda a, b: exponential_distance_decay(embedding, 0, a, b),
-        )
-        graph = graph_constructor.construct(embedding)
-        hnc = HNC(self, graph, graph_constructor.arc_weight)
-        return hnc.solve_parametric(0, 2)
