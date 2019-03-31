@@ -10,7 +10,7 @@ class Seeds:
 
     def select_positive_seeds(self, radius, movie_size):
         num_dimensions = len(movie_size)
-        offsets = eight_neighborhood(num_dimensions, radius - 1)
+        offsets = eight_neighborhood(num_dimensions, radius)
         # compute positive seeds
         positive_seeds = add_offset_set_coordinates(offsets, self.center_seed)
         # check if seeds are within boundaries

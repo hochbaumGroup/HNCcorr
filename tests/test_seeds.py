@@ -35,11 +35,11 @@ def test_negative_seeds(S, neg_seeds):
 @pytest.mark.parametrize(
     "center_seed, radius, expected_seeds",
     [
-        ((0, 0), 1, {(0, 0)}),
-        ((0, 0), 2, {(0, 0), (0, 1), (1, 1), (1, 0)}),
+        ((0, 0), 0, {(0, 0)}),
+        ((0, 0), 1, {(0, 0), (0, 1), (1, 1), (1, 0)}),
         (
             (1, 1),
-            2,
+            1,
             {
                 (0, 0),
                 (0, 1),
