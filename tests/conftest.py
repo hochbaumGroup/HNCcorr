@@ -2,6 +2,9 @@ import pytest
 import os
 import numpy as np
 
+from hnccorr.segmentation import Segmentation
+from hnccorr.patch import Patch
+
 TEST_DATA_DIR = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "test_data"
 )
@@ -60,8 +63,6 @@ def pos_seeds():
 
 @pytest.fixture
 def P(MM, pos_seeds):
-    from hnccorr.patch import Patch
-
     return lambda x: Patch(MM, {}, x, 7, 3, 2)
 
 
@@ -72,8 +73,6 @@ def P1(P):
 
 @pytest.fixture
 def P2(MM2):
-    from hnccorr.patch import Patch
-
     return Patch(MM2, {}, (5, 5), 3, 3, 2)
 
 
@@ -83,10 +82,8 @@ def SS1():
 
 
 @pytest.fixture
-def S(P2):
-    from hnccorr.segmentation import Segmentation
-
-    return lambda x: Segmentation(P2, x, 0.5)
+def S():
+    return lambda x: Segmentation(x, 0.5)
 
 
 @pytest.fixture
@@ -100,8 +97,6 @@ def S2(S):
 
 
 @pytest.fixture
-def S4(P1):
-    from hnccorr.segmentation import Segmentation
-
+def S4():
     # all pixels except negative seeds
-    return Segmentation(P1, {(0,), (2,), (3,), (4,), (6,)}, 2.0)
+    return Segmentation({(0,), (2,), (3,), (4,), (6,)}, 2.0)

@@ -17,7 +17,7 @@ class HNC:
 
     def _construct_segmentations(self, cuts, breakpoints):
         return [
-            Segmentation(self._patch, selection, weight)
+            Segmentation(selection, weight)
             for selection, weight in zip(cuts, breakpoints)
         ]
 
