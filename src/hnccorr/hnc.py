@@ -5,13 +5,13 @@ from hnccorr.segmentation import Segmentation
 
 
 class HNC:
-    def __init__(self, patch, graph, arc_weight):
-        self._patch = patch
+    def __init__(self, seeds, graph, arc_weight):
+        self._seeds = seeds
 
         self._hnc = HNC_Closure(
             deepcopy(graph),
-            self._patch.seeds.positive_seeds,
-            self._patch.seeds.negative_seeds,
+            self._seeds.positive_seeds,
+            self._seeds.negative_seeds,
             arc_weight=arc_weight,
         )
 
