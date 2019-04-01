@@ -19,11 +19,6 @@ def test_num_frames(P1):
     assert P1.num_frames == 3
 
 
-def test_seeds(P1):
-    assert P1.seeds.positive_seeds == {(2,), (3,), (4,)}
-    assert P1.seeds.negative_seeds == {(1,), (5,)}
-
-
 def test_data(P1, MM):
     np.testing.assert_equal(P1[:], MM[:, 2:9])
 
