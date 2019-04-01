@@ -62,7 +62,7 @@ def pos_seeds():
 
 @pytest.fixture
 def P(MM):
-    return lambda x: Patch(MM, {}, x, 7, 3, 2)
+    return lambda x: Patch(MM, {}, x, 7)
 
 
 @pytest.fixture
@@ -72,4 +72,4 @@ def P1(P):
 
 @pytest.fixture
 def P2(MM2):
-    return Patch(MM2, {}, (5, 5), 3, 3, 2)
+    return Patch(MM2, {}, (5, 5), 3)
