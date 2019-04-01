@@ -1,5 +1,7 @@
 import pytest
 
+from hnccorr.seeds import Seeds
+
 
 @pytest.fixture
 def neg_seeds():
@@ -8,15 +10,11 @@ def neg_seeds():
 
 @pytest.fixture
 def S(pos_seeds, neg_seeds):
-    from hnccorr.seeds import Seeds
-
     return Seeds((5,), pos_seeds, neg_seeds)
 
 
 @pytest.fixture
 def empty_seed():
-    from hnccorr.seeds import Seeds
-
     return Seeds(None, [], [])
 
 

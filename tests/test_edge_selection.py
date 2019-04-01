@@ -1,9 +1,9 @@
 import numpy as np
 
+from hnccorr.edge_selection import SparseComputation
+
 
 def test_sparse_computation():
-    from hnccorr.edge_selection import SparseComputation
-
     class MockEmbedding:
         def __init__(self):
             self.embedding = np.array(

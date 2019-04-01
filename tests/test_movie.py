@@ -2,6 +2,7 @@ import pytest
 import os
 import numpy as np
 
+from hnccorr.movie import Movie
 
 from conftest import TEST_DATA_DIR
 
@@ -14,8 +15,6 @@ def M():
     image have value 1, all pixels in the second image have value 2, and all
     pixels in the third image have value 3.
     """
-    from hnccorr.movie import Movie
-
     return Movie(
         "Simple",
         image_dir=str(os.path.join(TEST_DATA_DIR, "simple_movie")),
