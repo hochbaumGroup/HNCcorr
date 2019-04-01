@@ -6,9 +6,9 @@ from hnccorr.hnc import HNC
 from hnccorr.seeds import Seeds
 
 
-def test_hnc(P1):
+def test_hnc():
     G = nx.Graph()
-    G.add_nodes_from(generate_pixels(P1.pixel_size))
+    G.add_nodes_from(generate_pixels((7,)))
 
     h = HNC(Seeds((3,), {(2,), (3,), (4,)}, {(1,), (5,)}), G, "weight")
 
