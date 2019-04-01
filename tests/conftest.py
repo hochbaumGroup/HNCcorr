@@ -2,7 +2,6 @@ import pytest
 import os
 import numpy as np
 
-from hnccorr.segmentation import Segmentation
 from hnccorr.patch import Patch
 
 TEST_DATA_DIR = os.path.join(
@@ -62,7 +61,7 @@ def pos_seeds():
 
 
 @pytest.fixture
-def P(MM, pos_seeds):
+def P(MM):
     return lambda x: Patch(MM, {}, x, 7, 3, 2)
 
 
@@ -74,23 +73,3 @@ def P1(P):
 @pytest.fixture
 def P2(MM2):
     return Patch(MM2, {}, (5, 5), 3, 3, 2)
-
-
-@pytest.fixture
-def SS1():
-    return {(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)}
-
-
-@pytest.fixture
-def S():
-    return lambda x: Segmentation(x, 0.5)
-
-
-@pytest.fixture
-def S1(S, SS1):
-    return S(SS1)
-
-
-@pytest.fixture
-def S2(S):
-    return S({(1, 0)})
