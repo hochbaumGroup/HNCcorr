@@ -31,8 +31,3 @@ def test_data(P1, MM):
 @pytest.mark.parametrize("center_seed, offset", ([(1,), (0,)], [(9,), (3,)]))
 def test_offset(P, center_seed, offset):
     assert P(center_seed).coordinate_offset == offset
-
-
-def test_patch_equal(P1):
-    assert P1 == copy(P1)
-    assert P1 != deepcopy(P1)

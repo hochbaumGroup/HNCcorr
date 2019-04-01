@@ -67,17 +67,6 @@ class Patch(object):
         }
         return positive_seeds
 
-    def __eq__(self, other):
-        return (
-            self._movie == other._movie
-            and self.seeds.center_seed == other.seeds.center_seed
-            and self.pixel_size == other.pixel_size
-            and self._negative_seed_radius == other._negative_seed_radius
-            and self.seeds.positive_seeds == other.seeds.positive_seeds
-            and self.seeds.negative_seeds == other.seeds.negative_seeds
-            and self.coordinate_offset == other.coordinate_offset
-        )
-
     def _select_negative_seeds(self):
         dist = np.zeros(
             (2 * self._negative_seed_radius + 1,) * self._num_dimensions
