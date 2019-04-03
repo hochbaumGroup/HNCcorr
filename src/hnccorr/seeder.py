@@ -9,16 +9,13 @@ from hnccorr.utils import (
 
 
 class LocalCorrelationSeeder(object):
-    def __init__(self, movie, neighborhood_size=3, keep_fraction=0.4):
+    def __init__(self, neighborhood_size=3, keep_fraction=0.4):
         self._neighborhood_size = neighborhood_size
         self._keep_fraction = keep_fraction
+
+    def select_seeds(self, movie):
         self._movie = movie
-
         self._num_dims = self._movie.num_dimensions
-
-        self._select_seeds()
-
-    def _select_seeds(self):
         # helpful constants
         max_shift = int((self._neighborhood_size - 1) / 2)
 
