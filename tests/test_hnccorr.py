@@ -9,7 +9,7 @@ def mock_seeder():
     class MockSeeder:
         def __init__(self):
             self.called = False
-            self.return_val = Candidate(1)
+            self.return_val = 1
 
         def select_seeds(self, movie):
             pass
@@ -27,4 +27,4 @@ def mock_seeder():
 def test_hnccorr_segment(MM, mock_seeder):
     h = HNCcorr(mock_seeder)
     h.segment(MM)
-    assert h.candidates == [mock_seeder.return_val]
+    assert h.candidates == [Candidate(mock_seeder.return_val)]

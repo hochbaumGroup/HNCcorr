@@ -11,6 +11,7 @@ class HNCcorr:
 
         seed = self._seeder.next()
         while seed is not None:
-            self.candidates.append(seed)
+            candidate = Candidate(seed)
+            self.candidates.append(candidate)
             seed = self._seeder.next()
         return self
