@@ -6,9 +6,13 @@ class HNCcorr:
     def __init__(self, seeder):
         self._seeder = seeder
         self.segmentations = []
+        self.candidates = []
 
     def segment(self, movie):
+        self._seeder.reset()
+        self.segmentations = []
         self.candidates = []
+
         self._seeder.select_seeds(movie)
 
         seed = self._seeder.next()

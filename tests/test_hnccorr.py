@@ -22,17 +22,40 @@ def mock_seeder():
                 self.called = True
                 return self.return_val
 
+        def reset(self):
+            self.called = False
+
     return MockSeeder()
 
 
-def test_hnccorr_segment(MM, mock_seeder):
-    h = HNCcorr(mock_seeder)
-    h.segment(MM)
-    assert h.candidates == [Candidate(mock_seeder.return_val)]
+@pytest.fixture
+def H(mock_seeder):
+    return HNCcorr(mock_seeder)
 
 
-def test_hnccorr_segmentations(MM, mock_seeder):
-    h = HNCcorr(mock_seeder)
-    assert h.segmentations == []
-    h.segment(MM)
-    assert h.segmentations == [Segmentation({(0, 1)}, 1.0)]
+def test_hnccorr_segmentations(H, MM):
+    assert H.segmentations == []
+    H.segment(MM)
+    assert H.segmentations == [Segmentation({(0, 1)}, 1.0)]
+
+
+def test_hnccorr_candidates(H, MM, mock_seeder):
+    assert H.candidates == []
+    H.segment(MM)
+    assert H.candidates == [Candidate(mock_seeder.return_val)]
+
+
+def test_hnccorr_reinitialize_candidates_for_movie(H, MM, mock_seeder):
+    H.segment(MM)
+    assert H.candidates == [Candidate(mock_seeder.return_val)]
+
+    H.segment(MM)
+    assert H.candidates == [Candidate(mock_seeder.return_val)]
+
+
+def test_hnccorr_reinitialize_segmentations_for_movie(H, MM, mock_seeder):
+    H.segment(MM)
+    assert H.segmentations == [Segmentation({(0, 1)}, 1.0)]
+
+    H.segment(MM)
+    assert H.segmentations == [Segmentation({(0, 1)}, 1.0)]

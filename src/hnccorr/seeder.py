@@ -65,3 +65,6 @@ class LocalCorrelationSeeder(object):
 
             return center_seed
         return None
+
+    def reset(self):
+        self._current_index = 0
