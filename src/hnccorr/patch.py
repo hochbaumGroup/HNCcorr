@@ -1,18 +1,10 @@
 import numpy as np
-
-from hnccorr.segmentation import Segmentation
 from hnccorr.utils import (
     add_offset_coordinates,
     add_offset_set_coordinates,
     eight_neighborhood,
     add_time_index,
 )
-from hnccorr.hnc import HNC
-from hnccorr.seeds import Seeds
-from hnccorr.graph import GraphConstructor
-from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
-from hnccorr.edge_selection import SparseComputation
-from hnccorr.utils import eight_neighborhood
 
 
 class Patch(object):
@@ -53,14 +45,11 @@ class Patch(object):
         # shift right such that bottom right corner exists
         bottomright_coordinates = list(
             min(x, max_value)
-            for x, max_value in zip(
-                bottomright_coordinates, self._movie.pixel_size
-            )
+            for x, max_value in zip(bottomright_coordinates, self._movie.pixel_size)
         )
 
         topleft_coordinates = add_offset_coordinates(
-            bottomright_coordinates,
-            (-self._patch_size,) * self._num_dimensions,
+            bottomright_coordinates, (-self._patch_size,) * self._num_dimensions
         )
 
         return topleft_coordinates
@@ -72,9 +61,7 @@ class Patch(object):
         )
 
         idx = []
-        for start, stop in zip(
-            self.coordinate_offset, bottomright_coordinates
-        ):
+        for start, stop in zip(self.coordinate_offset, bottomright_coordinates):
             idx.append(slice(start, stop))
         return add_time_index(tuple(idx))
 

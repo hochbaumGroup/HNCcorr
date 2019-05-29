@@ -4,16 +4,10 @@ from closure.hnc import HNC as HNC_Closure
 from hnccorr.segmentation import Segmentation
 
 
-class HNC:
-    def __init__(self, seeds, graph, arc_weight):
-        self._seeds = seeds
-
-        self._hnc = HNC_Closure(
-            deepcopy(graph),
-            self._seeds.positive_seeds,
-            self._seeds.negative_seeds,
-            arc_weight=arc_weight,
-        )
+class HncParametric:
+    def __init__(self, lower_bound, upper_bound):
+        self._lower_bound = lower_bound
+        self._upper_bound = upper_bound
 
     def _construct_segmentations(self, cuts, breakpoints):
         return [
@@ -21,6 +15,12 @@ class HNC:
             for selection, weight in zip(cuts, breakpoints)
         ]
 
-    def solve_parametric(self, low, high):
-        cuts, breakpoints = self._hnc.solve_parametric(low, high)
+    def solve(self, seeds, graph):
+        hnc = HNC_Closure(
+            deepcopy(graph),
+            seeds.positive_seeds,
+            seeds.negative_seeds,
+            arc_weight="weight",
+        )
+        cuts, breakpoints = hnc.solve_parametric(self._lower_bound, self._upper_bound)
         return self._construct_segmentations(cuts, breakpoints)
