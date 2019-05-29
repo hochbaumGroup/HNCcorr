@@ -11,6 +11,7 @@ def test_candidate_equality():
     assert Candidate(1, "a", True) == Candidate(1, "a", True)
     assert Candidate(1, "a", True) != Candidate(2, "a", True)
     assert Candidate(1, "a", True) != Candidate(1, "b", True)
+    assert Candidate(1, "a", True) != Candidate(1, "a", False)
 
 
 def test_candidate_segmentations(simple_candidate, simple_segmentation):

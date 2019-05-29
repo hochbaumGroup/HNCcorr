@@ -10,8 +10,12 @@ class Candidate:
         self.best_segmentation = None
 
     def __eq__(self, other):
-        return (self._value == other._value) and (
-            self._postprocessor == other._postprocessor
+        return all(
+            [
+                self._value == other._value,
+                self._postprocessor == other._postprocessor,
+                self._segmentor == other._segmentor,
+            ]
         )
 
     def segment(self):
