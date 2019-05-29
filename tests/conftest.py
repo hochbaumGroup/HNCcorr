@@ -4,9 +4,7 @@ import numpy as np
 
 from hnccorr.patch import Patch
 
-TEST_DATA_DIR = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "test_data"
-)
+TEST_DATA_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_data")
 
 
 @pytest.fixture
@@ -45,12 +43,7 @@ def MM2():
             return self._A.__getitem__(key)
 
         def is_valid_pixel_index(self, index):
-            return (
-                index[0] >= 0
-                and index[0] < 10
-                and index[1] >= 0
-                and index[1] < 10
-            )
+            return index[0] >= 0 and index[0] < 10 and index[1] >= 0 and index[1] < 10
 
     return MockMovie()
 
