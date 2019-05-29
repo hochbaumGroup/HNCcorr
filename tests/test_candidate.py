@@ -4,8 +4,8 @@ from hnccorr.segmentation import Segmentation
 
 
 @pytest.fixture
-def simple_candidate():
-    return Candidate(1)
+def simple_candidate(postprocessor_select_first):
+    return Candidate(1, postprocessor_select_first)
 
 
 def test_candidate_segment(simple_candidate, simple_segmentation):

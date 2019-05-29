@@ -60,6 +60,15 @@ def simple_segmentation():
 
 
 @pytest.fixture
+def postprocessor_select_first():
+    class MockPostProcessor:
+        def segment(self, segmentations):
+            return segmentations[0]
+
+    return MockPostProcessor()
+
+
+@pytest.fixture
 def P(MM):
     return lambda x: Patch(MM, {}, x, 7)
 

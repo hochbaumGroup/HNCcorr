@@ -29,15 +29,6 @@ def mock_seeder():
 
 
 @pytest.fixture
-def postprocessor_select_first():
-    class MockPostProcessor:
-        def segment(self, segmentations):
-            return segmentations[0]
-
-    return MockPostProcessor()
-
-
-@pytest.fixture
 def H(mock_seeder, postprocessor_select_first):
     return HNCcorr(mock_seeder, postprocessor_select_first)
 
@@ -51,15 +42,15 @@ def test_hnccorr_segmentations(H, MM, simple_segmentation):
 def test_hnccorr_candidates(H, MM, mock_seeder):
     assert H.candidates == []
     H.segment(MM)
-    assert H.candidates == [Candidate(mock_seeder.return_val)]
+    assert H.candidates == [Candidate(mock_seeder.return_val, None)]
 
 
 def test_hnccorr_reinitialize_candidates_for_movie(H, MM, mock_seeder):
     H.segment(MM)
-    assert H.candidates == [Candidate(mock_seeder.return_val)]
+    assert H.candidates == [Candidate(mock_seeder.return_val, None)]
 
     H.segment(MM)
-    assert H.candidates == [Candidate(mock_seeder.return_val)]
+    assert H.candidates == [Candidate(mock_seeder.return_val, None)]
 
 
 def test_hnccorr_reinitialize_segmentations_for_movie(
