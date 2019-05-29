@@ -3,8 +3,15 @@ from hnccorr.candidate import Candidate
 from hnccorr.segmentation import Segmentation
 
 
-def test_candidate_segment(simple_segmentation):
-    c = Candidate(1)
-    best_segmentation = c.segment()
+@pytest.fixture
+def simple_candidate():
+    return Candidate(1)
 
-    assert best_segmentation == simple_segmentation
+
+def test_candidate_segment(simple_candidate, simple_segmentation):
+    assert simple_candidate.segment() == simple_segmentation
+
+
+def test_candidate_segmentations(simple_candidate, simple_segmentation):
+    simple_candidate.segment()
+    assert simple_candidate.segmentations == [simple_segmentation]
