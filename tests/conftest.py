@@ -114,7 +114,7 @@ def seeder_fixed_val():
 
 @pytest.fixture
 def P(MM):
-    return lambda x: Patch(MM, {}, x, 7)
+    return lambda x: Patch(MM, x, 7)
 
 
 @pytest.fixture
@@ -124,4 +124,4 @@ def P1(P):
 
 @pytest.fixture
 def P2(MM2):
-    return Patch(MM2, {}, (5, 5), 3)
+    return Patch(MM2, (5, 5), 3)

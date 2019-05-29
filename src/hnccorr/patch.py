@@ -11,10 +11,9 @@ class Patch(object):
     """Subregion of movie with seeds to evaluate for cell presence
     """
 
-    def __init__(self, movie, config, center_seed, patch_size):
+    def __init__(self, movie, center_seed, patch_size):
         self._num_dimensions = movie.num_dimensions
         self._center_seed = center_seed
-        self._config = config
         self._patch_size = patch_size
         self._movie = movie
         self.pixel_size = (patch_size,) * self._num_dimensions
