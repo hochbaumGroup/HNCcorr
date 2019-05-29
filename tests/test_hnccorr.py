@@ -33,10 +33,10 @@ def H(mock_seeder):
     return HNCcorr(mock_seeder)
 
 
-def test_hnccorr_segmentations(H, MM):
+def test_hnccorr_segmentations(H, MM, simple_segmentation):
     assert H.segmentations == []
     H.segment(MM)
-    assert H.segmentations == [Segmentation({(0, 1)}, 1.0)]
+    assert H.segmentations == [simple_segmentation]
 
 
 def test_hnccorr_candidates(H, MM, mock_seeder):
@@ -53,9 +53,11 @@ def test_hnccorr_reinitialize_candidates_for_movie(H, MM, mock_seeder):
     assert H.candidates == [Candidate(mock_seeder.return_val)]
 
 
-def test_hnccorr_reinitialize_segmentations_for_movie(H, MM, mock_seeder):
+def test_hnccorr_reinitialize_segmentations_for_movie(
+    H, MM, mock_seeder, simple_segmentation
+):
     H.segment(MM)
-    assert H.segmentations == [Segmentation({(0, 1)}, 1.0)]
+    assert H.segmentations == [simple_segmentation]
 
     H.segment(MM)
-    assert H.segmentations == [Segmentation({(0, 1)}, 1.0)]
+    assert H.segmentations == [simple_segmentation]

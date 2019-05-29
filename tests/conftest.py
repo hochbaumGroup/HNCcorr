@@ -3,6 +3,7 @@ import os
 import numpy as np
 
 from hnccorr.patch import Patch
+from hnccorr.segmentation import Segmentation
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_data")
 
@@ -51,6 +52,11 @@ def MM2():
 @pytest.fixture
 def pos_seeds():
     return {(4,), (5,), (6,)}
+
+
+@pytest.fixture
+def simple_segmentation():
+    return Segmentation({(0, 1)}, 1.0)
 
 
 @pytest.fixture

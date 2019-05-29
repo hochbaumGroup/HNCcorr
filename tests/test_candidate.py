@@ -3,8 +3,8 @@ from hnccorr.candidate import Candidate
 from hnccorr.segmentation import Segmentation
 
 
-def test_candidate_segment():
+def test_candidate_segment(simple_segmentation):
     c = Candidate(1)
     best_segmentation = c.segment()
 
-    assert best_segmentation == Segmentation({(0, 1)}, 1.0)
+    assert best_segmentation == simple_segmentation
