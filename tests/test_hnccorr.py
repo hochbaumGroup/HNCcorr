@@ -29,8 +29,17 @@ def mock_seeder():
 
 
 @pytest.fixture
-def H(mock_seeder):
-    return HNCcorr(mock_seeder)
+def postprocessor_select_first():
+    class MockPostProcessor:
+        def segment(self, segmentations):
+            return segmentations[0]
+
+    return MockPostProcessor()
+
+
+@pytest.fixture
+def H(mock_seeder, postprocessor_select_first):
+    return HNCcorr(mock_seeder, postprocessor_select_first)
 
 
 def test_hnccorr_segmentations(H, MM, simple_segmentation):

@@ -3,7 +3,7 @@ from hnccorr.segmentation import Segmentation
 
 
 class HNCcorr:
-    def __init__(self, seeder):
+    def __init__(self, seeder, postprocessor):
         self._seeder = seeder
         self.segmentations = []
         self.candidates = []
