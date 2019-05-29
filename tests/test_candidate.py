@@ -3,13 +3,14 @@ from hnccorr.candidate import Candidate
 from hnccorr.segmentation import Segmentation
 
 
-@pytest.fixture
-def simple_candidate(postprocessor_select_first):
-    return Candidate(1, postprocessor_select_first)
-
-
 def test_candidate_segment(simple_candidate, simple_segmentation):
     assert simple_candidate.segment() == simple_segmentation
+
+
+def test_candidate_equality():
+    assert Candidate(1, "a") == Candidate(1, "a")
+    assert Candidate(1, "a") != Candidate(2, "a")
+    assert Candidate(1, "a") != Candidate(1, "b")
 
 
 def test_candidate_segmentations(simple_candidate, simple_segmentation):

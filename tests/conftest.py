@@ -4,6 +4,7 @@ import numpy as np
 
 from hnccorr.patch import Patch
 from hnccorr.segmentation import Segmentation
+from hnccorr.candidate import Candidate
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_data")
 
@@ -60,12 +61,40 @@ def simple_segmentation():
 
 
 @pytest.fixture
+def simple_candidate(seeder_fixed_val, postprocessor_select_first):
+    return Candidate(seeder_fixed_val.return_val, postprocessor_select_first)
+
+
+@pytest.fixture
 def postprocessor_select_first():
     class MockPostProcessor:
         def select(self, segmentations):
             return segmentations[0]
 
     return MockPostProcessor()
+
+
+@pytest.fixture
+def seeder_fixed_val():
+    class MockSeeder:
+        def __init__(self):
+            self.called = False
+            self.return_val = 1
+
+        def select_seeds(self, movie):
+            pass
+
+        def next(self):
+            if self.called:
+                return None
+            else:
+                self.called = True
+                return self.return_val
+
+        def reset(self):
+            self.called = False
+
+    return MockSeeder()
 
 
 @pytest.fixture
