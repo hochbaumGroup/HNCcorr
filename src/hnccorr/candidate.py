@@ -14,5 +14,5 @@ class Candidate:
     def segment(self):
         self.segmentations = [Segmentation({(0, 1)}, 1.0)]
 
-        self.best_segmentation = self.segmentations[0]
+        self.best_segmentation = self._postprocessor.select(self.segmentations)
         return self.best_segmentation

@@ -62,7 +62,7 @@ def simple_segmentation():
 @pytest.fixture
 def postprocessor_select_first():
     class MockPostProcessor:
-        def segment(self, segmentations):
+        def select(self, segmentations):
             return segmentations[0]
 
     return MockPostProcessor()
