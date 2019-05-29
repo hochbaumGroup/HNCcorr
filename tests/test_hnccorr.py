@@ -6,8 +6,10 @@ from hnccorr.segmentation import Segmentation
 
 
 @pytest.fixture
-def H(seeder_fixed_val, postprocessor_select_first):
-    return HNCcorr(seeder_fixed_val, postprocessor_select_first)
+def H(seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentation):
+    return HNCcorr(
+        seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentation
+    )
 
 
 def test_hnccorr_segmentations(H, MM, simple_segmentation):

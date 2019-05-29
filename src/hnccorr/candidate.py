@@ -2,9 +2,10 @@ from hnccorr.segmentation import Segmentation
 
 
 class Candidate:
-    def __init__(self, value, postprocessor):
+    def __init__(self, value, postprocessor, segmentor):
         self._value = value
         self._postprocessor = postprocessor
+        self.best_segmentor = segmentor
         self.segmentations = None
         self.best_segmentation = None
 

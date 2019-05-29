@@ -3,10 +3,11 @@ from hnccorr.segmentation import Segmentation
 
 
 class HNCcorr:
-    def __init__(self, seeder, postprocessor):
+    def __init__(self, seeder, postprocessor, segmentor):
         self._seeder = seeder
         self.segmentations = []
         self._postprocessor = postprocessor
+        self._segmentor = segmentor
         self.candidates = []
 
     def segment(self, movie):
@@ -18,7 +19,7 @@ class HNCcorr:
 
         seed = self._seeder.next()
         while seed is not None:
-            candidate = Candidate(seed, self._postprocessor)
+            candidate = Candidate(seed, self._postprocessor, self._segmentor)
             self.candidates.append(candidate)
             self.segmentations.append(Segmentation({(0, 1)}, 1.0))
             seed = self._seeder.next()

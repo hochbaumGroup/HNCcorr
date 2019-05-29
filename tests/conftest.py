@@ -61,8 +61,21 @@ def simple_segmentation():
 
 
 @pytest.fixture
-def simple_candidate(seeder_fixed_val, postprocessor_select_first):
-    return Candidate(seeder_fixed_val.return_val, postprocessor_select_first)
+def segmentor_simple_segmentation(simple_segmentation):
+    class MockSegmentor:
+        def segment():
+            return [simple_candidate]
+
+
+@pytest.fixture
+def simple_candidate(
+    seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentation
+):
+    return Candidate(
+        seeder_fixed_val.return_val,
+        postprocessor_select_first,
+        segmentor_simple_segmentation,
+    )
 
 
 @pytest.fixture
