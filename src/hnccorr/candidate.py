@@ -5,7 +5,7 @@ class Candidate:
     def __init__(self, value, postprocessor, segmentor):
         self._value = value
         self._postprocessor = postprocessor
-        self.best_segmentor = segmentor
+        self._segmentor = segmentor
         self.segmentations = None
         self.best_segmentation = None
 
@@ -15,7 +15,7 @@ class Candidate:
         )
 
     def segment(self):
-        self.segmentations = [Segmentation({(0, 1)}, 1.0)]
+        self.segmentations = self._segmentor.segment()
 
         self.best_segmentation = self._postprocessor.select(self.segmentations)
         return self.best_segmentation
