@@ -2,8 +2,8 @@ from hnccorr.segmentation import Segmentation
 
 
 class Candidate:
-    def __init__(self, value, postprocessor, segmentor):
-        self._value = value
+    def __init__(self, center_seed, postprocessor, segmentor):
+        self._center_seed = center_seed
         self._postprocessor = postprocessor
         self._segmentor = segmentor
         self.segmentations = None
@@ -12,7 +12,7 @@ class Candidate:
     def __eq__(self, other):
         return all(
             [
-                self._value == other._value,
+                self._center_seed == other._center_seed,
                 self._postprocessor == other._postprocessor,
                 self._segmentor == other._segmentor,
             ]
