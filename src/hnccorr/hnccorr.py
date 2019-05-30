@@ -4,23 +4,23 @@ from hnccorr.segmentation import Segmentation
 
 class HNCcorr:
     def __init__(self, seeder, postprocessor, segmentor):
-        self._seeder = seeder
+        self.seeder = seeder
         self.segmentations = []
-        self._postprocessor = postprocessor
-        self._segmentor = segmentor
+        self.postprocessor = postprocessor
+        self.segmentor = segmentor
         self.candidates = []
 
     def segment(self, movie):
-        self._seeder.reset()
+        self.seeder.reset()
         self.segmentations = []
         self.candidates = []
 
-        self._seeder.select_seeds(movie)
+        self.seeder.select_seeds(movie)
 
-        seed = self._seeder.next()
+        seed = self.seeder.next()
         while seed is not None:
             candidate = Candidate(seed, self)
             self.candidates.append(candidate)
             self.segmentations.append(Segmentation({(0, 1)}, 1.0))
-            seed = self._seeder.next()
+            seed = self.seeder.next()
         return self

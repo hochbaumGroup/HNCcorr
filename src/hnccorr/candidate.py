@@ -17,7 +17,7 @@ class Candidate:
         pos_seeds = None
         neg_seeds = None
         graph = None
-        self.segmentations = self._hnccorr._segmentor.solve(graph, pos_seeds, neg_seeds)
+        self.segmentations = self._hnccorr.segmentor.solve(graph, pos_seeds, neg_seeds)
 
-        self.best_segmentation = self._hnccorr._postprocessor.select(self.segmentations)
+        self.best_segmentation = self._hnccorr.postprocessor.select(self.segmentations)
         return self.best_segmentation

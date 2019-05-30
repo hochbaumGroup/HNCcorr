@@ -14,7 +14,19 @@ def H(seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentatio
 
 @pytest.fixture
 def candidate(H):
-    return Candidate(H._seeder.return_val, H)
+    return Candidate(H.seeder.return_val, H)
+
+
+def test_hnccorr_seeder(H, seeder_fixed_val):
+    assert H.seeder == seeder_fixed_val
+
+
+def test_hnccorr_seeder(H, postprocessor_select_first):
+    assert H.postprocessor == postprocessor_select_first
+
+
+def test_hnccorr_seeder(H, segmentor_simple_segmentation):
+    assert H.segmentor == segmentor_simple_segmentation
 
 
 def test_hnccorr_segmentations(H, MM, simple_segmentation):
