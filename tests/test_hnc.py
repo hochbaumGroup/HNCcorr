@@ -3,7 +3,6 @@ import networkx as nx
 
 from hnccorr.utils import generate_pixels
 from hnccorr.hnc import HncParametric
-from hnccorr.seeds import Seeds
 
 
 def test_hnc():
