@@ -3,7 +3,7 @@ all: test
 lint: pylint pydoc pycode
 
 pylint:
-	pylint --rcfile=.pylintrc src/nytaximdp
+	pylint --rcfile=.pylintrc src/hnccorr
 
 pydoc:
 	pydocstyle src/
