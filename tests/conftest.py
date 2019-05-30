@@ -63,7 +63,7 @@ def simple_segmentation():
 @pytest.fixture
 def segmentor_simple_segmentation(simple_segmentation):
     class MockSegmentor:
-        def solve(self, seeds, graph):
+        def solve(self, graph, pos_seeds, neg_seeds):
             return [simple_segmentation]
 
     return MockSegmentor()

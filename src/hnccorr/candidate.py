@@ -19,9 +19,10 @@ class Candidate:
         )
 
     def segment(self):
-        seeds = None
+        pos_seeds = None
+        neg_seeds = None
         graph = None
-        self.segmentations = self._segmentor.solve(seeds, graph)
+        self.segmentations = self._segmentor.solve(graph, pos_seeds, neg_seeds)
 
         self.best_segmentation = self._postprocessor.select(self.segmentations)
         return self.best_segmentation
