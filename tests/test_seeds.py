@@ -1,7 +1,7 @@
 import pytest
 
 from hnccorr.seeds import Seeds
-from hnccorr.seeds import PositiveSeedSelector
+from hnccorr.seeds import PositiveSeedSelector, NegativeSeedSelector
 
 
 @pytest.fixture
@@ -74,14 +74,21 @@ def test_select_negative_seeds_simple(empty_seed):
     }
 
 
-def test_select_negative_seeds_zero_radius(empty_seed):
-    empty_seed.center_seed = (5, 5)
-    assert empty_seed.select_negative_seeds(0, 4, (10, 10)) == {(5, 5)}
+def test_select_negative_seed_selector():
+    assert NegativeSeedSelector(2, 4, (10, 10)).select((5, 5)) == {
+        (3, 5),
+        (7, 5),
+        (5, 3),
+        (5, 7),
+    }
 
 
-def test_select_negative_seeds_count_rounding(empty_seed):
-    empty_seed.center_seed = (5, 5)
-    assert empty_seed.select_negative_seeds(2, 8, (10, 10)) == {
+def test_select_negative_seeds_zero_radius():
+    assert NegativeSeedSelector(0, 8, (10, 10)).select((5, 5)) == {(5, 5)}
+
+
+def test_select_negative_seeds_count_rounding():
+    assert NegativeSeedSelector(2, 8, (10, 10)).select((5, 5)) == {
         (3, 5),
         (4, 4),
         (7, 5),
@@ -93,19 +100,17 @@ def test_select_negative_seeds_count_rounding(empty_seed):
     }
 
 
-def test_select_negative_seeds_topleft_corner(empty_seed):
-    empty_seed.center_seed = (0, 0)
-    assert empty_seed.select_negative_seeds(2, 4, (10, 10)) == {(0, 2), (2, 0)}
+def test_select_negative_seeds_topleft_corner():
+    assert NegativeSeedSelector(2, 4, (10, 10)).select((0, 0)) == {(0, 2), (2, 0)}
 
 
-def test_select_negative_seeds_bottomright_corner(empty_seed):
-    empty_seed.center_seed = (9, 9)
-    assert empty_seed.select_negative_seeds(2, 4, (10, 10)) == {(7, 9), (9, 7)}
+def test_select_negative_seeds_bottomright_corner():
+    assert NegativeSeedSelector(2, 4, (10, 10)).select((9, 9)) == {(7, 9), (9, 7)}
 
 
-def test_select_negative_seeds_invalid_dimension(empty_seed):
+def test_select_negative_seeds_invalid_dimension():
     with pytest.raises(ValueError):
-        empty_seed.select_negative_seeds(2, 4, (10, 10, 10))
+        NegativeSeedSelector(2, 4, (10, 10, 10))
 
     with pytest.raises(ValueError):
-        empty_seed.select_negative_seeds(2, 4, (10,))
+        NegativeSeedSelector(2, 4, (10,))
