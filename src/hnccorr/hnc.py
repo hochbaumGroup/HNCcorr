@@ -15,12 +15,7 @@ class HncParametric:
             for selection, weight in zip(cuts, breakpoints)
         ]
 
-    def solve(self, seeds, graph):
-        hnc = HNC_Closure(
-            deepcopy(graph),
-            seeds.positive_seeds,
-            seeds.negative_seeds,
-            arc_weight="weight",
-        )
+    def solve(self, graph, pos_seeds, neg_seeds):
+        hnc = HNC_Closure(deepcopy(graph), pos_seeds, neg_seeds, arc_weight="weight")
         cuts, breakpoints = hnc.solve_parametric(self._lower_bound, self._upper_bound)
         return self._construct_segmentations(cuts, breakpoints)

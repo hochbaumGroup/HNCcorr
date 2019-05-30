@@ -12,7 +12,7 @@ def test_hnc():
 
     h = HncParametric(0, 2)
 
-    segmentations = h.solve(Seeds((3,), {(2,), (3,), (4,)}, {(1,), (5,)}), G)
+    segmentations = h.solve(G, {(2,), (3,), (4,)}, {(1,), (5,)})
 
     assert len(segmentations) == 1
     assert segmentations[0].selection == {(0,), (2,), (3,), (4,), (6,)}
