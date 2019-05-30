@@ -3,11 +3,20 @@ from hnccorr.segmentation import Segmentation
 
 
 class HNCcorr:
-    def __init__(self, seeder, postprocessor, segmentor):
+    def __init__(
+        self,
+        seeder,
+        postprocessor,
+        segmentor,
+        positive_seed_selector,
+        negative_seed_selector,
+    ):
         self.seeder = seeder
         self.segmentations = []
         self.postprocessor = postprocessor
         self.segmentor = segmentor
+        self.positive_seed_selector = positive_seed_selector
+        self.negative_seed_selector = negative_seed_selector
         self.candidates = []
 
     def segment(self, movie):

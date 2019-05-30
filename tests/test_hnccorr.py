@@ -8,7 +8,11 @@ from hnccorr.segmentation import Segmentation
 @pytest.fixture
 def H(seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentation):
     return HNCcorr(
-        seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentation
+        seeder_fixed_val,
+        postprocessor_select_first,
+        segmentor_simple_segmentation,
+        "pos_seed_selector",
+        "neg_seed_selector",
     )
 
 
@@ -19,6 +23,18 @@ def candidate(H):
 
 def test_hnccorr_seeder(H, seeder_fixed_val):
     assert H.seeder == seeder_fixed_val
+
+
+def test_hnccorr_seeder(H, seeder_fixed_val):
+    assert H.seeder == seeder_fixed_val
+
+
+def test_hnccorr_positive_seed_selector(H):
+    assert H.positive_seed_selector == "pos_seed_selector"
+
+
+def test_hnccorr_negative_seed_selector(H):
+    assert H.negative_seed_selector == "neg_seed_selector"
 
 
 def test_hnccorr_seeder(H, postprocessor_select_first):
