@@ -1,6 +1,7 @@
 import pytest
 
 from hnccorr.seeds import Seeds
+from hnccorr.seeds import PositiveSeedSelector
 
 
 @pytest.fixture
@@ -38,25 +39,29 @@ def test_negative_seeds(S, neg_seeds):
         (
             (1, 1),
             1,
-            {
-                (0, 0),
-                (0, 1),
-                (0, 2),
-                (1, 0),
-                (1, 1),
-                (1, 2),
-                (2, 0),
-                (2, 1),
-                (2, 2),
-            },
+            {(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)},
         ),
     ],
 )
-def test_select_positive_seeds(
-    empty_seed, center_seed, radius, expected_seeds
-):
+def test_select_positive_seeds(empty_seed, center_seed, radius, expected_seeds):
     empty_seed.center_seed = center_seed
     assert empty_seed.select_positive_seeds(radius, (5, 5)) == expected_seeds
+
+
+@pytest.mark.parametrize(
+    "center_seed, radius, expected_seeds",
+    [
+        ((0, 0), 0, {(0, 0)}),
+        ((0, 0), 1, {(0, 0), (0, 1), (1, 1), (1, 0)}),
+        (
+            (1, 1),
+            1,
+            {(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)},
+        ),
+    ],
+)
+def test_positive_seed_selector(center_seed, radius, expected_seeds):
+    assert PositiveSeedSelector(radius, (5, 5)).select(center_seed) == expected_seeds
 
 
 def test_select_negative_seeds_simple(empty_seed):
