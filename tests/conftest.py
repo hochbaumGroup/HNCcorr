@@ -70,14 +70,35 @@ def segmentor_simple_segmentation(simple_segmentation):
 
 
 @pytest.fixture
-def simple_candidate(
-    seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentation
+def simple_positive_seed_selector():
+    class MockPositiveSeedSelector:
+        def select(center_seed):
+            return center_seed
+
+    return MockPositiveSeedSelector()
+
+
+@pytest.fixture
+def mock_hnccorr(
+    seeder_fixed_val,
+    postprocessor_select_first,
+    segmentor_simple_segmentation,
+    simple_positive_seed_selector,
 ):
-    return Candidate(
-        seeder_fixed_val.return_val,
-        postprocessor_select_first,
-        segmentor_simple_segmentation,
-    )
+    class MockHNCcorr:
+        def __init__(self):
+            self._seeder = seeder_fixed_val
+            self._postprocessor = postprocessor_select_first
+            self._segmentor = segmentor_simple_segmentation
+            self._positive_seed_selector = simple_positive_seed_selector
+            self._negative_seed_selector = simple_positive_seed_selector
+
+    return MockHNCcorr()
+
+
+@pytest.fixture
+def simple_candidate(mock_hnccorr):
+    return Candidate(mock_hnccorr._seeder.return_val, mock_hnccorr)
 
 
 @pytest.fixture
