@@ -16,7 +16,6 @@ class Candidate:
     def segment(self):
         pos_seeds = self._hnccorr.positive_seed_selector.select(self._center_seed)
         neg_seeds = self._hnccorr.negative_seed_selector.select(self._center_seed)
-        print(self._hnccorr.movie)
         patch = self._hnccorr.patch_class(
             self._hnccorr.movie, self._center_seed, "patch_size"
         )
