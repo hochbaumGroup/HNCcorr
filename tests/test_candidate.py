@@ -1,10 +1,22 @@
 import pytest
+
+from hnccorr.hnccorr import HNCcorr
 from hnccorr.candidate import Candidate
-from hnccorr.segmentation import Segmentation
 
 
-def test_candidate_segment(simple_candidate, simple_segmentation):
-    assert simple_candidate.segment() == simple_segmentation
+def test_candidate_segment(mocker, dummy, simple_segmentation):
+    segmentor = mocker.patch("hnccorr.hnc.HncParametric", autospec=True)(dummy, dummy)
+    segmentor.solve.return_value = "segmentations"
+    postprocessor = mocker.patch(
+        "hnccorr.postprocessor.SizePostprocessor", autospec=True
+    )(dummy, dummy, dummy)
+    postprocessor.select.return_value = simple_segmentation
+
+    hnccorr = HNCcorr(dummy, postprocessor, segmentor, dummy, dummy)
+
+    assert Candidate(1, hnccorr).segment() == simple_segmentation
+    segmentor.solve.assert_called_once_with(None, None, None)
+    postprocessor.select.assert_called_once_with("segmentations")
 
 
 def test_candidate_equality():

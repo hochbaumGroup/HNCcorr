@@ -10,6 +10,11 @@ TEST_DATA_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_
 
 
 @pytest.fixture
+def dummy():
+    return "Dummy"
+
+
+@pytest.fixture
 def MM():
     class MockMovie:
         def __init__(self):
