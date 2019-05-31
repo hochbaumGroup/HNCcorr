@@ -63,6 +63,7 @@ def hnccorr(
         mock_pos_seed_selector,
         mock_neg_seed_selector,
         mock_graph_constructor,
+        "patch_class",
     )
 
 

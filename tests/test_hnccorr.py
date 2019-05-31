@@ -14,6 +14,7 @@ def H(seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentatio
         "pos_seed_selector",
         "neg_seed_selector",
         "graph_constructor",
+        "patch",
     )
 
 
@@ -36,6 +37,10 @@ def test_hnccorr_movie(H, MM, seeder_fixed_val):
 
 def test_hnccorr_seeder(H, seeder_fixed_val):
     assert H.seeder == seeder_fixed_val
+
+
+def test_hnccorr_patch_class(H):
+    assert H.patch_class == "patch"
 
 
 def test_hnccorr_positive_seed_selector(H):
