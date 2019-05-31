@@ -18,8 +18,8 @@ def MW():
 def test_graph_constructor(P, MES, MW):
     from hnccorr.graph import GraphConstructor
 
-    GC = GraphConstructor(P((0,)), MES, MW)
-    G = GC.construct(None)
+    GC = GraphConstructor(MES, MW)
+    G = GC.construct(P((0,)), None)
 
     num_nodes = 7
     assert len(G.nodes) == num_nodes
