@@ -84,6 +84,7 @@ def hnccorr(
         mock_patch_class,
         mock_embedding_class,
         "alpha",
+        "patch_size",
     )
     H.movie = "movie"
     return H

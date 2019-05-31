@@ -15,6 +15,7 @@ class HNCcorr:
         patch_class,
         embedding_class,
         embedding_alpha,
+        patch_size,
     ):
         self.seeder = seeder
         self.postprocessor = postprocessor
@@ -25,6 +26,7 @@ class HNCcorr:
         self.patch_class = patch_class
         self.embedding_class = embedding_class
         self.embedding_alpha = embedding_alpha
+        self.patch_size = patch_size
 
         self.movie = None
         self.segmentations = []

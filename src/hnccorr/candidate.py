@@ -14,7 +14,7 @@ class Candidate:
         pos_seeds = self._hnccorr.positive_seed_selector.select(self._center_seed)
         neg_seeds = self._hnccorr.negative_seed_selector.select(self._center_seed)
         patch = self._hnccorr.patch_class(
-            self._hnccorr.movie, self._center_seed, "patch_size"
+            self._hnccorr.movie, self._center_seed, self._hnccorr.patch_size
         )
         embedding = self._hnccorr.embedding_class(patch, self._hnccorr.embedding_alpha)
         graph = self._hnccorr.graph_constructor.construct(patch, embedding)
