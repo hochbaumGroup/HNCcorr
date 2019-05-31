@@ -83,6 +83,7 @@ def hnccorr(
         mock_graph_constructor,
         mock_patch_class,
         mock_embedding_class,
+        "alpha",
     )
     H.movie = "movie"
     return H

@@ -14,6 +14,7 @@ class HNCcorr:
         graph_constructor,
         patch_class,
         embedding_class,
+        embedding_alpha,
     ):
         self.seeder = seeder
         self.postprocessor = postprocessor
@@ -23,6 +24,7 @@ class HNCcorr:
         self.graph_constructor = graph_constructor
         self.patch_class = patch_class
         self.embedding_class = embedding_class
+        self.embedding_alpha = embedding_alpha
 
         self.movie = None
         self.segmentations = []

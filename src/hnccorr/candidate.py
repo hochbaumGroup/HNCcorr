@@ -16,7 +16,7 @@ class Candidate:
         patch = self._hnccorr.patch_class(
             self._hnccorr.movie, self._center_seed, "patch_size"
         )
-        embedding = self._hnccorr.embedding_class(patch, "alpha")
+        embedding = self._hnccorr.embedding_class(patch, self._hnccorr.embedding_alpha)
         graph = self._hnccorr.graph_constructor.construct(patch, embedding)
         self.segmentations = self._hnccorr.segmentor.solve(graph, pos_seeds, neg_seeds)
         self.best_segmentation = self._hnccorr.postprocessor.select(self.segmentations)
