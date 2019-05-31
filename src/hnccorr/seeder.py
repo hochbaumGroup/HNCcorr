@@ -12,6 +12,10 @@ class LocalCorrelationSeeder:
     def __init__(self, neighborhood_size=3, keep_fraction=0.4):
         self._neighborhood_size = neighborhood_size
         self._keep_fraction = keep_fraction
+        self._movie = None
+        self._num_dims = None
+        self._seeds = None
+        self._current_index = None
 
     def select_seeds(self, movie):
         self._movie = movie
