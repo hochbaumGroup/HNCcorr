@@ -84,29 +84,6 @@ def simple_positive_seed_selector():
 
 
 @pytest.fixture
-def mock_hnccorr(
-    seeder_fixed_val,
-    postprocessor_select_first,
-    segmentor_simple_segmentation,
-    simple_positive_seed_selector,
-):
-    class MockHNCcorr:
-        def __init__(self):
-            self.seeder = seeder_fixed_val
-            self.postprocessor = postprocessor_select_first
-            self.segmentor = segmentor_simple_segmentation
-            self._positive_seed_selector = simple_positive_seed_selector
-            self._negative_seed_selector = simple_positive_seed_selector
-
-    return MockHNCcorr()
-
-
-@pytest.fixture
-def simple_candidate(mock_hnccorr):
-    return Candidate(mock_hnccorr.seeder.return_val, mock_hnccorr)
-
-
-@pytest.fixture
 def postprocessor_select_first():
     class MockPostProcessor:
         def select(self, segmentations):
