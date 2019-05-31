@@ -72,6 +72,7 @@ def hnccorr(
         mock_neg_seed_selector,
         mock_graph_constructor,
         mock_patch_class,
+        "embedding",
     )
     H.movie = "movie"
     return H

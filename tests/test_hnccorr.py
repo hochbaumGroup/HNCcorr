@@ -15,6 +15,7 @@ def H(seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentatio
         "neg_seed_selector",
         "graph_constructor",
         "patch",
+        "embedding",
     )
 
 
@@ -41,6 +42,10 @@ def test_hnccorr_seeder(H, seeder_fixed_val):
 
 def test_hnccorr_patch_class(H):
     assert H.patch_class == "patch"
+
+
+def test_hnccorr_embedding_class(H):
+    assert H.embedding_class == "embedding"
 
 
 def test_hnccorr_positive_seed_selector(H):
