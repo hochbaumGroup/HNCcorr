@@ -22,6 +22,5 @@ class Candidate:
         embedding = "embedding"
         graph = self._hnccorr.graph_constructor.construct(patch, embedding)
         self.segmentations = self._hnccorr.segmentor.solve(graph, pos_seeds, neg_seeds)
-
         self.best_segmentation = self._hnccorr.postprocessor.select(self.segmentations)
         return self.best_segmentation
