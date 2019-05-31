@@ -55,6 +55,15 @@ def mock_patch_class(mocker, dummy):
 
 
 @pytest.fixture
+def mock_embedding_class(mocker, dummy):
+    embedding_class = mocker.patch(
+        "hnccorr.embedding.CorrelationEmbedding", autospec=True
+    )
+    embedding_class.return_value = "embedding_class"
+    return embedding_class
+
+
+@pytest.fixture
 def hnccorr(
     dummy,
     mock_postprocessor,
@@ -63,6 +72,7 @@ def hnccorr(
     mock_neg_seed_selector,
     mock_graph_constructor,
     mock_patch_class,
+    mock_embedding_class,
 ):
     H = HNCcorr(
         dummy,
@@ -72,7 +82,7 @@ def hnccorr(
         mock_neg_seed_selector,
         mock_graph_constructor,
         mock_patch_class,
-        "embedding",
+        mock_embedding_class,
     )
     H.movie = "movie"
     return H
