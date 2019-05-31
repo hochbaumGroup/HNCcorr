@@ -11,6 +11,7 @@ class HNCcorr:
         positive_seed_selector,
         negative_seed_selector,
     ):
+        self.movie = None
         self.seeder = seeder
         self.segmentations = []
         self.postprocessor = postprocessor
@@ -20,6 +21,7 @@ class HNCcorr:
         self.candidates = []
 
     def segment(self, movie):
+        self.movie = movie
         self.seeder.reset()
         self.segmentations = []
         self.candidates = []

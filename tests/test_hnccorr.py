@@ -25,6 +25,14 @@ def test_hnccorr_seeder(H, seeder_fixed_val):
     assert H.seeder == seeder_fixed_val
 
 
+def test_hnccorr_movie(H, MM, seeder_fixed_val):
+    seeder_fixed_val.called = True  # deactive seeder
+
+    assert H.movie is None
+    H.segment(MM)
+    assert H.movie == MM
+
+
 def test_hnccorr_seeder(H, seeder_fixed_val):
     assert H.seeder == seeder_fixed_val
 
