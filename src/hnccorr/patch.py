@@ -1,4 +1,9 @@
-from hnccorr.utils import add_offset_coordinates, add_time_index
+from hnccorr.utils import (
+    add_offset_coordinates,
+    add_time_index,
+    generate_pixels,
+    add_offset_set_coordinates,
+)
 
 
 class Patch:
@@ -55,6 +60,11 @@ class Patch:
         for start, stop in zip(self.coordinate_offset, bottomright_coordinates):
             idx.append(slice(start, stop))
         return add_time_index(tuple(idx))
+
+    def enumerate_pixels(self):
+        return add_offset_set_coordinates(
+            generate_pixels(self.pixel_size), self.coordinate_offset
+        )
 
     def __getitem__(self, key):
         return self._data[key]

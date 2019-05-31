@@ -23,6 +23,21 @@ def test_data(P1, MM):
     np.testing.assert_equal(P1[:], MM[:, 2:9])
 
 
+def test_patch_enumerate_pixels(MM, MM2):
+    assert Patch(MM, (5,), 3).enumerate_pixels() == {(4,), (5,), (6,)}
+    assert Patch(MM2, (5, 5), 3).enumerate_pixels() == {
+        (4, 4),
+        (4, 5),
+        (4, 6),
+        (5, 4),
+        (5, 5),
+        (5, 6),
+        (6, 4),
+        (6, 5),
+        (6, 6),
+    }
+
+
 @pytest.mark.parametrize("center_seed, offset", ([(1,), (0,)], [(9,), (3,)]))
 def test_offset(P, center_seed, offset):
     assert P(center_seed).coordinate_offset == offset
