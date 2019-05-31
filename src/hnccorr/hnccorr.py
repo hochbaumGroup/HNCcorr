@@ -4,6 +4,7 @@ from hnccorr.segmentation import Segmentation
 
 class HNCcorr:
     def __init__(
+        # pylint: disable=C0330
         self,
         seeder,
         postprocessor,
