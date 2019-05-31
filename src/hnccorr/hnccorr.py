@@ -10,6 +10,7 @@ class HNCcorr:
         segmentor,
         positive_seed_selector,
         negative_seed_selector,
+        graph_constructor,
     ):
         self.movie = None
         self.seeder = seeder
@@ -18,6 +19,7 @@ class HNCcorr:
         self.segmentor = segmentor
         self.positive_seed_selector = positive_seed_selector
         self.negative_seed_selector = negative_seed_selector
+        self.graph_constructor = graph_constructor
         self.candidates = []
 
     def segment(self, movie):

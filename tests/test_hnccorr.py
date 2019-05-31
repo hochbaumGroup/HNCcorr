@@ -13,6 +13,7 @@ def H(seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentatio
         segmentor_simple_segmentation,
         "pos_seed_selector",
         "neg_seed_selector",
+        "graph_constructor",
     )
 
 
@@ -43,6 +44,10 @@ def test_hnccorr_positive_seed_selector(H):
 
 def test_hnccorr_negative_seed_selector(H):
     assert H.negative_seed_selector == "neg_seed_selector"
+
+
+def test_hnccorr_graph_constructor(H):
+    assert H.graph_constructor == "graph_constructor"
 
 
 def test_hnccorr_seeder(H, postprocessor_select_first):

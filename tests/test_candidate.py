@@ -52,6 +52,7 @@ def hnccorr(
         mock_segmentor,
         mock_pos_seed_selector,
         mock_neg_seed_selector,
+        "graph_constructor",
     )
 
 
