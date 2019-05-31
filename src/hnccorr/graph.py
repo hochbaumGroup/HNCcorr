@@ -12,7 +12,7 @@ class GraphConstructor:
     def construct(self, patch, embedding):
         graph = nx.Graph()
 
-        graph.add_nodes_from(generate_pixels(patch.pixel_size))
+        graph.add_nodes_from(patch.enumerate_pixels())
 
         for node1, node2 in self._edge_selector.select_edges(embedding):
             graph.add_edge(node1, node2, weight=self._weight_function(node1, node2))

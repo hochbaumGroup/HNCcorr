@@ -1,4 +1,5 @@
 import pytest
+from hnccorr.graph import GraphConstructor
 
 
 @pytest.fixture
@@ -16,8 +17,6 @@ def MW():
 
 
 def test_graph_constructor(P, MES, MW):
-    from hnccorr.graph import GraphConstructor
-
     GC = GraphConstructor(MES, MW)
     G = GC.construct(P((0,)), None)
 
@@ -31,3 +30,20 @@ def test_graph_constructor(P, MES, MW):
     assert ((0,), (2,)) in G.edges
     assert G[(0,)][(1,)]["weight"] == 1
     assert G[(0,)][(2,)]["weight"] == 2
+
+
+def test_graph_constructor_nodes_offset_from_zero(mocker, dummy):
+    all_pixels = {(2,), (3,), (4,), (5,), (6,), (7,), (8,)}
+    Patch = mocker.patch("hnccorr.patch.Patch", autospec=True)
+    Patch.return_value.enumerate_pixels.return_value = all_pixels
+
+    EdgeSelector = mocker.patch(
+        "hnccorr.edge_selection.SparseComputation", autospec=True
+    )
+    EdgeSelector.return_value.select_edges.return_value = []
+
+    GC = GraphConstructor(EdgeSelector(dummy, dummy), dummy)
+    mock_patch = Patch(dummy, dummy, dummy)
+    graph = GC.construct(mock_patch, None)
+
+    assert set(graph.nodes) == all_pixels
