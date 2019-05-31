@@ -4,19 +4,31 @@ from hnccorr.hnccorr import HNCcorr
 from hnccorr.candidate import Candidate
 
 
-def test_candidate_segment(mocker, dummy, simple_segmentation):
+def test_candidate_segment(mocker, dummy):
+    segmentations = "segmentations"
+    best_segmentation = "best segmentation"
+    pos_seed = "pos_seed"
+    center_seed = 1
+
     segmentor = mocker.patch("hnccorr.hnc.HncParametric", autospec=True)(dummy, dummy)
-    segmentor.solve.return_value = "segmentations"
+    segmentor.solve.return_value = segmentations
+
     postprocessor = mocker.patch(
         "hnccorr.postprocessor.SizePostprocessor", autospec=True
     )(dummy, dummy, dummy)
-    postprocessor.select.return_value = simple_segmentation
+    postprocessor.select.return_value = best_segmentation
 
-    hnccorr = HNCcorr(dummy, postprocessor, segmentor, dummy, dummy)
+    pos_seed_selector = mocker.patch(
+        "hnccorr.seeds.PositiveSeedSelector", autospec=True
+    )(dummy, dummy)
+    pos_seed_selector.select.return_value = pos_seed
 
-    assert Candidate(1, hnccorr).segment() == simple_segmentation
-    segmentor.solve.assert_called_once_with(None, None, None)
-    postprocessor.select.assert_called_once_with("segmentations")
+    hnccorr = HNCcorr(dummy, postprocessor, segmentor, pos_seed_selector, dummy)
+
+    assert Candidate(center_seed, hnccorr).segment() == best_segmentation
+    pos_seed_selector.select.assert_called_once_with(center_seed)
+    segmentor.solve.assert_called_once_with(None, pos_seed, None)
+    postprocessor.select.assert_called_once_with(segmentations)
 
 
 def test_candidate_equality():
