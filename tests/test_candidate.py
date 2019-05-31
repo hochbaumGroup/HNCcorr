@@ -39,12 +39,22 @@ def mock_postprocessor(mocker, dummy):
 
 
 @pytest.fixture
+def mock_graph_constructor(mocker, dummy):
+    graph_constructor = mocker.patch("hnccorr.graph.GraphConstructor", autospec=True)(
+        dummy, dummy
+    )
+    graph_constructor.construct.return_value = "graph"
+    return graph_constructor
+
+
+@pytest.fixture
 def hnccorr(
     dummy,
     mock_postprocessor,
     mock_segmentor,
     mock_pos_seed_selector,
     mock_neg_seed_selector,
+    mock_graph_constructor,
 ):
     return HNCcorr(
         dummy,
@@ -52,7 +62,7 @@ def hnccorr(
         mock_segmentor,
         mock_pos_seed_selector,
         mock_neg_seed_selector,
-        "graph_constructor",
+        mock_graph_constructor,
     )
 
 
@@ -62,6 +72,7 @@ def test_candidate_segment(
     mock_segmentor,
     mock_pos_seed_selector,
     mock_neg_seed_selector,
+    mock_graph_constructor,
 ):
     center_seed = 1
 
@@ -71,8 +82,9 @@ def test_candidate_segment(
     )
     mock_pos_seed_selector.select.assert_called_once_with(center_seed)
     mock_neg_seed_selector.select.assert_called_once_with(center_seed)
+    mock_graph_constructor.construct.assert_called_once_with("patch", "embedding")
     mock_segmentor.solve.assert_called_once_with(
-        None,
+        mock_graph_constructor.construct.return_value,
         mock_pos_seed_selector.select.return_value,
         mock_neg_seed_selector.select.return_value,
     )
