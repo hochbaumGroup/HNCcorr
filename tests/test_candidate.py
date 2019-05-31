@@ -48,6 +48,13 @@ def mock_graph_constructor(mocker, dummy):
 
 
 @pytest.fixture
+def mock_patch_class(mocker, dummy):
+    patch_class = mocker.patch("hnccorr.patch.Patch", autospec=True)
+    patch_class.return_value = "patch"
+    return patch_class
+
+
+@pytest.fixture
 def hnccorr(
     dummy,
     mock_postprocessor,
@@ -55,6 +62,7 @@ def hnccorr(
     mock_pos_seed_selector,
     mock_neg_seed_selector,
     mock_graph_constructor,
+    mock_patch_class,
 ):
     return HNCcorr(
         dummy,
@@ -63,7 +71,7 @@ def hnccorr(
         mock_pos_seed_selector,
         mock_neg_seed_selector,
         mock_graph_constructor,
-        "patch_class",
+        mock_patch_class,
     )
 
 
