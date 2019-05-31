@@ -5,7 +5,7 @@ from PIL.TiffTags import TAGS
 from hnccorr.utils import list_images
 
 
-class Movie(object):
+class Movie:
     """2-dimensional calcium imaging movie stored in memory.
 
     Attributes:
@@ -43,11 +43,7 @@ class Movie(object):
             meta = {TAGS[key]: image.tag[key] for key in image.tag}
 
         # set size of data
-        self.data_size = (
-            len(images),
-            meta["ImageLength"][0],
-            meta["ImageWidth"][0],
-        )
+        self.data_size = (len(images), meta["ImageLength"][0], meta["ImageWidth"][0])
 
         self._data = np.zeros(self.data_size, np.uint16)
 

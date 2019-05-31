@@ -1,5 +1,6 @@
-from hnccorr.utils import eight_neighborhood, add_offset_set_coordinates
 from math import sin, cos, pi
+
+from hnccorr.utils import eight_neighborhood, add_offset_set_coordinates
 
 
 class PositiveSeedSelector:

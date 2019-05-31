@@ -8,7 +8,7 @@ from hnccorr.utils import (
 )
 
 
-class LocalCorrelationSeeder(object):
+class LocalCorrelationSeeder:
     def __init__(self, neighborhood_size=3, keep_fraction=0.4):
         self._neighborhood_size = neighborhood_size
         self._keep_fraction = keep_fraction

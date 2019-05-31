@@ -1,7 +1,7 @@
 from hnccorr.utils import fill_holes, select_max_seed_component
 
 
-class Segmentation(object):
+class Segmentation:
     def __init__(self, selection, weight):
         self.selection = set(selection)
         self.weight = weight
