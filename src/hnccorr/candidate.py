@@ -1,6 +1,3 @@
-from hnccorr.segmentation import Segmentation
-
-
 class Candidate:
     def __init__(self, center_seed, hnccorr):
         self._center_seed = center_seed

@@ -9,7 +9,8 @@ class HncParametric:
         self._lower_bound = lower_bound
         self._upper_bound = upper_bound
 
-    def _construct_segmentations(self, cuts, breakpoints):
+    @staticmethod
+    def _construct_segmentations(cuts, breakpoints):
         return [
             Segmentation(selection, weight)
             for selection, weight in zip(cuts, breakpoints)

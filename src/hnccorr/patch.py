@@ -1,13 +1,7 @@
-import numpy as np
-from hnccorr.utils import (
-    add_offset_coordinates,
-    add_offset_set_coordinates,
-    eight_neighborhood,
-    add_time_index,
-)
+from hnccorr.utils import add_offset_coordinates, add_time_index
 
 
-class Patch(object):
+class Patch:
     """Subregion of movie with seeds to evaluate for cell presence
     """
 
@@ -23,8 +17,6 @@ class Patch(object):
             raise ValueError("patch_size (%d) should be an odd number.")
 
         self.coordinate_offset = self._compute_coordinate_offset()
-
-        offset = list(-x for x in self.coordinate_offset)
 
         self._data = self._movie[self._movie_indices()]
 
