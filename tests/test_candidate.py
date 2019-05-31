@@ -106,7 +106,9 @@ def test_candidate_segment(
     mock_pos_seed_selector.select.assert_called_once_with(center_seed)
     mock_neg_seed_selector.select.assert_called_once_with(center_seed)
     mock_patch_class.assert_called_once_with("movie", center_seed, "patch_size")
-    mock_graph_constructor.construct.assert_called_once_with("patch", "embedding")
+    mock_graph_constructor.construct.assert_called_once_with(
+        mock_patch_class.return_value, "embedding"
+    )
     mock_segmentor.solve.assert_called_once_with(
         mock_graph_constructor.construct.return_value,
         mock_pos_seed_selector.select.return_value,
