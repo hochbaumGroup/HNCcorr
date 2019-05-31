@@ -14,6 +14,15 @@ def mock_pos_seed_selector(mocker, dummy):
 
 
 @pytest.fixture
+def mock_neg_seed_selector(mocker, dummy):
+    neg_seed_selector = mocker.patch(
+        "hnccorr.seeds.NegativeSeedSelector", autospec=True
+    )(dummy, dummy, dummy)
+    neg_seed_selector.select.return_value = "negative_seed"
+    return neg_seed_selector
+
+
+@pytest.fixture
 def mock_segmentor(mocker, dummy):
     segmentor = mocker.patch("hnccorr.hnc.HncParametric", autospec=True)(dummy, dummy)
     segmentor.solve.return_value = "segmentations"
@@ -30,14 +39,28 @@ def mock_postprocessor(mocker, dummy):
 
 
 @pytest.fixture
-def hnccorr(dummy, mock_postprocessor, mock_segmentor, mock_pos_seed_selector):
+def hnccorr(
+    dummy,
+    mock_postprocessor,
+    mock_segmentor,
+    mock_pos_seed_selector,
+    mock_neg_seed_selector,
+):
     return HNCcorr(
-        dummy, mock_postprocessor, mock_segmentor, mock_pos_seed_selector, dummy
+        dummy,
+        mock_postprocessor,
+        mock_segmentor,
+        mock_pos_seed_selector,
+        mock_neg_seed_selector,
     )
 
 
 def test_candidate_segment(
-    hnccorr, mock_postprocessor, mock_segmentor, mock_pos_seed_selector
+    hnccorr,
+    mock_postprocessor,
+    mock_segmentor,
+    mock_pos_seed_selector,
+    mock_neg_seed_selector,
 ):
     center_seed = 1
 
@@ -46,8 +69,11 @@ def test_candidate_segment(
         == mock_postprocessor.select.return_value
     )
     mock_pos_seed_selector.select.assert_called_once_with(center_seed)
+    mock_neg_seed_selector.select.assert_called_once_with(center_seed)
     mock_segmentor.solve.assert_called_once_with(
-        None, mock_pos_seed_selector.select.return_value, None
+        None,
+        mock_pos_seed_selector.select.return_value,
+        mock_neg_seed_selector.select.return_value,
     )
     mock_postprocessor.select.assert_called_once_with(mock_segmentor.solve.return_value)
 
