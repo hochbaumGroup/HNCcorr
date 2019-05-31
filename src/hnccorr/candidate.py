@@ -16,7 +16,10 @@ class Candidate:
     def segment(self):
         pos_seeds = self._hnccorr.positive_seed_selector.select(self._center_seed)
         neg_seeds = self._hnccorr.negative_seed_selector.select(self._center_seed)
-        patch = "patch"
+        print(self._hnccorr.movie)
+        patch = self._hnccorr.patch_class(
+            self._hnccorr.movie, self._center_seed, "patch_size"
+        )
         embedding = "embedding"
         graph = self._hnccorr.graph_constructor.construct(patch, embedding)
         self.segmentations = self._hnccorr.segmentor.solve(graph, pos_seeds, neg_seeds)
