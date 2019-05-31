@@ -10,11 +10,11 @@ class GraphConstructor:
         self.arc_weight = "weight"
 
     def construct(self, patch, embedding):
-        G = nx.Graph()
+        graph = nx.Graph()
 
-        G.add_nodes_from(generate_pixels(patch.pixel_size))
+        graph.add_nodes_from(generate_pixels(patch.pixel_size))
 
-        for a, b in self._edge_selector.select_edges(embedding):
-            G.add_edge(a, b, weight=self._weight_function(a, b))
+        for node1, node2 in self._edge_selector.select_edges(embedding):
+            graph.add_edge(node1, node2, weight=self._weight_function(node1, node2))
 
-        return G
+        return graph
