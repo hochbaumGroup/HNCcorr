@@ -13,7 +13,7 @@ def MES():
 
 @pytest.fixture
 def MW():
-    return lambda a, b: b[0]
+    return lambda x, a, b: b[0]
 
 
 def test_graph_constructor(P, MES, MW):

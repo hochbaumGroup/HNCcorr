@@ -16,7 +16,6 @@ def H(seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentatio
         "graph_constructor",
         "patch",
         "embedding",
-        "alpha",
         "patch_size",
     )
 
@@ -36,10 +35,6 @@ def test_hnccorr_movie(H, MM, seeder_fixed_val):
     assert H.movie is None
     H.segment(MM)
     assert H.movie == MM
-
-
-def test_hnccorr_embedding_alpha(H):
-    assert H.embedding_alpha == "alpha"
 
 
 def test_hnccorr_patch_size(H):

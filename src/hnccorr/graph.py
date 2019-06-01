@@ -15,6 +15,8 @@ class GraphConstructor:
         graph.add_nodes_from(patch.enumerate_pixels())
 
         for node1, node2 in self._edge_selector.select_edges(embedding):
-            graph.add_edge(node1, node2, weight=self._weight_function(node1, node2))
+            graph.add_edge(
+                node1, node2, weight=self._weight_function(embedding, node1, node2)
+            )
 
         return graph
