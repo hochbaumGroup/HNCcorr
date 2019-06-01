@@ -1,7 +1,5 @@
 import networkx as nx
 
-from hnccorr.utils import generate_pixels
-
 
 class GraphConstructor:
     def __init__(self, edge_selector, weight_function):
