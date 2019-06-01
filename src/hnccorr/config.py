@@ -10,6 +10,6 @@ class Config:
 
     def __add__(self, other):
         entries = deepcopy(self._entries)
-        entries.update(other._entries)
+        entries.update(other._entries)  # pylint: disable=W0212
 
         return Config(**entries)
