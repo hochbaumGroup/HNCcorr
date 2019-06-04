@@ -17,13 +17,18 @@ class Movie:
         num_frames (int): Number of frames in movie
     """
 
-    def __init__(self, name, image_dir, num_images):
+    def __init__(self, name, data):
         self.name = name
-        self.num_frames = num_images
+        self._data = data
+        self.data_size = data.shape
 
-        self._load_images(image_dir, num_images)
+    @classmethod
+    def from_tiff_images(cls, name, image_dir, num_images):
+        data = cls._load_images(image_dir, num_images)
+        return cls(name, data)
 
-    def _load_images(self, image_dir, num_images):
+    @staticmethod
+    def _load_images(image_dir, num_images):
         """Load images from directory.
 
         Sorts tiff files in the directory `image_dir` and loads the images into
@@ -43,13 +48,14 @@ class Movie:
             meta = {TAGS[key]: image.tag[key] for key in image.tag}
 
         # set size of data
-        self.data_size = (len(images), meta["ImageLength"][0], meta["ImageWidth"][0])
+        data_size = (len(images), meta["ImageLength"][0], meta["ImageWidth"][0])
 
-        self._data = np.zeros(self.data_size, np.uint16)
+        data = np.zeros(data_size, np.uint16)
 
         for i, filename in enumerate(images):
             with Image.open(filename) as image:
-                self._data[i, :, :] = np.array(image)
+                data[i, :, :] = np.array(image)
+        return data
 
     def __getitem__(self, key):
         """Access data directly from underlying numpy array"""
@@ -63,6 +69,10 @@ class Movie:
                     return False
             return True
         return False
+
+    @property
+    def num_frames(self):
+        return self.data_size[0]
 
     @property
     def pixel_size(self):

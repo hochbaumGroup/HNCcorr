@@ -15,7 +15,7 @@ def M():
     image have value 1, all pixels in the second image have value 2, and all
     pixels in the third image have value 3.
     """
-    return Movie(
+    return Movie.from_tiff_images(
         "Simple",
         image_dir=str(os.path.join(TEST_DATA_DIR, "simple_movie")),
         num_images=3,
