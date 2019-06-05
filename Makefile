@@ -13,3 +13,6 @@ pycode:
 
 test:
 	pytest
+
+integration:
+	pytest tests/integration

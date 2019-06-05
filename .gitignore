@@ -102,3 +102,6 @@ ENV/
 
 # pytest
 .pytest_cache/
+
+# large test data
+/tests/integration/test_data/
