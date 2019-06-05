@@ -132,6 +132,7 @@ def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
     edge_selector = SparseComputation(3, 1 / 35.0)
     weight_function = lambda emb, a, b: exponential_distance_decay(emb, a, b, 1.0)
     graph_constructor = GraphConstructor(edge_selector, weight_function)
+    patch_size = 31
 
     H = HNCcorr(
         seeder,
@@ -142,7 +143,7 @@ def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
         graph_constructor,
         Patch,
         CorrelationEmbedding,
-        31,
+        patch_size,
     )
 
     H.movie = Movie("Neurofinder02.00", data)
@@ -153,3 +154,7 @@ def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
 
     assert best_segmentation.selection == matlab_segmentation.selection
     assert best_segmentation.weight == pytest.approx(matlab_segmentation.weight)
+
+    assert (
+        best_segmentation.selection in Patch(center_seed, patch_size).enumerate_pixels()
+    )
