@@ -41,3 +41,15 @@ def test_patch_enumerate_pixels(MM, MM2):
 @pytest.mark.parametrize("center_seed, offset", ([(1,), (0,)], [(9,), (3,)]))
 def test_offset(P, center_seed, offset):
     assert P(center_seed).coordinate_offset == offset
+
+
+def test_to_movie_index(P):
+    patch = P((9,))
+    patch.to_movie_index((3,)) == (6,)
+    patch.to_movie_index((0,)) == (3,)
+
+
+def test_to_patch_index(P):
+    patch = P((9,))
+    patch.to_patch_index((9,)) == (6,)
+    patch.to_patch_index((3,)) == (0,)

@@ -36,6 +36,7 @@ def test_graph_constructor_nodes_offset_from_zero(mocker, dummy):
     all_pixels = {(2,), (3,), (4,), (5,), (6,), (7,), (8,)}
     Patch = mocker.patch("hnccorr.patch.Patch", autospec=True)
     Patch.return_value.enumerate_pixels.return_value = all_pixels
+    Patch.return_value.to_movie_index = lambda x: (2,) if x == (0,) else (3,)
 
     EdgeSelector = mocker.patch(
         "hnccorr.edge_selection.SparseComputation", autospec=True
