@@ -24,11 +24,10 @@ def test_embedding(CE1, CE2):
     np.testing.assert_allclose(CE2.embedding[(0, 0, slice(None, None))], [0, 0, 0])
 
 
-@pytest.mark.filterwarnings("ignore::RuntimeWarning")
-def test_correlation_embedding(CE1, CE2):
-    CE1.distance((0,), (1,)) == pytest.approx(0.003866)
-    np.seterr(divide="ignore")
-    CE2.distance((0,), (1,)) == pytest.approx(0.0)
+def test_correlation_embedding(CE1):
+    CE1.embedding = np.array([[0.0, 1.0], [-2.0, 0.0]])
+    assert CE1.distance((0,), (1,)) == pytest.approx(2.5)
+    assert CE1.distance((0,), (0,)) == pytest.approx(0)
 
 
 def test_exponential_distance_decay(CE1):

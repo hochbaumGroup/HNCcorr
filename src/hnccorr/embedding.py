@@ -11,17 +11,12 @@ class CorrelationEmbedding:
         self._length = self.embedding.shape[0]
 
     def distance(self, first, second):
-        return (
-            np.sqrt(
-                np.sum(
-                    np.power(
-                        self.embedding[add_time_index(first)]
-                        - self.embedding[add_time_index(second)],
-                        2,
-                    )
-                )
+        return np.mean(
+            np.power(
+                self.embedding[add_time_index(first)]
+                - self.embedding[add_time_index(second)],
+                2,
             )
-            / self._length
         )
 
 
