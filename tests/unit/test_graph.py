@@ -40,10 +40,12 @@ def test_graph_constructor_nodes_offset_from_zero(mocker, dummy):
     EdgeSelector = mocker.patch(
         "hnccorr.edge_selection.SparseComputation", autospec=True
     )
-    EdgeSelector.return_value.select_edges.return_value = []
+    EdgeSelector.return_value.select_edges.return_value = [((0,), (1,))]
 
-    GC = GraphConstructor(EdgeSelector(dummy, dummy), dummy)
+    GC = GraphConstructor(EdgeSelector(dummy, dummy), lambda emb, x, y: 1)
     mock_patch = Patch(dummy, dummy, dummy)
     graph = GC.construct(mock_patch, None)
 
     assert set(graph.nodes) == all_pixels
+    assert graph[(2,)][(3,)]["weight"] == 1
+    assert graph[(3,)][(2,)]["weight"] == 1
