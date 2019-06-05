@@ -4,12 +4,16 @@ from sparsecomputation import ApproximatePCA
 
 
 class SparseComputation:
-    def __init__(self, dim_low, distance):
+    def __init__(self, dim_low, distance, dimension_reducer=None):
         self._dim_low = int(dim_low)
         self._distance = distance
 
-        self._apca = ApproximatePCA(self._dim_low)
-        self._sc = SC(self._apca, distance=self._distance)
+        if dimension_reducer is None:
+            self._dim_reducer = ApproximatePCA(self._dim_low)
+        else:
+            self._dim_reducer = dimension_reducer
+
+        self._sc = SC(self._dim_reducer, distance=self._distance)
 
     def select_edges(self, embedding):
         shape = embedding.embedding.shape[1:]
@@ -17,7 +21,6 @@ class SparseComputation:
 
         pairs = self._sc.select_pairs(data)
 
-        return [
-            (np.unravel_index(a, shape), np.unravel_index(b, shape))
-            for a, b in pairs
-        ]
+        return set(
+            (np.unravel_index(a, shape), np.unravel_index(b, shape)) for a, b in pairs
+        )
