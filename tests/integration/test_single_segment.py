@@ -15,6 +15,7 @@ from hnccorr.hnc import HncParametric
 from hnccorr.seeder import LocalCorrelationSeeder
 from hnccorr.postprocessor import SizePostprocessor
 from hnccorr.candidate import Candidate
+from hnccorr.segmentation import Segmentation
 
 
 @pytest.fixture
@@ -22,12 +23,96 @@ def data():
     return np.load(os.path.join(TEST_DATA_DIR, "neurofinder.02.00_10.npy"))
 
 
-def test_hnccorr_single_segment(mocker, dummy, data):
+@pytest.fixture
+def matlab_segmentation():
+    return Segmentation(
+        {
+            (280, 433),
+            (281, 433),
+            (282, 433),
+            (283, 433),
+            (284, 433),
+            (279, 434),
+            (280, 434),
+            (281, 434),
+            (282, 434),
+            (283, 434),
+            (284, 434),
+            (285, 434),
+            (286, 434),
+            (279, 435),
+            (280, 435),
+            (281, 435),
+            (282, 435),
+            (283, 435),
+            (284, 435),
+            (285, 435),
+            (286, 435),
+            (287, 435),
+            (279, 436),
+            (280, 436),
+            (281, 436),
+            (282, 436),
+            (283, 436),
+            (284, 436),
+            (285, 436),
+            (286, 436),
+            (287, 436),
+            (279, 437),
+            (280, 437),
+            (281, 437),
+            (282, 437),
+            (283, 437),
+            (284, 437),
+            (285, 437),
+            (286, 437),
+            (287, 437),
+            (279, 438),
+            (280, 438),
+            (281, 438),
+            (282, 438),
+            (283, 438),
+            (284, 438),
+            (285, 438),
+            (286, 438),
+            (287, 438),
+            (279, 439),
+            (280, 439),
+            (281, 439),
+            (282, 439),
+            (283, 439),
+            (284, 439),
+            (285, 439),
+            (286, 439),
+            (280, 440),
+            (281, 440),
+            (282, 440),
+            (283, 440),
+            (284, 440),
+            (285, 440),
+            (286, 440),
+            (280, 441),
+            (281, 441),
+            (282, 441),
+            (283, 441),
+            (284, 441),
+            (285, 441),
+            (282, 442),
+            (283, 442),
+        },
+        0.0,
+    )
+
+
+def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
     seeder = LocalCorrelationSeeder(3, 0.4)
     postprocessor = SizePostprocessor(40, 200, 80)
     segmentor = HncParametric(0, 100000)
     positive_seed_selector = PositiveSeedSelector(0, [512, 512])
 
+    # negative seed selector is mocked due to a bug in the matlab code.
+    # Matlab passes the argument to sin(x)/cos(x) in degrees instead of radians.
+    # This results in slightly wrong negative seeds.
     negative_seed_selector = mocker.patch(
         "hnccorr.seeds.NegativeSeedSelector", autospec=True
     )(dummy, dummy, dummy)
@@ -66,78 +151,5 @@ def test_hnccorr_single_segment(mocker, dummy, data):
     c = Candidate(center_seed, H)
     best_segmentation = c.segment()
 
-    assert best_segmentation.selection == {
-        (280, 433),
-        (281, 433),
-        (282, 433),
-        (283, 433),
-        (284, 433),
-        (279, 434),
-        (280, 434),
-        (281, 434),
-        (282, 434),
-        (283, 434),
-        (284, 434),
-        (285, 434),
-        (286, 434),
-        (279, 435),
-        (280, 435),
-        (281, 435),
-        (282, 435),
-        (283, 435),
-        (284, 435),
-        (285, 435),
-        (286, 435),
-        (287, 435),
-        (279, 436),
-        (280, 436),
-        (281, 436),
-        (282, 436),
-        (283, 436),
-        (284, 436),
-        (285, 436),
-        (286, 436),
-        (287, 436),
-        (279, 437),
-        (280, 437),
-        (281, 437),
-        (282, 437),
-        (283, 437),
-        (284, 437),
-        (285, 437),
-        (286, 437),
-        (287, 437),
-        (279, 438),
-        (280, 438),
-        (281, 438),
-        (282, 438),
-        (283, 438),
-        (284, 438),
-        (285, 438),
-        (286, 438),
-        (287, 438),
-        (279, 439),
-        (280, 439),
-        (281, 439),
-        (282, 439),
-        (283, 439),
-        (284, 439),
-        (285, 439),
-        (286, 439),
-        (280, 440),
-        (281, 440),
-        (282, 440),
-        (283, 440),
-        (284, 440),
-        (285, 440),
-        (286, 440),
-        (280, 441),
-        (281, 441),
-        (282, 441),
-        (283, 441),
-        (284, 441),
-        (285, 441),
-        (282, 442),
-        (283, 442),
-    }
-    assert best_segmentation.weight == pytest.approx(0.0)
+    assert best_segmentation.selection == matlab_segmentation.selection
+    assert best_segmentation.weight == pytest.approx(matlab_segmentation.weight)
