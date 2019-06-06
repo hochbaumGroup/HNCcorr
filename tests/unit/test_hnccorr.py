@@ -3,6 +3,7 @@ import pytest
 from hnccorr.hnccorr import HNCcorr
 from hnccorr.candidate import Candidate
 from hnccorr.segmentation import Segmentation
+from hnccorr.config import HNCcorrConfig
 
 
 @pytest.fixture
@@ -27,6 +28,10 @@ def candidate(H):
 
 def test_hnccorr_seeder(H, seeder_fixed_val):
     assert H.seeder == seeder_fixed_val
+
+
+def test_hnccorr_from_config():
+    assert isinstance(HNCcorr.from_config(HNCcorrConfig()), HNCcorr)
 
 
 def test_hnccorr_movie(H, MM, seeder_fixed_val):

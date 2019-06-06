@@ -1,5 +1,13 @@
 from hnccorr.candidate import Candidate
 from hnccorr.segmentation import Segmentation
+from hnccorr.patch import Patch
+from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
+from hnccorr.graph import GraphConstructor
+from hnccorr.seeds import PositiveSeedSelector, NegativeSeedSelector
+from hnccorr.edge_selection import SparseComputation
+from hnccorr.hnc import HncParametric
+from hnccorr.seeder import LocalCorrelationSeeder
+from hnccorr.postprocessor import SizePostprocessor
 
 
 class HNCcorr:
@@ -29,6 +37,31 @@ class HNCcorr:
         self.movie = None
         self.segmentations = []
         self.candidates = []
+
+    @classmethod
+    def from_config(cls, config):
+        seeder = LocalCorrelationSeeder(3, 0.0005)
+        postprocessor = SizePostprocessor(40, 200, 80)
+        segmentor = HncParametric(0, 100000)
+        positive_seed_selector = PositiveSeedSelector(0, [512, 512])
+        negative_seed_selector = NegativeSeedSelector(10, 10, [512, 512])
+
+        edge_selector = SparseComputation(3, 1 / 35.0)
+        weight_function = lambda emb, a, b: exponential_distance_decay(emb, a, b, 1.0)
+        graph_constructor = GraphConstructor(edge_selector, weight_function)
+        patch_size = 31
+
+        return HNCcorr(
+            seeder,
+            postprocessor,
+            segmentor,
+            positive_seed_selector,
+            negative_seed_selector,
+            graph_constructor,
+            Patch,
+            CorrelationEmbedding,
+            patch_size,
+        )
 
     def segment(self, movie):
         self.movie = movie
