@@ -20,6 +20,7 @@ class HNCcorr:
         positive_seed_selector,
         negative_seed_selector,
         graph_constructor,
+        candidate_class,
         patch_class,
         embedding_class,
         patch_size,
@@ -30,6 +31,7 @@ class HNCcorr:
         self.positive_seed_selector = positive_seed_selector
         self.negative_seed_selector = negative_seed_selector
         self.graph_constructor = graph_constructor
+        self._candidate_class = candidate_class
         self.patch_class = patch_class
         self.embedding_class = embedding_class
         self.patch_size = patch_size
@@ -58,6 +60,7 @@ class HNCcorr:
             positive_seed_selector,
             negative_seed_selector,
             graph_constructor,
+            Candidate,
             Patch,
             CorrelationEmbedding,
             patch_size,
@@ -73,7 +76,7 @@ class HNCcorr:
 
         seed = self.seeder.next()
         while seed is not None:
-            candidate = Candidate(seed, self)
+            candidate = self._candidate_class(seed, self)
             self.candidates.append(candidate)
             self.segmentations.append(Segmentation({(0, 1)}, 1.0))
             seed = self.seeder.next()

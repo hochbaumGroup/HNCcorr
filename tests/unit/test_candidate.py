@@ -81,6 +81,7 @@ def hnccorr(
         mock_pos_seed_selector,
         mock_neg_seed_selector,
         mock_graph_constructor,
+        Candidate,
         mock_patch_class,
         mock_embedding_class,
         "patch_size",
