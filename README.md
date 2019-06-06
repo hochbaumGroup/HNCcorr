@@ -14,8 +14,7 @@ from hnccorr.sample_data import sample_numpy_movie
 
 movie = Movie("Sample movie", sample_numpy_movie)
 H = HNCcorr.from_config() # Initialize HNCcorr with default configuration
-H.segment(movie)
-
+H.segment(movie)  # Identify cells in movie
 
 H.segmentations  # List of identified cells
 H.segmentations_to_json_file()  # Export list of cells to JSON (for Neurofinder)
