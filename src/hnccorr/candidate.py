@@ -6,6 +6,7 @@ class Candidate:
         self.best_segmentation = None
 
     def __eq__(self, other):
+        # pylint: disable=W0212
         return (self._center_seed == other._center_seed) and (
             self._hnccorr == other._hnccorr
         )
