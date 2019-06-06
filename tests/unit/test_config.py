@@ -1,11 +1,11 @@
 import pytest
 
-from hnccorr.config import Config
+from hnccorr.config import HNCcorrConfig
 
 
 @pytest.fixture
 def config():
-    return Config(patch_size=31, negative_seed_radius=10)
+    return HNCcorrConfig(patch_size=31, negative_seed_radius=10)
 
 
 def test_attributes(config):
@@ -14,7 +14,7 @@ def test_attributes(config):
 
 
 def test_add_config(config):
-    config2 = Config(patch_size=21, positive_seed_size=5)
+    config2 = HNCcorrConfig(patch_size=21, positive_seed_size=5)
 
     config3 = config + config2
     assert config.patch_size == 31

@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 
-class Config:
+class HNCcorrConfig:
     def __init__(self, **entries):
         self._entries = entries
 
@@ -12,4 +12,4 @@ class Config:
         entries = deepcopy(self._entries)
         entries.update(other._entries)  # pylint: disable=W0212
 
-        return Config(**entries)
+        return HNCcorrConfig(**entries)
