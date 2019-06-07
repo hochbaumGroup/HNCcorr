@@ -65,7 +65,7 @@ class Patch:
         return add_offset_coordinates(patch_index, self.coordinate_offset)
 
     def to_patch_index(self, patch_index):
-        return add_offset_coordinates(patch_index, (-x for x in self.coordinate_offset))
+        return add_offset_coordinates(patch_index, [-x for x in self.coordinate_offset])
 
     def enumerate_pixels(self):
         return add_offset_set_coordinates(
