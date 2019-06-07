@@ -12,8 +12,8 @@ We provide a Python 3 (recommended) implementation as well as a Matlab implement
 from hnccorr import HNCcorr, Movie
 from hnccorr.sample_data import sample_numpy_movie
 
-movie = Movie("Sample movie", sample_numpy_movie)
-H = HNCcorr.from_config() # Initialize HNCcorr with default configuration
+movie = Movie("Sample movie", sample_numpy_movie)  # See documentation for alternatives
+H = HNCcorr.from_config()  # Initialize HNCcorr with default configuration
 H.segment(movie)  # Identify cells in movie
 
 H.segmentations  # List of identified cells
