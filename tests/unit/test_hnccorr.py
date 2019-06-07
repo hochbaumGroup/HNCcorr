@@ -21,26 +21,8 @@ def H(
 ):
     return HNCcorr(
         seeder_fixed_val,
-        postprocessor_select_first,
+        "postprocessor",
         segmentor_simple_segmentation,
-        "pos_seed_selector",
-        "neg_seed_selector",
-        "graph_constructor",
-        mock_candidate_class,
-        "patch",
-        "embedding",
-        "patch_size",
-    )
-
-
-@pytest.fixture
-def hnccorr_with_mocked_postprocessor(
-    seeder_fixed_val, mock_postprocessor, mock_candidate_class
-):
-    return HNCcorr(
-        seeder_fixed_val,
-        mock_postprocessor,
-        "segmentor",
         "pos_seed_selector",
         "neg_seed_selector",
         "graph_constructor",
@@ -135,47 +117,20 @@ def test_hnccorr_candidates_after_segment(H, MM, mock_candidate_class):
     assert H.candidates[0].segment() == "segment"
 
 
-def test_hnccorr_candidates_after_segment(H, MM, mock_candidate_class):
-    mock_candidate_class.return_value.segment.return_value = ["segment"]
+def test_hnccorr_segmentations_after_segment(H, MM, mock_candidate_class):
+    mock_candidate_class.return_value.segment.return_value = "segment"
     H.segment(MM)
     assert H.segmentations == ["segment"]
 
     H.segment(MM)
     assert H.segmentations == ["segment"]
-
-
-@pytest.fixture
-def mock_postprocessor(mocker, dummy):
-    return mocker.patch("hnccorr.postprocessor.SizePostprocessor", autospec=True)(
-        dummy, dummy, dummy
-    )
-
-
-def test_hnccorr_segment_calls_postprocessor_select(
-    MM, mock_candidate_class, hnccorr_with_mocked_postprocessor, mock_postprocessor
-):
-    mock_candidate_class.return_value.segment.return_value = ["segment", "segment2"]
-
-    hnccorr_with_mocked_postprocessor.segment(MM)
-
-    mock_postprocessor.select.assert_called_once_with(["segment", "segment2"])
-
-
-def test_hnccorr_segment_segmentations(
-    MM, hnccorr_with_mocked_postprocessor, mock_postprocessor
-):
-    mock_postprocessor.select.return_value = "first_choice"
-
-    hnccorr_with_mocked_postprocessor.segment(MM)
-
-    assert hnccorr_with_mocked_postprocessor.segmentations == ["first_choice"]
 
 
 def test_hnccorr_segment_none_is_not_added_to_segmentations(
-    MM, hnccorr_with_mocked_postprocessor, mock_postprocessor
+    MM, H, mock_candidate_class
 ):
-    mock_postprocessor.select.return_value = None
+    mock_candidate_class.return_value.segment.return_value = None
 
-    hnccorr_with_mocked_postprocessor.segment(MM)
+    H.segment(MM)
 
-    assert hnccorr_with_mocked_postprocessor.segmentations == []
+    assert H.segmentations == []

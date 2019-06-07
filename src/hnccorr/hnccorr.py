@@ -78,9 +78,7 @@ class HNCcorr:
         while seed is not None:
             candidate = self._candidate_class(seed, self)
             self.candidates.append(candidate)
-            segmentations = candidate.segment()
-
-            best_segmentation = self.postprocessor.select(segmentations)
+            best_segmentation = candidate.segment()
             if best_segmentation is not None:
                 self.segmentations.append(best_segmentation)
             seed = self.seeder.next()
