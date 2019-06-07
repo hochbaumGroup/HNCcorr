@@ -7,6 +7,7 @@ from conftest import TEST_DATA_DIR
 from sparsecomputation import PCA
 from hnccorr.movie import Movie
 from hnccorr.hnccorr import HNCcorr
+from hnccorr.candidate import Candidate
 from hnccorr.patch import Patch
 from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
 from hnccorr.graph import GraphConstructor
@@ -148,6 +149,7 @@ def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
         positive_seed_selector,
         negative_seed_selector,
         graph_constructor,
+        Candidate,
         Patch,
         CorrelationEmbedding,
         patch_size,
