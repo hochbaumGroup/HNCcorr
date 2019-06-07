@@ -53,7 +53,7 @@ class HNCcorr:
         graph_constructor = GraphConstructor(edge_selector, weight_function)
         patch_size = 31
 
-        return HNCcorr(
+        return cls(
             seeder,
             postprocessor,
             segmentor,
