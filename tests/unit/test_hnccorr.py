@@ -7,7 +7,18 @@ from hnccorr.config import HNCcorrConfig
 
 
 @pytest.fixture
-def H(seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentation):
+def mock_candidate_class(mocker):
+    return mocker.patch("hnccorr.candidate.Candidate", autospec=True)
+
+
+@pytest.fixture
+def H(
+    dummy,
+    seeder_fixed_val,
+    postprocessor_select_first,
+    segmentor_simple_segmentation,
+    mock_candidate_class,
+):
     return HNCcorr(
         seeder_fixed_val,
         postprocessor_select_first,
@@ -15,7 +26,7 @@ def H(seeder_fixed_val, postprocessor_select_first, segmentor_simple_segmentatio
         "pos_seed_selector",
         "neg_seed_selector",
         "graph_constructor",
-        Candidate,
+        mock_candidate_class,
         "patch",
         "embedding",
         "patch_size",
@@ -59,6 +70,12 @@ def test_hnccorr_embedding_class(H):
     assert H.embedding_class == "embedding"
 
 
+def test_hnccorr_segment_calls_candidate_segment(H, MM, mock_candidate_class):
+    mock_candidate_class.return_value.segment.return_value = ["segmentation"]
+    H.segment(MM)
+    assert mock_candidate_class.return_value.segment.call_count > 0
+
+
 def test_hnccorr_positive_seed_selector(H):
     assert H.positive_seed_selector == "pos_seed_selector"
 
@@ -79,31 +96,31 @@ def test_hnccorr_seeder(H, segmentor_simple_segmentation):
     assert H.segmentor == segmentor_simple_segmentation
 
 
-def test_hnccorr_segmentations(H, MM, simple_segmentation):
+def test_hnccorr_segmentations_initialization(H):
     assert H.segmentations == []
-    H.segment(MM)
-    assert H.segmentations == [simple_segmentation]
 
 
-def test_hnccorr_candidates(H, MM, candidate):
+def test_hnccorr_candidates_initialization(H):
+    assert H.candidates == []
+
+
+def test_hnccorr_candidates_after_segment(H, MM, mock_candidate_class):
+    mock_candidate_class.return_value.segment.return_value = "segment"
+
     assert H.candidates == []
     H.segment(MM)
-    assert H.candidates == [candidate]
-
-
-def test_hnccorr_reinitialize_candidates_for_movie(H, MM, candidate):
-    H.segment(MM)
-    assert H.candidates == [candidate]
+    assert len(H.candidates) == 1
+    assert H.candidates[0].segment() == "segment"
 
     H.segment(MM)
-    assert H.candidates == [candidate]
+    assert len(H.candidates) == 1
+    assert H.candidates[0].segment() == "segment"
 
 
-def test_hnccorr_reinitialize_segmentations_for_movie(
-    H, MM, seeder_fixed_val, simple_segmentation
-):
+def test_hnccorr_candidates_after_segment(H, MM, mock_candidate_class):
+    mock_candidate_class.return_value.segment.return_value = "segment"
     H.segment(MM)
-    assert H.segmentations == [simple_segmentation]
+    assert H.segmentations == ["segment"]
 
     H.segment(MM)
-    assert H.segmentations == [simple_segmentation]
+    assert H.segmentations == ["segment"]
