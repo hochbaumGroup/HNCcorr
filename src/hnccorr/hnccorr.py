@@ -1,3 +1,4 @@
+from hnccorr.config import default_config
 from hnccorr.candidate import Candidate
 from hnccorr.segmentation import Segmentation
 from hnccorr.patch import Patch
@@ -42,28 +43,34 @@ class HNCcorr:
 
     @classmethod
     def from_config(cls, config):
-        seeder = LocalCorrelationSeeder(3, 0.0005)
-        postprocessor = SizePostprocessor(40, 200, 80)
-        segmentor = HncParametric(0, 100000)
-        positive_seed_selector = PositiveSeedSelector(0, [512, 512])
-        negative_seed_selector = NegativeSeedSelector(10, 10, [512, 512])
+        config = default_config + config
 
-        edge_selector = SparseComputation(3, 1 / 35.0)
-        weight_function = lambda emb, a, b: exponential_distance_decay(emb, a, b, 1.0)
-        graph_constructor = GraphConstructor(edge_selector, weight_function)
-        patch_size = 31
+        edge_selector = SparseComputation(
+            config.sparse_computation_dimension, config.sparse_computation_grid_distance
+        )
+        weight_function = lambda emb, a, b: exponential_distance_decay(
+            emb, a, b, config.gaussian_similarity_alpha
+        )
 
         return cls(
-            seeder,
-            postprocessor,
-            segmentor,
-            positive_seed_selector,
-            negative_seed_selector,
-            graph_constructor,
+            LocalCorrelationSeeder(config.seeder_mask_size, config.percentage_of_seeds),
+            SizePostprocessor(
+                config.postprocessor_min_cell_size,
+                config.postprocessor_max_cell_size,
+                config.postprocessor_preferred_cell_size,
+            ),
+            HncParametric(0, 1),
+            PositiveSeedSelector(config.positive_seed_radius, [512, 512]),
+            NegativeSeedSelector(
+                config.negative_seed_circle_radius,
+                config.negative_seed_circle_count,
+                [512, 512],
+            ),
+            GraphConstructor(edge_selector, weight_function),
             Candidate,
             Patch,
             CorrelationEmbedding,
-            patch_size,
+            config.patch_size,
         )
 
     def segment(self, movie):
