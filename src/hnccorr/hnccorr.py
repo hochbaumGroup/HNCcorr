@@ -42,8 +42,11 @@ class HNCcorr:
         self.candidates = []
 
     @classmethod
-    def from_config(cls, config):
-        config = default_config + config
+    def from_config(cls, config=None):
+        if config is None:
+            config = default_config
+        else:
+            config = default_config + config
 
         edge_selector = SparseComputation(
             config.sparse_computation_dimension, config.sparse_computation_grid_distance
