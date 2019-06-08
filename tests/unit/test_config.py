@@ -1,6 +1,6 @@
 import pytest
 
-from hnccorr.config import HNCcorrConfig
+from hnccorr.config import HNCcorrConfig, default_config
 
 
 @pytest.fixture
@@ -30,3 +30,18 @@ def test_add_config(config):
         config.positive_seed_size == 5
     assert config2.positive_seed_size == 5
     assert config3.positive_seed_size == 5
+
+
+def test_default_config():
+    assert default_config.seeder_mask_size == 3
+    assert default_config.percentage_of_seeds == pytest.approx(0.4)
+    assert default_config.postprocessor_min_cell_size == 40
+    assert default_config.postprocessor_max_cell_size == 200
+    assert default_config.postprocessor_preferred_cell_size == 80
+    assert default_config.positive_seed_radius == 0
+    assert default_config.negative_seed_circle_radius == pytest.approx(10.0)
+    assert default_config.negative_seed_circle_count == 10
+    assert default_config.gaussian_similarity_alpha == pytest.approx(1.0)
+    assert default_config.sparse_computation_grid_distance == pytest.approx(1 / 35.0)
+    assert default_config.sparse_computation_dimension == 3
+    assert default_config.patch_size == 31
