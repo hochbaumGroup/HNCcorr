@@ -16,6 +16,7 @@ class LocalCorrelationSeeder:
         self._num_dims = None
         self._seeds = None
         self._current_index = None
+        self._excluded_pixels = set()
 
     def select_seeds(self, movie):
         self._movie = movie
@@ -62,12 +63,18 @@ class LocalCorrelationSeeder:
         self._seeds = [seed for seed, _ in mean_neighbor_corr[:num_keep]]
         self._current_index = 0
 
+    def exclude_pixels(self, pixels):
+        self._excluded_pixels = self._excluded_pixels.union(pixels)
+
     def next(self):
-        if self._current_index < len(self._seeds):
+        while self._current_index < len(self._seeds):
             center_seed = self._seeds[self._current_index]
             self._current_index += 1
 
-            return center_seed
+            if center_seed not in self._excluded_pixels:
+                return center_seed
+            else:
+                continue
         return None
 
     def reset(self):

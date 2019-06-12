@@ -18,3 +18,11 @@ def test_local_corr_seeder_reset(MM):
 
     LCS.reset()
     assert LCS.next() == (9,)
+
+
+def test_seeder_exclude_pixels(MM):
+    LCS = LocalCorrelationSeeder(neighborhood_size=3, keep_fraction=0.2)
+    LCS.select_seeds(MM)
+    assert LCS.next() == (9,)
+    LCS.exclude_pixels({(8,)})
+    assert LCS.next() is None
