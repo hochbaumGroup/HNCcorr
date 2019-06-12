@@ -9,7 +9,6 @@ from hnccorr.utils import (
     add_offset_set_coordinates,
     add_time_index,
     list_images,
-    fill_holes,
     eight_neighborhood,
 )
 
@@ -35,10 +34,6 @@ def test_list_images():
 
     for i, e in zip(images, expected_images):
         assert os.path.abspath(i) == os.path.abspath(e)
-
-
-def test_fill_holes():
-    assert fill_holes({(1,), (3,)}, (5,)) == {(1,), (2,), (3,)}
 
 
 def test_eight_neighborhood():

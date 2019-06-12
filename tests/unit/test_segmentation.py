@@ -13,29 +13,23 @@ def test_selection():
     assert Segmentation({(0, 1)}, 0.5).selection == {(0, 1)}
 
 
-def test_fill_hole():
-    assert Segmentation(
-        {(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)}, 0.5
-    ).clean(set(), (5, 5)).selection == {
-        (0, 0),
-        (1, 0),
-        (2, 0),
-        (0, 1),
-        (1, 1),
-        (2, 1),
-        (0, 2),
-        (1, 2),
-        (2, 2),
-    }
+def test_clean_fill_hole():
+    selection = {(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)}
+    weight = 1
+    original = Segmentation(selection, weight)
+
+    new = original.clean(set(), (5, 5))
+    assert new == Segmentation(
+        {(0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)}, weight
+    )
+    assert original == Segmentation(selection, weight)
 
 
 def test_clean_select_seed_component():
-    assert Segmentation({(0, 0), (3, 3)}, 0.5).clean({(3, 3)}, (5, 5)).selection == {
-        (3, 3)
-    }
+    selection = {(0, 0), (3, 3)}
+    weight = 1
+    original = Segmentation(selection, weight)
 
-
-def test_select_max_seed_component():
-    assert Segmentation({(1,), (2,), (5,), (6,)}, 1).select_max_seed_component(
-        {(1,), (2,), (5,), (6,)}, {(1,), (2,), (5,)}
-    ) == Segmentation({(1,), (2,)}, 1)
+    new = original.clean({(3, 3)}, (5, 5))
+    assert new == Segmentation({(3, 3)}, weight)
+    assert original == Segmentation(selection, weight)
