@@ -113,7 +113,7 @@ def matlab_segmentation():
 
 
 def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
-    seeder = LocalCorrelationSeeder(3, 0.4)
+    seeder = LocalCorrelationSeeder(3, 0.4, 4)
     postprocessor = SizePostprocessor(40, 200, 80)
     segmentor = HncParametric(0, 100000)
     positive_seed_selector = PositiveSeedSelector(0)
@@ -123,7 +123,7 @@ def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
     # This results in slightly wrong negative seeds.
     negative_seed_selector = mocker.patch(
         "hnccorr.seeds.NegativeSeedSelector", autospec=True
-    )(dummy, dummy, dummy)
+    )(dummy, dummy)
     negative_seed_selector.select.return_value = {
         (283, 447),
         (273, 435),
