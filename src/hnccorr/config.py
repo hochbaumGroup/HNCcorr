@@ -17,6 +17,7 @@ class HNCcorrConfig:
 
 DEFAULT_CONFIG = HNCcorrConfig(
     seeder_mask_size=3,
+    seeder_exclusion_padding=4,
     percentage_of_seeds=0.40,
     postprocessor_min_cell_size=40,
     postprocessor_max_cell_size=200,

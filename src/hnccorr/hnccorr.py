@@ -55,7 +55,11 @@ class HNCcorr:
         )
 
         return cls(
-            LocalCorrelationSeeder(config.seeder_mask_size, config.percentage_of_seeds),
+            LocalCorrelationSeeder(
+                config.seeder_mask_size,
+                config.percentage_of_seeds,
+                config.seeder_exclusion_padding,
+            ),
             SizePostprocessor(
                 config.postprocessor_min_cell_size,
                 config.postprocessor_max_cell_size,

@@ -34,6 +34,7 @@ def test_add_config(config):
 
 def test_default_config():
     assert DEFAULT_CONFIG.seeder_mask_size == 3
+    assert DEFAULT_CONFIG.seeder_exclusion_padding == 4
     assert DEFAULT_CONFIG.percentage_of_seeds == pytest.approx(0.4)
     assert DEFAULT_CONFIG.postprocessor_min_cell_size == 40
     assert DEFAULT_CONFIG.postprocessor_max_cell_size == 200
