@@ -15,7 +15,9 @@ class Candidate:
         pos_seeds = self._hnccorr.positive_seed_selector.select(
             self._center_seed, self._hnccorr.movie.pixel_size
         )
-        neg_seeds = self._hnccorr.negative_seed_selector.select(self._center_seed)
+        neg_seeds = self._hnccorr.negative_seed_selector.select(
+            self._center_seed, self._hnccorr.movie.pixel_size
+        )
         patch = self._hnccorr.patch_class(
             self._hnccorr.movie, self._center_seed, self._hnccorr.patch_size
         )

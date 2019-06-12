@@ -20,7 +20,7 @@ def test_positive_seed_selector(center_seed, radius, expected_seeds):
 
 
 def test_select_negative_seed_selector():
-    assert NegativeSeedSelector(2, 4, (10, 10)).select((5, 5)) == {
+    assert NegativeSeedSelector(2, 4).select((5, 5), (10, 10)) == {
         (3, 5),
         (7, 5),
         (5, 3),
@@ -29,11 +29,11 @@ def test_select_negative_seed_selector():
 
 
 def test_select_negative_seeds_zero_radius():
-    assert NegativeSeedSelector(0, 8, (10, 10)).select((5, 5)) == {(5, 5)}
+    assert NegativeSeedSelector(0, 8).select((5, 5), (10, 10)) == {(5, 5)}
 
 
 def test_select_negative_seeds_count_rounding():
-    assert NegativeSeedSelector(2, 8, (10, 10)).select((5, 5)) == {
+    assert NegativeSeedSelector(2, 8).select((5, 5), (10, 10)) == {
         (3, 5),
         (4, 4),
         (7, 5),
@@ -46,16 +46,16 @@ def test_select_negative_seeds_count_rounding():
 
 
 def test_select_negative_seeds_topleft_corner():
-    assert NegativeSeedSelector(2, 4, (10, 10)).select((0, 0)) == {(0, 2), (2, 0)}
+    assert NegativeSeedSelector(2, 4).select((0, 0), (10, 10)) == {(0, 2), (2, 0)}
 
 
 def test_select_negative_seeds_bottomright_corner():
-    assert NegativeSeedSelector(2, 4, (10, 10)).select((9, 9)) == {(7, 9), (9, 7)}
+    assert NegativeSeedSelector(2, 4).select((9, 9), (10, 10)) == {(7, 9), (9, 7)}
 
 
 def test_select_negative_seeds_invalid_dimension():
     with pytest.raises(ValueError):
-        NegativeSeedSelector(2, 4, (10, 10, 10))
+        NegativeSeedSelector(2, 4).select((5, 5, 5), (10, 10, 10))
 
     with pytest.raises(ValueError):
-        NegativeSeedSelector(2, 4, (10,))
+        NegativeSeedSelector(2, 4).select((5,), (10,))

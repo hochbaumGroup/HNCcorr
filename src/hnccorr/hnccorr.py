@@ -64,9 +64,7 @@ class HNCcorr:
             HncParametric(0, 1),
             PositiveSeedSelector(config.positive_seed_radius),
             NegativeSeedSelector(
-                config.negative_seed_circle_radius,
-                config.negative_seed_circle_count,
-                [512, 512],
+                config.negative_seed_circle_radius, config.negative_seed_circle_count
             ),
             GraphConstructor(edge_selector, weight_function),
             Candidate,

@@ -17,15 +17,13 @@ class PositiveSeedSelector:
 
 
 class NegativeSeedSelector:
-    def __init__(self, radius, count, movie_size):
+    def __init__(self, radius, count):
         self._radius = radius
         self._count = count
-        if len(movie_size) == 2:
-            self._movie_size = movie_size
-        else:
-            raise ValueError("Only 2-dimensional movies are currently supported.")
 
-    def select(self, center_seed):
+    def select(self, center_seed, movie_size):
+        if len(movie_size) != 2:
+            raise ValueError("Only 2-dimensional movies are currently supported.")
 
         angle_step = 2 * pi / float(self._count)
 
@@ -36,7 +34,7 @@ class NegativeSeedSelector:
         negative_seeds = add_offset_set_coordinates(offsets, center_seed)
 
         # check if seeds are within boundaries
-        return extract_valid_pixels(negative_seeds, self._movie_size)
+        return extract_valid_pixels(negative_seeds, movie_size)
 
 
 def extract_valid_pixels(pixel_set, region_size):

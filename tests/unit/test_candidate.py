@@ -17,7 +17,7 @@ def mock_pos_seed_selector(mocker, dummy):
 def mock_neg_seed_selector(mocker, dummy):
     neg_seed_selector = mocker.patch(
         "hnccorr.seeds.NegativeSeedSelector", autospec=True
-    )(dummy, dummy, dummy)
+    )(dummy, dummy)
     neg_seed_selector.select.return_value = "negative_seed"
     return neg_seed_selector
 
@@ -117,7 +117,9 @@ def test_candidate_segment(
     mock_pos_seed_selector.select.assert_called_once_with(
         center_seed, mock_movie.pixel_size
     )
-    mock_neg_seed_selector.select.assert_called_once_with(center_seed)
+    mock_neg_seed_selector.select.assert_called_once_with(
+        center_seed, mock_movie.pixel_size
+    )
     mock_patch_class.assert_called_once_with(mock_movie, center_seed, "patch_size")
     mock_embedding_class.assert_called_once_with(mock_patch_class.return_value)
     mock_graph_constructor.construct.assert_called_once_with(
