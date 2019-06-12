@@ -50,6 +50,10 @@ def test_hnccorr_from_config():
     assert isinstance(HNCcorr.from_config(), HNCcorr)
 
 
+def test_hnccorr_from_non_default_config():
+    assert isinstance(HNCcorr.from_config(HNCcorrConfig()), HNCcorr)
+
+
 def test_hnccorr_movie(H, MM, seeder_fixed_val):
     seeder_fixed_val.called = True  # deactive seeder
 
