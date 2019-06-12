@@ -116,7 +116,7 @@ def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
     seeder = LocalCorrelationSeeder(3, 0.4)
     postprocessor = SizePostprocessor(40, 200, 80)
     segmentor = HncParametric(0, 100000)
-    positive_seed_selector = PositiveSeedSelector(0, [512, 512])
+    positive_seed_selector = PositiveSeedSelector(0)
 
     # negative seed selector is mocked due to a bug in the matlab code.
     # Matlab passes the argument to sin(x)/cos(x) in degrees instead of radians.
