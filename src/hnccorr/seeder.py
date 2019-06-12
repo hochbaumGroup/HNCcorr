@@ -1,4 +1,5 @@
 import numpy as np
+from copy import copy
 
 from hnccorr.utils import (
     add_offset_set_coordinates,
@@ -9,11 +10,12 @@ from hnccorr.utils import (
 
 
 class LocalCorrelationSeeder:
-    def __init__(self, neighborhood_size=3, keep_fraction=0.4):
+    def __init__(self, neighborhood_size=3, keep_fraction=0.4, padding=0):
         self._neighborhood_size = neighborhood_size
         self._keep_fraction = keep_fraction
         self._movie = None
         self._num_dims = None
+        self._padding = padding
         self._seeds = None
         self._current_index = None
         self._excluded_pixels = set()
@@ -64,7 +66,15 @@ class LocalCorrelationSeeder:
         self._current_index = 0
 
     def exclude_pixels(self, pixels):
-        self._excluded_pixels = self._excluded_pixels.union(pixels)
+        neighborhood = eight_neighborhood(self._num_dims, self._padding)
+
+        padded_pixel_sets = [
+            add_offset_set_coordinates(neighborhood, pixel) for pixel in pixels
+        ]
+
+        self._excluded_pixels = self._excluded_pixels.union(
+            pixels.union(*padded_pixel_sets)
+        )
 
     def next(self):
         while self._current_index < len(self._seeds):
