@@ -62,7 +62,7 @@ class HNCcorr:
                 config.postprocessor_preferred_cell_size,
             ),
             HncParametric(0, 1),
-            PositiveSeedSelector(config.positive_seed_radius, [512, 512]),
+            PositiveSeedSelector(config.positive_seed_radius),
             NegativeSeedSelector(
                 config.negative_seed_circle_radius,
                 config.negative_seed_circle_count,

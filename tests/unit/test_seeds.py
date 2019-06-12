@@ -16,7 +16,7 @@ from hnccorr.seeds import PositiveSeedSelector, NegativeSeedSelector
     ],
 )
 def test_positive_seed_selector(center_seed, radius, expected_seeds):
-    assert PositiveSeedSelector(radius, (5, 5)).select(center_seed) == expected_seeds
+    assert PositiveSeedSelector(radius).select(center_seed, (5, 5)) == expected_seeds
 
 
 def test_select_negative_seed_selector():

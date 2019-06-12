@@ -8,7 +8,7 @@ from hnccorr.candidate import Candidate
 def mock_pos_seed_selector(mocker, dummy):
     pos_seed_selector = mocker.patch(
         "hnccorr.seeds.PositiveSeedSelector", autospec=True
-    )(dummy, dummy)
+    )(dummy)
     pos_seed_selector.select.return_value = "positive_seed"
     return pos_seed_selector
 
@@ -64,8 +64,15 @@ def mock_embedding_class(mocker, dummy):
 
 
 @pytest.fixture
+def mock_movie(mocker, dummy):
+    movie = mocker.patch("hnccorr.movie.Movie", autospec=True)(dummy, dummy)
+    return movie
+
+
+@pytest.fixture
 def hnccorr(
     dummy,
+    mock_movie,
     mock_postprocessor,
     mock_segmentor,
     mock_pos_seed_selector,
@@ -86,12 +93,13 @@ def hnccorr(
         mock_embedding_class,
         "patch_size",
     )
-    H.movie = "movie"
+    H.movie = mock_movie
     return H
 
 
 def test_candidate_segment(
     hnccorr,
+    mock_movie,
     mock_postprocessor,
     mock_segmentor,
     mock_pos_seed_selector,
@@ -106,9 +114,11 @@ def test_candidate_segment(
         Candidate(center_seed, hnccorr).segment()
         == mock_postprocessor.select.return_value
     )
-    mock_pos_seed_selector.select.assert_called_once_with(center_seed)
+    mock_pos_seed_selector.select.assert_called_once_with(
+        center_seed, mock_movie.pixel_size
+    )
     mock_neg_seed_selector.select.assert_called_once_with(center_seed)
-    mock_patch_class.assert_called_once_with("movie", center_seed, "patch_size")
+    mock_patch_class.assert_called_once_with(mock_movie, center_seed, "patch_size")
     mock_embedding_class.assert_called_once_with(mock_patch_class.return_value)
     mock_graph_constructor.construct.assert_called_once_with(
         mock_patch_class.return_value, mock_embedding_class.return_value

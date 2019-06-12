@@ -4,17 +4,16 @@ from hnccorr.utils import eight_neighborhood, add_offset_set_coordinates
 
 
 class PositiveSeedSelector:
-    def __init__(self, radius, movie_size):
+    def __init__(self, radius):
         self._radius = radius
-        self._movie_size = movie_size
 
-    def select(self, center_seed):
-        num_dimensions = len(self._movie_size)
+    def select(self, center_seed, movie_size):
+        num_dimensions = len(movie_size)
         offsets = eight_neighborhood(num_dimensions, self._radius)
         # compute positive seeds
         positive_seeds = add_offset_set_coordinates(offsets, center_seed)
         # check if seeds are within boundaries
-        return extract_valid_pixels(positive_seeds, self._movie_size)
+        return extract_valid_pixels(positive_seeds, movie_size)
 
 
 class NegativeSeedSelector:
