@@ -83,8 +83,7 @@ class LocalCorrelationSeeder:
 
             if center_seed not in self._excluded_pixels:
                 return center_seed
-            else:
-                continue
+
         return None
 
     def reset(self):
