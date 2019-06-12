@@ -25,7 +25,6 @@ def mock_neg_seed_selector(mocker, dummy):
 @pytest.fixture
 def mock_segmentor(mocker, dummy):
     segmentor = mocker.patch("hnccorr.hnc.HncParametric", autospec=True)(dummy, dummy)
-    segmentor.solve.return_value = "segmentations"
     return segmentor
 
 
@@ -70,6 +69,11 @@ def mock_movie(mocker, dummy):
 
 
 @pytest.fixture
+def mock_segmentation_class(mocker):
+    return mocker.patch("hnccorr.segmentation.Segmentation", autospec=True)
+
+
+@pytest.fixture
 def hnccorr(
     dummy,
     mock_movie,
@@ -99,6 +103,7 @@ def hnccorr(
 
 def test_candidate_segment(
     hnccorr,
+    dummy,
     mock_movie,
     mock_postprocessor,
     mock_segmentor,
@@ -107,8 +112,13 @@ def test_candidate_segment(
     mock_graph_constructor,
     mock_patch_class,
     mock_embedding_class,
+    mock_segmentation_class,
 ):
     center_seed = 1
+    mock_segmentor.solve.return_value = [
+        mock_segmentation_class(dummy, dummy),
+        mock_segmentation_class(dummy, dummy),
+    ]
 
     assert (
         Candidate(center_seed, hnccorr).segment()
@@ -144,6 +154,21 @@ def test_candidate_segmentations(hnccorr, mock_segmentor):
     assert c.segmentations is None
     c.segment()
     assert c.segmentations == mock_segmentor.solve.return_value
+
+
+def test_candidate_segmentations(
+    dummy, mock_segmentor, mock_segmentation_class, hnccorr
+):
+    mock_segmentor.solve.return_value = [
+        mock_segmentation_class(dummy, dummy),
+        mock_segmentation_class(dummy, dummy),
+    ]
+    mock_segmentation_class.return_value.clean.return_value = "clean"
+
+    c = Candidate(1, hnccorr)
+    assert c.clean_segmentations is None
+    c.segment()
+    assert c.clean_segmentations == ["clean", "clean"]
 
 
 def test_candidate_best_segmentations(hnccorr, mock_postprocessor):
