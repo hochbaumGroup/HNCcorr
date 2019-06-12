@@ -44,5 +44,5 @@ def extract_valid_pixels(pixel_set, region_size):
     return {
         pixel
         for pixel in pixel_set
-        if all([x >= 0 and x < dim_len for x, dim_len in zip(pixel, region_size)])
+        if all([0 <= x < dim_len for x, dim_len in zip(pixel, region_size)])
     }
