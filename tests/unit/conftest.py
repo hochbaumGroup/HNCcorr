@@ -102,6 +102,9 @@ def seeder_fixed_val():
         def select_seeds(self, movie):
             pass
 
+        def exclude_pixels(self, pixel_set):
+            pass
+
         def next(self):
             if self.called:
                 return None

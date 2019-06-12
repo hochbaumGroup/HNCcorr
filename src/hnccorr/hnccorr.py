@@ -94,6 +94,7 @@ class HNCcorr:
             best_segmentation = candidate.segment()
             if best_segmentation is not None:
                 self.segmentations.append(best_segmentation)
+                self.seeder.exclude_pixels(best_segmentation.selection)
             seed = self.seeder.next()
 
         print("Completed - Total cells identified: %d" % len(self.segmentations))

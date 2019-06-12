@@ -75,7 +75,6 @@ def test_hnccorr_embedding_class(H):
 
 
 def test_hnccorr_segment_calls_candidate_segment(H, MM, mock_candidate_class):
-    mock_candidate_class.return_value.segment.return_value = ["segmentation"]
     H.segment(MM)
     assert mock_candidate_class.return_value.segment.call_count > 0
 
@@ -109,25 +108,28 @@ def test_hnccorr_candidates_initialization(H):
 
 
 def test_hnccorr_candidates_after_segment(H, MM, mock_candidate_class):
-    mock_candidate_class.return_value.segment.return_value = "segment"
+    base_segmentation = Segmentation(set(), "segment")
+    mock_candidate_class.return_value.segment.return_value = base_segmentation
 
     assert H.candidates == []
     H.segment(MM)
     assert len(H.candidates) == 1
-    assert H.candidates[0].segment() == "segment"
+    assert H.candidates[0].segment() == base_segmentation
 
     H.segment(MM)
     assert len(H.candidates) == 1
-    assert H.candidates[0].segment() == "segment"
+    assert H.candidates[0].segment() == base_segmentation
 
 
 def test_hnccorr_segmentations_after_segment(H, MM, mock_candidate_class):
-    mock_candidate_class.return_value.segment.return_value = "segment"
-    H.segment(MM)
-    assert H.segmentations == ["segment"]
+    base_segmentation = Segmentation(set(), "segment")
+    mock_candidate_class.return_value.segment.return_value = base_segmentation
 
     H.segment(MM)
-    assert H.segmentations == ["segment"]
+    assert H.segmentations == [base_segmentation]
+
+    H.segment(MM)
+    assert H.segmentations == [base_segmentation]
 
 
 def test_hnccorr_segment_none_is_not_added_to_segmentations(
@@ -138,3 +140,31 @@ def test_hnccorr_segment_none_is_not_added_to_segmentations(
     H.segment(MM)
 
     assert H.segmentations == []
+
+
+@pytest.fixture
+def mock_seeder(mocker, dummy):
+    return mocker.patch("hnccorr.seeder.LocalCorrelationSeeder", autospec=True)()
+
+
+def test_hnccor_exclude_previously_segmented_pixels(
+    mock_seeder, dummy, mock_candidate_class
+):
+    mock_seeder.next.side_effect = ("seed1", None)
+    mock_candidate_class.return_value.segment.return_value = Segmentation({"pixel"}, 1)
+    H = HNCcorr(
+        mock_seeder,
+        "postprocessor",
+        "mock_segmentor",
+        "pos_seed_selector",
+        "neg_seed_selector",
+        "graph_constructor",
+        mock_candidate_class,
+        "patch",
+        "embedding",
+        "patch_size",
+    )
+
+    H.segment(dummy)
+
+    mock_seeder.exclude_pixels.assert_called_once_with({"pixel"})
