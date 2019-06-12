@@ -21,7 +21,7 @@ class Patch:
         if patch_size % 2 == 0:
             raise ValueError("patch_size (%d) should be an odd number.")
 
-        self.coordinate_offset = self._compute_coordinate_offset()
+        self._coordinate_offset = self._compute_coordinate_offset()
 
         self._data = self._movie[self._movie_indices()]
 
@@ -53,23 +53,25 @@ class Patch:
     def _movie_indices(self):
         """Compute movie index range of patch"""
         bottomright_coordinates = add_offset_coordinates(
-            self.coordinate_offset, (self._patch_size,) * self._num_dimensions
+            self._coordinate_offset, (self._patch_size,) * self._num_dimensions
         )
 
         idx = []
-        for start, stop in zip(self.coordinate_offset, bottomright_coordinates):
+        for start, stop in zip(self._coordinate_offset, bottomright_coordinates):
             idx.append(slice(start, stop))
         return add_time_index(tuple(idx))
 
     def to_movie_index(self, patch_index):
-        return add_offset_coordinates(patch_index, self.coordinate_offset)
+        return add_offset_coordinates(patch_index, self._coordinate_offset)
 
     def to_patch_index(self, patch_index):
-        return add_offset_coordinates(patch_index, [-x for x in self.coordinate_offset])
+        return add_offset_coordinates(
+            patch_index, [-x for x in self._coordinate_offset]
+        )
 
     def enumerate_pixels(self):
         return add_offset_set_coordinates(
-            generate_pixels(self.pixel_size), self.coordinate_offset
+            generate_pixels(self.pixel_size), self._coordinate_offset
         )
 
     def __getitem__(self, key):
