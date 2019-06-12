@@ -1,6 +1,5 @@
 from hnccorr.config import default_config
 from hnccorr.candidate import Candidate
-from hnccorr.segmentation import Segmentation
 from hnccorr.patch import Patch
 from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
 from hnccorr.graph import GraphConstructor
