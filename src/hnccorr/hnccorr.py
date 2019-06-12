@@ -1,4 +1,4 @@
-from hnccorr.config import default_config
+from hnccorr.config import DEFAULT_CONFIG
 from hnccorr.candidate import Candidate
 from hnccorr.patch import Patch
 from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
@@ -43,9 +43,9 @@ class HNCcorr:
     @classmethod
     def from_config(cls, config=None):
         if config is None:
-            config = default_config
+            config = DEFAULT_CONFIG
         else:
-            config = default_config + config
+            config = DEFAULT_CONFIG + config
 
         edge_selector = SparseComputation(
             config.sparse_computation_dimension, config.sparse_computation_grid_distance

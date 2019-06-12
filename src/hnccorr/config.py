@@ -15,7 +15,7 @@ class HNCcorrConfig:
         return HNCcorrConfig(**entries)
 
 
-default_config = HNCcorrConfig(
+DEFAULT_CONFIG = HNCcorrConfig(
     seeder_mask_size=3,
     percentage_of_seeds=0.40,
     postprocessor_min_cell_size=40,
