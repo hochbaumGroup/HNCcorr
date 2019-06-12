@@ -1,5 +1,6 @@
 import pytest
 from copy import copy
+from itertools import product
 
 from hnccorr.segmentation import Segmentation
 
@@ -29,6 +30,12 @@ def test_fill_hole():
 
 
 def test_clean_select_seed_component():
-    assert Segmentation({(0, 0), (3, 3)}, 0.5).clean(
-        {(3, 3)}, (5, 5)
-    ).selection == {(3, 3)}
+    assert Segmentation({(0, 0), (3, 3)}, 0.5).clean({(3, 3)}, (5, 5)).selection == {
+        (3, 3)
+    }
+
+
+def test_select_max_seed_component():
+    assert Segmentation({(1,), (2,), (5,), (6,)}, 1).select_max_seed_component(
+        {(1,), (2,), (5,), (6,)}, {(1,), (2,), (5,)}
+    ) == Segmentation({(1,), (2,)}, 1)

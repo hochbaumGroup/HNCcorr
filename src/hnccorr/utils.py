@@ -3,7 +3,6 @@ import os
 from itertools import product
 import numpy as np
 from scipy.ndimage.morphology import binary_fill_holes
-import networkx as nx
 
 
 def add_offset_set_coordinates(iterable, offset):
@@ -44,27 +43,6 @@ def fill_holes(selection, patch_shape):
 
     index_arrays = [a.tolist() for a in np.where(filled_mask)]
     return set(zip(*index_arrays))
-
-
-def select_max_seed_component(selection, seeds, num_dims):
-
-    neighbors = four_neighborhood(num_dims)
-
-    graph = nx.Graph()
-    graph.add_nodes_from(selection)
-
-    for index, shift in product(selection, neighbors):
-        neighbor = tuple(map(lambda a, b: a + b, index, shift))
-        if neighbor in graph:
-            graph.add_edge(index, neighbor)
-
-    components = list(nx.connected_components(graph))
-
-    overlap = [len(c.intersection(seeds)) for c in components]
-
-    best_component = components[np.argmax(overlap)]
-
-    return best_component
 
 
 def four_neighborhood(num_dims):

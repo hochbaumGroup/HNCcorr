@@ -10,7 +10,6 @@ from hnccorr.utils import (
     add_time_index,
     list_images,
     fill_holes,
-    select_max_seed_component,
     eight_neighborhood,
 )
 
@@ -40,12 +39,6 @@ def test_list_images():
 
 def test_fill_holes():
     assert fill_holes({(1,), (3,)}, (5,)) == {(1,), (2,), (3,)}
-
-
-def test_select_max_seed_component():
-    assert select_max_seed_component(
-        {(1,), (2,), (5,), (6,)}, {(1,), (2,), (5,)}, 1
-    ) == {(1,), (2,)}
 
 
 def test_eight_neighborhood():
