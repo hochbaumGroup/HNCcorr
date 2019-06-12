@@ -2,6 +2,8 @@ import os
 
 from conftest import TEST_DATA_DIR
 
+from hnccorr.utils import four_neighborhood
+
 
 def test_add_offset():
     from hnccorr.utils import add_offset_coordinates
@@ -12,10 +14,7 @@ def test_add_offset():
 def test_add_set_offset():
     from hnccorr.utils import add_offset_set_coordinates
 
-    assert add_offset_set_coordinates({(0, 1), (1, 1)}, (2, 2)) == {
-        (2, 3),
-        (3, 3),
-    }
+    assert add_offset_set_coordinates({(0, 1), (1, 1)}, (2, 2)) == {(2, 3), (3, 3)}
 
 
 def test_add_time_index():
@@ -30,11 +29,7 @@ def test_list_images():
     images = list_images(TEST_DATA_DIR)
     expected_images = map(
         lambda x: os.path.join("./test_data/simple_movie", x),
-        [
-            "simple_movie00000.tif",
-            "simple_movie00001.tif",
-            "simple_movie00002.tif",
-        ],
+        ["simple_movie00000.tif", "simple_movie00001.tif", "simple_movie00002.tif"],
     )
 
     for i, e in zip(images, expected_images):
@@ -71,6 +66,11 @@ def test_eight_neighborhood():
         (1, 0),
         (1, 1),
     }
+
+
+def test_four_neighborhood():
+    assert four_neighborhood(1) == {(-1,), (0,), (1,)}
+    assert four_neighborhood(2) == {(-1, 0), (0, 0), (1, 0), (0, -1), (0, 1)}
 
 
 def test_generate_pixles():

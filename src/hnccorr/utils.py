@@ -47,13 +47,8 @@ def fill_holes(selection, patch_shape):
 
 
 def select_max_seed_component(selection, seeds, num_dims):
-    def neighborhood(num_dims):
-        for dim, change in product(range(num_dims), (-1, 1)):
-            shift = [0] * num_dims
-            shift[dim] = change
-            yield shift
 
-    neighbors = tuple(neighborhood(num_dims))
+    neighbors = four_neighborhood(num_dims)
 
     graph = nx.Graph()
     graph.add_nodes_from(selection)
@@ -70,6 +65,15 @@ def select_max_seed_component(selection, seeds, num_dims):
     best_component = components[np.argmax(overlap)]
 
     return best_component
+
+
+def four_neighborhood(num_dims):
+    neighbors = []
+    for dim, change in product(range(num_dims), (-1, 0, 1)):
+        shift = [0] * num_dims
+        shift[dim] = change
+        neighbors.append(tuple(shift))
+    return set(neighbors)
 
 
 def eight_neighborhood(num_dims, max_radius):
