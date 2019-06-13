@@ -50,9 +50,6 @@ class HNCcorr:
         edge_selector = SparseComputation(
             config.sparse_computation_dimension, config.sparse_computation_grid_distance
         )
-        weight_function = lambda emb, a, b: exponential_distance_decay(
-            emb, a, b, config.gaussian_similarity_alpha
-        )
 
         return cls(
             LocalCorrelationSeeder(
@@ -70,7 +67,12 @@ class HNCcorr:
             NegativeSeedSelector(
                 config.negative_seed_circle_radius, config.negative_seed_circle_count
             ),
-            GraphConstructor(edge_selector, weight_function),
+            GraphConstructor(
+                edge_selector,
+                lambda emb, a, b: exponential_distance_decay(
+                    emb, a, b, config.gaussian_similarity_alpha
+                ),
+            ),
             Candidate,
             Patch,
             CorrelationEmbedding,
