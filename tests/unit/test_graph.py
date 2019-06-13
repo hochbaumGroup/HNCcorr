@@ -3,22 +3,24 @@ from hnccorr.graph import GraphConstructor
 
 
 @pytest.fixture
-def MES():
-    class MockEdgeSelector:
-        def select_edges(self, embedding):
-            return [((0,), (1,)), ((0,), (2,))]
-
-    return MockEdgeSelector()
+def mock_patch(mocker, dummy):
+    return mocker.patch("hnccorr.patch.Patch", autospec=True)(dummy, dummy, dummy)
 
 
 @pytest.fixture
-def MW():
-    return lambda x, a, b: b[0]
+def mock_edge_selector(mocker, dummy):
+    return mocker.patch("hnccorr.edge_selection.SparseComputation", autospec=True)(
+        dummy, dummy
+    )
 
 
-def test_graph_constructor(P, MES, MW):
-    GC = GraphConstructor(MES, MW)
-    G = GC.construct(P((0,)), None)
+def test_graph_constructor(mock_patch, mock_edge_selector):
+    mock_edge_selector.select_edges.return_value = [((0,), (1,)), ((0,), (2,))]
+    mock_patch.enumerate_pixels.return_value = [(i,) for i in range(7)]
+    mock_patch.to_movie_index = lambda x: x
+
+    GC = GraphConstructor(mock_edge_selector, lambda x, a, b: b[0])
+    G = GC.construct(mock_patch, None)
 
     num_nodes = 7
     assert len(G.nodes) == num_nodes
@@ -32,19 +34,14 @@ def test_graph_constructor(P, MES, MW):
     assert G[(0,)][(2,)]["weight"] == 2
 
 
-def test_graph_constructor_nodes_offset_from_zero(mocker, dummy):
+def test_graph_constructor_nodes_offset_from_zero(mock_patch, mock_edge_selector):
     all_pixels = {(2,), (3,), (4,), (5,), (6,), (7,), (8,)}
-    Patch = mocker.patch("hnccorr.patch.Patch", autospec=True)
-    Patch.return_value.enumerate_pixels.return_value = all_pixels
-    Patch.return_value.to_movie_index = lambda x: (2,) if x == (0,) else (3,)
+    mock_patch.enumerate_pixels.return_value = all_pixels
+    mock_patch.to_movie_index = lambda x: (2,) if x == (0,) else (3,)
 
-    EdgeSelector = mocker.patch(
-        "hnccorr.edge_selection.SparseComputation", autospec=True
-    )
-    EdgeSelector.return_value.select_edges.return_value = [((0,), (1,))]
+    mock_edge_selector.select_edges.return_value = [((0,), (1,))]
 
-    GC = GraphConstructor(EdgeSelector(dummy, dummy), lambda emb, x, y: 1)
-    mock_patch = Patch(dummy, dummy, dummy)
+    GC = GraphConstructor(mock_edge_selector, lambda emb, x, y: 1)
     graph = GC.construct(mock_patch, None)
 
     assert set(graph.nodes) == all_pixels
