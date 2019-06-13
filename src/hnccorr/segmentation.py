@@ -1,6 +1,6 @@
+from itertools import product
 import networkx as nx
 import numpy as np
-from itertools import product
 from scipy.ndimage.morphology import binary_fill_holes
 
 from hnccorr.utils import four_neighborhood

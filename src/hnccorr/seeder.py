@@ -1,5 +1,4 @@
 import numpy as np
-from copy import copy
 
 from hnccorr.utils import (
     add_offset_set_coordinates,

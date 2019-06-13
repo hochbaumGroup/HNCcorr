@@ -1,7 +1,6 @@
 import glob
 import os
 from itertools import product
-import numpy as np
 
 
 def add_offset_set_coordinates(iterable, offset):
