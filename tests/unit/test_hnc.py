@@ -1,13 +1,12 @@
 import pytest
 import networkx as nx
 
-from hnccorr.utils import generate_pixels
 from hnccorr.hnc import HncParametric
 
 
 def test_hnc():
     G = nx.Graph()
-    G.add_nodes_from(generate_pixels((7,)))
+    G.add_nodes_from((i,) for i in range(7))
 
     h = HncParametric(0, 2)
 
