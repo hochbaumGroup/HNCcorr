@@ -116,18 +116,3 @@ def seeder_fixed_val():
             self.called = False
 
     return MockSeeder()
-
-
-@pytest.fixture
-def P(MM):
-    return lambda x: Patch(MM, x, 7)
-
-
-@pytest.fixture
-def P1(P):
-    return P((5,))
-
-
-@pytest.fixture
-def P2(MM2):
-    return Patch(MM2, (5, 5), 3)
