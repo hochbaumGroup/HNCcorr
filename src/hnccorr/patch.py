@@ -15,8 +15,6 @@ class Patch:
         self._center_seed = center_seed
         self._patch_size = patch_size
         self._movie = movie
-        self.pixel_size = (patch_size,) * self._num_dimensions
-        self.num_frames = movie.num_frames
 
         if patch_size % 2 == 0:
             raise ValueError("patch_size (%d) should be an odd number.")
@@ -24,6 +22,14 @@ class Patch:
         self._coordinate_offset = self._compute_coordinate_offset()
 
         self._data = self._movie[self._movie_indices()]
+
+    @property
+    def num_frames(self):
+        return self._movie.num_frames
+
+    @property
+    def pixel_size(self):
+        return (self._patch_size,) * self._num_dimensions
 
     def _compute_coordinate_offset(self):
         half_width = int((self._patch_size - 1) / 2)
