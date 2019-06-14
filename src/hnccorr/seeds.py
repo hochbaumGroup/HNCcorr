@@ -6,7 +6,9 @@ from hnccorr.utils import eight_neighborhood, add_offset_set_coordinates
 class PositiveSeedSelector:
     """Selects positive seed pixels in a square centered on `center_seed`.
 
-    Selects all pixels in a square centered on `center_seed` as positive seeds. A pixel is selected if it is within a Manhattan distance (L1) of `_max_distance` from the center seed pixel.
+    Selects all pixels in a square centered on `center_seed` as positive seeds. A pixel
+    is selected if it is within a Manhattan distance (L1) of `_max_distance` from the
+    center seed pixel.
 
     Attributes:
         _max_distance (int): Maximum L1 distance allowed.
@@ -35,7 +37,8 @@ class PositiveSeedSelector:
 class NegativeSeedSelector:
     """Selects negative seed pixels uniformly from a circle around center seed pixel.
 
-    Selects `_count` pixels from a circle centered on the center seed pixel with radius `_radius`. The selected pixels are spread uniformly over the circle. Non-integer
+    Selects `_count` pixels from a circle centered on the center seed pixel with radius
+    `_radius`. The selected pixels are spread uniformly over the circle. Non-integer
     pixel indices are rounded to the closest (integer) pixel. Currently only
     2-dimensional movies are supported.
 
