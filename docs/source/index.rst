@@ -10,6 +10,8 @@ Welcome to HNCcorr's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   hnccorr
+
 
 
 Indices and tables

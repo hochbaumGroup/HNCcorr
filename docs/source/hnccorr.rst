@@ -1,4 +1,4 @@
-hnccorr package
+API Documentation
 ===============
 
 Submodules
