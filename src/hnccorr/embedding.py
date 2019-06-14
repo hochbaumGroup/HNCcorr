@@ -10,15 +10,9 @@ class CorrelationEmbedding:
         self.embedding[np.isnan(self.embedding)] = 0
         self._length = self.embedding.shape[0]
 
-    def distance(self, first, second):
-        return np.mean(
-            np.power(
-                self.embedding[add_time_index(first)]
-                - self.embedding[add_time_index(second)],
-                2,
-            )
-        )
+    def get_vector(self, pixel):
+        return self.embedding[add_time_index(pixel)]
 
 
-def exponential_distance_decay(embedding, first, second, alpha):
-    return np.exp(-alpha * embedding.distance(first, second))
+def exponential_distance_decay(feature_vec1, feature_vec2, alpha):
+    return np.exp(-alpha * np.mean(np.power(feature_vec1 - feature_vec2, 2)))

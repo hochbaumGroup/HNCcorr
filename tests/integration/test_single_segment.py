@@ -139,7 +139,7 @@ def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
 
     edge_selector = SparseComputation(3, 1 / 35.0, dimension_reducer=PCA(3))
     graph_constructor = GraphConstructor(
-        edge_selector, lambda emb, a, b: exponential_distance_decay(emb, a, b, 1.0)
+        edge_selector, lambda a, b: exponential_distance_decay(a, b, 1.0)
     )
     patch_size = 31
 

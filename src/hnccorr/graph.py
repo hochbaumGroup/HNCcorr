@@ -16,7 +16,9 @@ class GraphConstructor:
             graph.add_edge(
                 patch.to_movie_coordinate(node1),
                 patch.to_movie_coordinate(node2),
-                weight=self._weight_function(embedding, node1, node2),
+                weight=self._weight_function(
+                    embedding.get_vector(node1), embedding.get_vector(node2)
+                ),
             )
 
         return graph

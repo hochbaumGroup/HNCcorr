@@ -42,14 +42,14 @@ def test_embedding(CE1, CE2, mock_patch):
     np.testing.assert_allclose(CE2.embedding[(0, 0, slice(None, None))], [0, 0, 0])
 
 
-def test_correlation_embedding(CE1):
+def test_get_vector(CE1):
     CE1.embedding = np.array([[0.0, 1.0], [-2.0, 0.0]])
-    assert CE1.distance((0,), (1,)) == pytest.approx(2.5)
-    assert CE1.distance((0,), (0,)) == pytest.approx(0)
+    np.testing.assert_allclose(CE1.get_vector((0,)), np.array([0.0, -2.0]))
 
 
-def test_exponential_distance_decay(CE1):
-    CE1.embedding = np.array([[0.0, 1.0], [-2.0, 0.0]])
+def test_exponential_distance_decay():
     alpha = 0.5
 
-    exponential_distance_decay(CE1, (0,), (1,), alpha) == pytest.approx(np.exp(-0.25))
+    exponential_distance_decay(
+        np.array([0.0, -2.0]), np.array([[1.0, 0.0]]), alpha
+    ) == pytest.approx(np.exp(-0.25))

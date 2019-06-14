@@ -69,8 +69,8 @@ class HNCcorr:
             ),
             GraphConstructor(
                 edge_selector,
-                lambda emb, a, b: exponential_distance_decay(
-                    emb, a, b, config.gaussian_similarity_alpha
+                lambda a, b: exponential_distance_decay(
+                    a, b, config.gaussian_similarity_alpha
                 ),
             ),
             Candidate,
