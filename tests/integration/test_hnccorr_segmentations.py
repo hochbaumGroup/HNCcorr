@@ -22,7 +22,7 @@ def test_hnccorr_single_segment(data):
 
     H.segment(movie)
 
-    A = np.zeros(movie.pixel_size)
+    A = np.zeros(movie.pixel_shape)
     for segmentation in H.segmentations:
         for i, j in segmentation.selection:
             A[i, j] += 1
