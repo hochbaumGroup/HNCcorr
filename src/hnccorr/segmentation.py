@@ -7,19 +7,58 @@ from hnccorr.utils import four_neighborhood
 
 
 class Segmentation:
+    """A set of pixels identified by HNC as a potential cell footprint.
+
+    Attributes:
+        selection (set): Pixels in the spatial footprint. Each pixel is represented as
+            a tuple.
+        weight (float): Upper bound on the lambda coefficient for which this
+            segmentation is optimal.
+    """
+
     def __init__(self, selection, weight):
+        """Initializes a Segmentation object."""
         self.selection = set(selection)
         self.weight = weight
 
     def __eq__(self, other):
+        """Compares two Segmentation objects."""
         return (self.selection == other.selection) and (self.weight == other.weight)
 
-    def clean(self, positive_seeds, region_size):
-        """Remove left over points / fill holes"""
-        improved_segmentation = self._select_max_seed_component(positive_seeds)
-        return improved_segmentation.fill_holes(region_size)
+    def clean(self, positive_seeds, movie_pixel_shape):
+        """Cleans Segmentation by selecting a connected component and filling holes.
 
-    def _select_max_seed_component(self, seeds):
+        The Segmentation is decomposed into connected components by considering
+        horizontal or vertical adjacent pixels as neighbors. The connected component
+        with the most positive seed is selected. Any holes in the selected component
+        are added to the selection.
+
+        Args:
+            positive_seeds (set): Pixels that are contained in the
+                spatial footprint. Each pixel is represented by a tuple.
+            movie_pixel_shape (tuple): Pixel resolution of the movie.
+
+        Returns:
+            Segmentation: A new Segmentation with the same weight.
+        """
+        improved_segmentation = self._select_max_seed_component(positive_seeds)
+        return improved_segmentation._fill_holes(movie_pixel_shape)
+
+    def _select_max_seed_component(self, positive_seeds):
+        """Selects the connected component of selection that contains the most seeds.
+
+        The Segmentation is decomposed into connected components by considering
+        horizontal or vertical adjacent pixels as neighbors. The connected component
+        with the most positive seed is selected.
+
+        Args:
+            positive_seeds (set): Pixels that are contained in the
+                spatial footprint. Each pixel is represented by a tuple.
+
+        Returns:
+            Segmentation: A new Segmentation with the same weight.
+        """
+
         # get an arbitrary element from seeds to compute dimension
         num_dims = len(next(iter(self.selection)))
         neighbors = four_neighborhood(num_dims)
@@ -34,14 +73,22 @@ class Segmentation:
 
         components = list(nx.connected_components(graph))
 
-        overlap = [len(c.intersection(seeds)) for c in components]
+        overlap = [len(c.intersection(positive_seeds)) for c in components]
 
         best_component = components[np.argmax(overlap)]
 
         return Segmentation(best_component, self.weight)
 
-    def fill_holes(self, patch_shape):
-        mask = np.full(patch_shape, False, dtype=np.bool)
+    def _fill_holes(self, movie_pixel_shape):
+        """Fills holes in the selection.
+
+        Args:
+            movie_pixel_shape (tuple): Pixel resolution of the movie.
+
+        Returns:
+            Segmentation: A new Segmentation with the same weight.
+        """
+        mask = np.full(movie_pixel_shape, False, dtype=np.bool)
 
         indices = list(zip(*self.selection))
         mask[indices] = True
