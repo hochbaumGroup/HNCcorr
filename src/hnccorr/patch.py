@@ -28,7 +28,7 @@ class Patch:
         return self._movie.num_frames
 
     @property
-    def pixel_size(self):
+    def pixel_shape(self):
         return (self._patch_size,) * self._num_dimensions
 
     def _compute_coordinate_offset(self):
@@ -47,7 +47,7 @@ class Patch:
         # shift right such that bottom right corner exists
         bottomright_coordinates = list(
             min(x, max_value)
-            for x, max_value in zip(bottomright_coordinates, self._movie.pixel_size)
+            for x, max_value in zip(bottomright_coordinates, self._movie.pixel_shape)
         )
 
         topleft_coordinates = add_offset_coordinates(
@@ -77,7 +77,7 @@ class Patch:
 
     def enumerate_pixels(self):
         return add_offset_set_coordinates(
-            generate_pixels(self.pixel_size), self._coordinate_offset
+            generate_pixels(self.pixel_shape), self._coordinate_offset
         )
 
     def __getitem__(self, key):

@@ -19,7 +19,7 @@ def MM():
     class MockMovie:
         def __init__(self):
             self.num_frames = 3
-            self.pixel_size = (10,)
+            self.pixel_shape = (10,)
             self.num_dimensions = 1
 
         def __getitem__(self, key):
@@ -43,7 +43,7 @@ def MM2():
             self.num_frames = 1
 
             self._A = np.zeros((2, 10, 10))
-            self.pixel_size = self._A.shape[1:]
+            self.pixel_shape = self._A.shape[1:]
 
         def __getitem__(self, key):
 

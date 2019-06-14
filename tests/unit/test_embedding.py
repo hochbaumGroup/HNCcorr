@@ -12,7 +12,7 @@ def mock_patch(mocker, dummy):
 
 @pytest.fixture
 def CE1(mock_patch):
-    mock_patch.pixel_size = (7,)
+    mock_patch.pixel_shape = (7,)
     mock_patch.__getitem__.return_value = np.array(
         [
             [1, 1, 1, 1, 1, 1, 1],
@@ -26,7 +26,7 @@ def CE1(mock_patch):
 
 @pytest.fixture
 def CE2(mock_patch):
-    mock_patch.pixel_size = (3, 3)
+    mock_patch.pixel_shape = (3, 3)
     mock_patch.__getitem__.return_value = np.zeros((3, 3))
     return CorrelationEmbedding(mock_patch)
 

@@ -125,10 +125,10 @@ def test_candidate_segment(
         == mock_postprocessor.select.return_value
     )
     mock_pos_seed_selector.select.assert_called_once_with(
-        center_seed, mock_movie.pixel_size
+        center_seed, mock_movie.pixel_shape
     )
     mock_neg_seed_selector.select.assert_called_once_with(
-        center_seed, mock_movie.pixel_size
+        center_seed, mock_movie.pixel_shape
     )
     mock_patch_class.assert_called_once_with(mock_movie, center_seed, "patch_size")
     mock_embedding_class.assert_called_once_with(mock_patch_class.return_value)

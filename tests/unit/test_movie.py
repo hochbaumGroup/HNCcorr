@@ -38,8 +38,8 @@ def test_data_size(M):
     assert M.data_size == (3, 5, 10)
 
 
-def test_pixel_size(M):
-    assert M.pixel_size == (5, 10)
+def test_pixel_shape(M):
+    assert M.pixel_shape == (5, 10)
 
 
 def test_is_valid_pixel_index(M):

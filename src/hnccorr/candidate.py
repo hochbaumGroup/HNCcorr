@@ -13,12 +13,12 @@ class Candidate:
         )
 
     def segment(self):
-        movie_pixel_size = self._hnccorr.movie.pixel_size
+        movie_pixel_shape = self._hnccorr.movie.pixel_shape
         pos_seeds = self._hnccorr.positive_seed_selector.select(
-            self._center_seed, movie_pixel_size
+            self._center_seed, movie_pixel_shape
         )
         neg_seeds = self._hnccorr.negative_seed_selector.select(
-            self._center_seed, movie_pixel_size
+            self._center_seed, movie_pixel_shape
         )
         patch = self._hnccorr.patch_class(
             self._hnccorr.movie, self._center_seed, self._hnccorr.patch_size
@@ -27,7 +27,7 @@ class Candidate:
         graph = self._hnccorr.graph_constructor.construct(patch, embedding)
         self.segmentations = self._hnccorr.segmentor.solve(graph, pos_seeds, neg_seeds)
         self.clean_segmentations = [
-            s.clean(pos_seeds, movie_pixel_size) for s in self.segmentations
+            s.clean(pos_seeds, movie_pixel_shape) for s in self.segmentations
         ]
         self.best_segmentation = self._hnccorr.postprocessor.select(self.segmentations)
         return self.best_segmentation

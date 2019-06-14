@@ -32,7 +32,7 @@ class LocalCorrelationSeeder:
 
         mean_neighbor_corr = []
 
-        for pixel in generate_pixels(self._movie.pixel_size):
+        for pixel in generate_pixels(self._movie.pixel_shape):
             pixel_data = self._movie[add_time_index(pixel)].reshape(1, -1)
 
             # compute neighbors

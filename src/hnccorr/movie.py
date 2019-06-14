@@ -64,7 +64,7 @@ class Movie:
     def is_valid_pixel_index(self, index):
         if self.num_dimensions == len(index):
             zero_tuple = (0,) * self.num_dimensions
-            for i, lower, upper in zip(index, zero_tuple, self.pixel_size):
+            for i, lower, upper in zip(index, zero_tuple, self.pixel_shape):
                 if i < lower or i >= upper:
                     return False
             return True
@@ -75,7 +75,7 @@ class Movie:
         return self.data_size[0]
 
     @property
-    def pixel_size(self):
+    def pixel_shape(self):
         return self.data_size[1:]
 
     @property

@@ -16,8 +16,8 @@ def test_even_windowsize(MM):
         Patch(MM, (5,), 6)
 
 
-def test_pixel_size(simple_patch):
-    assert simple_patch.pixel_size == (7,)
+def test_pixel_shape(simple_patch):
+    assert simple_patch.pixel_shape == (7,)
 
 
 def test_num_frames(simple_patch):
