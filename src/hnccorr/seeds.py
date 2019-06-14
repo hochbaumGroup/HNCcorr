@@ -7,11 +7,11 @@ class PositiveSeedSelector:
     """Selects positive seed pixels in a square centered on `center_seed`.
 
     Selects all pixels in a square centered on `center_seed` as positive seeds. A pixel
-    is selected if it is within a Manhattan distance (L1) of `_max_distance` from the
+    is selected if it is within a Chebyshev distance (L-Inf) of `_max_distance` from the
     center seed pixel.
 
     Attributes:
-        _max_distance (int): Maximum L1 distance allowed.
+        _max_distance (int): Maximum L-Inf distance allowed.
     """
 
     def __init__(self, max_distance):
