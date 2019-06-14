@@ -43,11 +43,15 @@ def test_patch_enumerate_pixels(simple_patch, MM2):
     }
 
 
-def test_to_movie_index(simple_patch, MM):
-    simple_patch.to_movie_index((3,)) == (6,)
-    simple_patch.to_movie_index((0,)) == (3,)
+@pytest.mark.parametrize(
+    "movie_coordinate, patch_coordinate", [((6,), (3,)), ((3,), (0,))]
+)
+def test_to_movie_coordinate(movie_coordinate, patch_coordinate, simple_patch, MM):
+    assert simple_patch.to_movie_coordinate(patch_coordinate) == movie_coordinate
 
 
-def test_to_patch_index(simple_patch, MM):
-    simple_patch.to_patch_index((9,)) == (6,)
-    simple_patch.to_patch_index((3,)) == (0,)
+@pytest.mark.parametrize(
+    "movie_coordinate, patch_coordinate", [((9,), (6,)), ((3,), (0,))]
+)
+def test_to_patch_coordinate(movie_coordinate, patch_coordinate, simple_patch, MM):
+    assert simple_patch.to_patch_coordinate(movie_coordinate) == patch_coordinate

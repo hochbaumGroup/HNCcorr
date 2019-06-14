@@ -67,10 +67,11 @@ class Patch:
             idx.append(slice(start, stop))
         return add_time_index(tuple(idx))
 
-    def to_movie_index(self, patch_index):
+    def to_movie_coordinate(self, patch_index):
+        """Converts a coordinate from the"""
         return add_offset_coordinates(patch_index, self._coordinate_offset)
 
-    def to_patch_index(self, patch_index):
+    def to_patch_coordinate(self, patch_index):
         return add_offset_coordinates(
             patch_index, [-x for x in self._coordinate_offset]
         )
