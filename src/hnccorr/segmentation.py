@@ -44,7 +44,7 @@ class Segmentation:
         improved_segmentation = self._select_max_seed_component(positive_seeds)
         return improved_segmentation._fill_holes(movie_pixel_shape)
 
-    def _select_max_seed_component(self, positive_seeds):
+    def select_max_seed_component(self, positive_seeds):
         """Selects the connected component of selection that contains the most seeds.
 
         The Segmentation is decomposed into connected components by considering
@@ -79,7 +79,7 @@ class Segmentation:
 
         return Segmentation(best_component, self.weight)
 
-    def _fill_holes(self, movie_pixel_shape):
+    def fill_holes(self, movie_pixel_shape):
         """Fills holes in the selection.
 
         Args:
