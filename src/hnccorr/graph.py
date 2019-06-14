@@ -14,8 +14,8 @@ class GraphConstructor:
 
         for node1, node2 in self._edge_selector.select_edges(embedding):
             graph.add_edge(
-                patch.to_movie_index(node1),
-                patch.to_movie_index(node2),
+                patch.to_movie_coordinate(node1),
+                patch.to_movie_coordinate(node2),
                 weight=self._weight_function(embedding, node1, node2),
             )
 
