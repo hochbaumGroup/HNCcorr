@@ -30,7 +30,7 @@ class Segmentation:
 
         The Segmentation is decomposed into connected components by considering
         horizontal or vertical adjacent pixels as neighbors. The connected component
-        with the most positive seed is selected. Any holes in the selected component
+        with the most positive seeds is selected. Any holes in the selected component
         are added to the selection.
 
         Args:
@@ -49,7 +49,7 @@ class Segmentation:
 
         The Segmentation is decomposed into connected components by considering
         horizontal or vertical adjacent pixels as neighbors. The connected component
-        with the most positive seed is selected.
+        with the most positive seeds is selected.
 
         Args:
             positive_seeds (set): Pixels that are contained in the
