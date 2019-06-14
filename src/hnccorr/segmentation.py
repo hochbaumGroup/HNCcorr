@@ -41,8 +41,8 @@ class Segmentation:
         Returns:
             Segmentation: A new Segmentation with the same weight.
         """
-        improved_segmentation = self._select_max_seed_component(positive_seeds)
-        return improved_segmentation._fill_holes(movie_pixel_shape)
+        improved_segmentation = self.select_max_seed_component(positive_seeds)
+        return improved_segmentation.fill_holes(movie_pixel_shape)
 
     def select_max_seed_component(self, positive_seeds):
         """Selects the connected component of selection that contains the most seeds.
