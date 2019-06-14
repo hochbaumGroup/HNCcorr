@@ -85,3 +85,6 @@ class Movie:
     @property
     def num_dimensions(self):
         return len(self.data_size[1:])
+
+    def extract_valid_pixels(self, pixels):
+        return {pixel for pixel in pixels if self.is_valid_pixel_index(pixel)}

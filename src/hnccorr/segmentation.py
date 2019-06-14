@@ -39,7 +39,7 @@ class Segmentation:
             movie_pixel_shape (tuple): Pixel resolution of the movie.
 
         Returns:
-            Segmentation: A new Segmentation with the same weight.
+            Segmentation: A new Segmentation object with the same weight.
         """
         improved_segmentation = self.select_max_seed_component(positive_seeds)
         return improved_segmentation.fill_holes(movie_pixel_shape)
@@ -56,7 +56,7 @@ class Segmentation:
                 spatial footprint. Each pixel is represented by a tuple.
 
         Returns:
-            Segmentation: A new Segmentation with the same weight.
+            Segmentation: A new Segmentation object with the same weight.
         """
 
         # get an arbitrary element from seeds to compute dimension
@@ -86,7 +86,7 @@ class Segmentation:
             movie_pixel_shape (tuple): Pixel resolution of the movie.
 
         Returns:
-            Segmentation: A new Segmentation with the same weight.
+            Segmentation: A new Segmentation object with the same weight.
         """
         mask = np.full(movie_pixel_shape, False, dtype=np.bool)
 

@@ -49,6 +49,10 @@ def test_is_valid_pixel_index(M):
     assert M.is_valid_pixel_index((4, 9))
 
 
+def test_extract_valid_pixels(M):
+    assert M.extract_valid_pixels({(0, 0), (-1, 0), (4, 10)}) == {(0, 0)}
+
+
 def test_movie_get_item(M):
     assert M[0, 0, 0] == 1.0
     np.testing.assert_allclose(M[2, :, :], np.ones((5, 10)) * 3)
