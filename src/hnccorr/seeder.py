@@ -87,3 +87,4 @@ class LocalCorrelationSeeder:
 
     def reset(self):
         self._current_index = 0
+        self._excluded_pixels = set()

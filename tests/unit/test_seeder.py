@@ -35,3 +35,11 @@ def test_seeder_exclude_pixels_boundary(LCS, MM):
     assert LCS.next() == (9,)
     LCS.exclude_pixels({(6,)})
     assert LCS.next() is None
+
+
+def test_seeder_reset_excluded_pixels(LCS, MM):
+    LCS.select_seeds(MM)
+    assert LCS.next() == (9,)
+    LCS.exclude_pixels({(9,)})
+    LCS.reset()
+    assert LCS.next() == (9,)
