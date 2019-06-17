@@ -4,7 +4,10 @@ import numpy as np
 class SizePostprocessor:
     """Selects the best segmentation based on the number of selected pixels.
 
-    Discards all segmentations that contain more pixels than ``_max_size`` or less pixels then ``_min_size``. If no segmentations remains, no cell was found and ``None`` is returned. Otherwise the segmentation is returned that minimizes ``|sqrt(x) - sqrt(_pref_size)`` where x is the number of pixels in the segmentation.
+    Discards all segmentations that contain more pixels than ``_max_size`` or less
+    pixels then ``_min_size``. If no segmentations remains, no cell was found and
+    ``None`` is returned. Otherwise the segmentation is returned that minimizes
+    ``|sqrt(x) - sqrt(_pref_size)`` where x is the number of pixels in the segmentation.
 
     Attributes:
         _min_size (int): Lower bound for the cell size in pixels.
