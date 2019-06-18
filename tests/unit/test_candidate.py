@@ -145,6 +145,13 @@ def test_candidate_equality():
     assert Candidate(1, "a") != Candidate(1, "b")
 
 
+def test_candidate_equality_wrong_class():
+    class FakeCandidate:
+        pass
+
+    assert Candidate(1, "a") != FakeCandidate()
+
+
 def test_candidate_segmentations(hnccorr, mock_segmentor):
     c = Candidate(1, hnccorr)
     assert c.segmentations is None

@@ -22,9 +22,12 @@ class Candidate:
     def __eq__(self, other):
         """Compare Candidate object."""
         # pylint: disable=W0212
-        return (self._center_seed == other._center_seed) and (
-            self._hnccorr == other._hnccorr
-        )
+        if isinstance(other, Candidate):
+            return (self._center_seed == other._center_seed) and (
+                self._hnccorr == other._hnccorr
+            )
+        else:
+            return False
 
     def segment(self):
         """Segment candidate cell and return footprint (if any).
