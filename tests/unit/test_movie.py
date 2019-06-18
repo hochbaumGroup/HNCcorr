@@ -42,11 +42,11 @@ def test_pixel_shape(M):
     assert M.pixel_shape == (5, 10)
 
 
-def test_is_valid_pixel_index(M):
-    assert not M.is_valid_pixel_index((0, -1))
-    assert not M.is_valid_pixel_index((4, 11))
-    assert not M.is_valid_pixel_index((4,))
-    assert M.is_valid_pixel_index((4, 9))
+def test_is_valid_pixel_coordinate(M):
+    assert not M.is_valid_pixel_coordinate((0, -1))
+    assert not M.is_valid_pixel_coordinate((4, 11))
+    assert not M.is_valid_pixel_coordinate((4,))
+    assert M.is_valid_pixel_coordinate((4, 9))
 
 
 def test_extract_valid_pixels(M):

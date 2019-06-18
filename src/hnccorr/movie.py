@@ -61,7 +61,7 @@ class Movie:
         """Access data directly from underlying numpy array"""
         return self._data.__getitem__(key)
 
-    def is_valid_pixel_index(self, index):
+    def is_valid_pixel_coordinate(self, index):
         if self.num_dimensions == len(index):
             zero_tuple = (0,) * self.num_dimensions
             for i, lower, upper in zip(index, zero_tuple, self.pixel_shape):
@@ -72,19 +72,24 @@ class Movie:
 
     @property
     def num_frames(self):
+        """Number of frames in the movie."""
         return self.data_size[0]
 
     @property
     def pixel_shape(self):
+        """Resolution of the movie in pixels."""
         return self.data_size[1:]
 
     @property
     def num_pixels(self):
+        """Number of pixels in the movie."""
         return np.product(self.data_size[1:])
 
     @property
     def num_dimensions(self):
+        """Dimension of the movie (excludes time dimension)."""
         return len(self.data_size[1:])
 
     def extract_valid_pixels(self, pixels):
-        return {pixel for pixel in pixels if self.is_valid_pixel_index(pixel)}
+        """Returns subset of pixels that are valid coordinates for the movie."""
+        return {pixel for pixel in pixels if self.is_valid_pixel_coordinate(pixel)}
