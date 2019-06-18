@@ -43,3 +43,10 @@ def test_seeder_reset_excluded_pixels(LCS, MM):
     LCS.exclude_pixels({(9,)})
     LCS.reset()
     assert LCS.next() == (9,)
+
+
+def test_seeder_select_seeds_should_reset_excluded_pixels(LCS, MM):
+    LCS.select_seeds(MM)
+    LCS.exclude_pixels({(9,)})
+    LCS.select_seeds(MM)
+    assert LCS.next() == (9,)

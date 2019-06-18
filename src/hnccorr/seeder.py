@@ -62,7 +62,7 @@ class LocalCorrelationSeeder:
 
         # store best seeds
         self._seeds = [seed for seed, _ in mean_neighbor_corr[:num_keep]]
-        self._current_index = 0
+        self.reset()
 
     def exclude_pixels(self, pixels):
         neighborhood = eight_neighborhood(self._num_dims, self._padding)
