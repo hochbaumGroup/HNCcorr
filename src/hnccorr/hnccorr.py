@@ -11,6 +11,19 @@ from hnccorr.postprocessor import SizePostprocessor
 
 
 class HNCcorr:
+    """Implementation of the HNCcorr algorithm.
+
+    This class specifies all components of the algoritm and defines the procedure for
+    segmenting the movie. How each candidate seed / location is evaluated is specified
+    in the Candidate class.
+
+    **Reference**:
+    Q Spaen, R Asín-Achá, SN Chettih, M Minderer, C Harvey, and DS Hochbaum (2019).
+    HNCcorr: A Novel Combinatorial Approach for Cell Identification in Calcium-Imaging
+    Movies. eNeuro, 6(2).
+
+    """
+
     def __init__(
         # pylint: disable=C0330
         self,
@@ -25,6 +38,7 @@ class HNCcorr:
         embedding_class,
         patch_size,
     ):
+        """Initalizes HNCcorr object."""
         self.seeder = seeder
         self.postprocessor = postprocessor
         self.segmentor = segmentor
@@ -42,6 +56,21 @@ class HNCcorr:
 
     @classmethod
     def from_config(cls, config=None):
+        """Initializes HNCcorr from an HNCcorrConfig object.
+
+        Provides a simple way to initialize an HNCcorr object from a configuration.
+        Default components are used, and parameters are taken from the input
+        configuration or inferred from the default configuration if not specified.
+
+        Args:
+            config (HNCcorrConfig): HNCcorrConfig object with modified configuration.
+                Parameters that are not explicitly specified in the `config` object are
+                taken from the default configuration ``DEFAULT_CONFIGURATION`` as
+                defined in the `hnccorr.config` module.
+
+        Returns:
+            HNCcorr: Initialized HNCcorr object as parametrized by the configuration.
+        """
         if config is None:
             config = DEFAULT_CONFIG
         else:
@@ -80,6 +109,20 @@ class HNCcorr:
         )
 
     def segment(self, movie):
+        """Applies the HNCcorr algorithm to identify cells in a calcium-imaging movie.
+
+        Identifies cells the spatial footprints of cells in a calcium imaging movie.
+        Cells are identified based on a set of candidate locations identified by the
+        seeder. If a cell is found, the pixels in the spatial footprint are excluded as
+        seeds for future segmentations. This prevents that a cell is segmented more
+        than once. Although segmented pixels cannot seed a new segmentation, they may
+        be segmented again.
+
+        Identified cells are accessible through the `segmentations` attribute.
+
+        Returns:
+            Reference to itself.
+        """
         self.movie = movie
         self.seeder.reset()
         self.segmentations = []
