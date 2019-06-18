@@ -27,7 +27,7 @@ def list_images(folder):
     Returns:
         list: Sorted list of paths of tiff files in folder.
     """
-    files_tif = glob.glob(os.path.join(folder, "*.tif"))
+    files_tif = glob.glob(os.path.join(folder, "*.tiff"))
     return sorted(files_tif)
 
 
