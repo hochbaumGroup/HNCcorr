@@ -25,15 +25,10 @@ class SparseComputationEmbeddingWrapper:
             SparseComputationEmbeddingWrapper
 
         """
-        self._dim_low = int(dim_low)
-        self._distance = distance
-
         if dimension_reducer is None:
-            self._dim_reducer = ApproximatePCA(self._dim_low)
-        else:
-            self._dim_reducer = dimension_reducer
+            dimension_reducer = ApproximatePCA(int(dim_low))
 
-        self._sc = SC(self._dim_reducer, distance=self._distance)
+        self._sc = SC(dimension_reducer, distance=distance)
 
     def select_edges(self, embedding):
         """Selects relevant pairwise similarities with sparse computation.
