@@ -1,5 +1,18 @@
 class Candidate:
+    """Encapsulates the logic for segmenting a single cell candidate / seed.
+
+    Attributes:
+        best_segmentation (Segmentation): Segmentation of a cell's spatial footprint as
+            selected by the postprocessor.
+        clean_segmentations (list[Segmentation]): List of segmentation after calling
+            `clean()` on each segmentation.
+        segmentations (list[Segmentation]): List of segmentations returned by HNC.
+        _center_seed (tuple): Seed pixel coordinates.
+        _hnccorr (HNCcorr): HNCcorr object.
+    """
+
     def __init__(self, center_seed, hnccorr):
+        """Initialize Candidate object."""
         self._center_seed = center_seed
         self._hnccorr = hnccorr
         self.segmentations = None
@@ -7,12 +20,23 @@ class Candidate:
         self.best_segmentation = None
 
     def __eq__(self, other):
+        """Compare Candidate object."""
         # pylint: disable=W0212
         return (self._center_seed == other._center_seed) and (
             self._hnccorr == other._hnccorr
         )
 
     def segment(self):
+        """Segment candidate cell and return footprint (if any).
+
+        Encapsulates the procedure for segmenting a single cell candidate. It
+        determines the seeds, constructs the similarity graph, and solves the HNC
+        clustering problem for all values of the trade-off parameter lambda. The
+        postprocessor selects the best segmentation or determines that no cell is found.
+
+        Returns:
+            Segmentation or None: Best segmentation or None if no cell is found.
+        """
         movie = self._hnccorr.movie
         pos_seeds = self._hnccorr.positive_seed_selector.select(
             self._center_seed, movie
