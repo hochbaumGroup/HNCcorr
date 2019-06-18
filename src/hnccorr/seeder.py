@@ -21,29 +21,32 @@ class LocalCorrelationSeeder:
 
 
     Attributes:
-        _neighborhood_size (int): Width in pixels of the local neighborhood of a pixel.
+        _current_index (int): Index of next seed in `_seeds` to return.
+        _excluded_pixels (set): Set of pixel coordinates to excluded as future seeds.
         _keep_fraction (float): Percentage of candidate seed pixels to attempt for
             segmentation. All other candidate seed pixels are discarded.
         _movie (Movie): Movie to segment.
-        _num_dims (int): Dimension of the movie to segment.
+        _neighborhood_size (int): Width in pixels of the local neighborhood of a pixel.
+        _padding (int): L-infinity distance for determining which pixels should be
+            padded to the exclusion set in `exclude_pixels()`.
+        _seeds (list[tuple]): List of candidate seed coordinates to return.
     """
 
     def __init__(self, neighborhood_size, keep_fraction, padding):
         """Initializes a LocalCorrelationSeeder object."""
-        self._neighborhood_size = neighborhood_size
-        self._keep_fraction = keep_fraction
-        self._movie = None
-        self._num_dims = None
-        self._padding = padding
-        self._seeds = None
         self._current_index = None
         self._excluded_pixels = set()
+        self._keep_fraction = keep_fraction
+        self._movie = None
+        self._neighborhood_size = neighborhood_size
+        self._padding = padding
+        self._seeds = None
 
     def select_seeds(self, movie):
         """Identifies candidate seeds in movie.
 
         Initializes list of candidate seeds in the movie. See class description for
-        details. Seeds can be accessed via the `next` method.
+        details. Seeds can be accessed via the `next()` method.
 
         Args:
             movie (Movie): Movie object to segment.
@@ -52,14 +55,15 @@ class LocalCorrelationSeeder:
             None
         """
         self._movie = movie
-        self._num_dims = self._movie.num_dimensions
+
+        num_dimensions = self._movie.num_dimensions
         # helpful constants
         max_shift = int((self._neighborhood_size - 1) / 2)
 
         # generate all offsets of neighbors
-        neighbor_offsets = eight_neighborhood(self._num_dims, max_shift)
+        neighbor_offsets = eight_neighborhood(num_dimensions, max_shift)
         # remove point as neighbor
-        neighbor_offsets = neighbor_offsets - {(0,) * self._num_dims}
+        neighbor_offsets = neighbor_offsets - {(0,) * num_dimensions}
 
         mean_neighbor_corr = []
 
@@ -96,7 +100,7 @@ class LocalCorrelationSeeder:
         self.reset()
 
     def exclude_pixels(self, pixels):
-        """Excludes pixels from being returned by `next` method.
+        """Excludes pixels from being returned by `next()` method.
 
         All pixels within in the set `pixels` as well as pixels that are within an L-
         infinity distance of `_padding` from any excluded pixel are excluded as seeds.
@@ -110,7 +114,7 @@ class LocalCorrelationSeeder:
         Returns:
             None
         """
-        neighborhood = eight_neighborhood(self._num_dims, self._padding)
+        neighborhood = eight_neighborhood(self._movie.num_dimensions, self._padding)
 
         padded_pixel_sets = [
             add_offset_set_coordinates(neighborhood, pixel) for pixel in pixels
