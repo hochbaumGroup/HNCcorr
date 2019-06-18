@@ -26,8 +26,8 @@ class Candidate:
             return (self.center_seed == other.center_seed) and (
                 self._hnccorr == other._hnccorr
             )
-        else:
-            return False
+
+        return False
 
     def segment(self):
         """Segment candidate cell and return footprint (if any).
