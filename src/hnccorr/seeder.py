@@ -9,7 +9,27 @@ from hnccorr.utils import (
 
 
 class LocalCorrelationSeeder:
+    """Provide seeds based on the correlation of pixels to their local neighborhood.
+
+    Seed pixels are selected based on the average correlation of the pixel to its local
+    neighborhood. Pixels with low correlation to their neighborhood are discarded and
+    only a fraction of `_seed_fraction` are kept and attempted for segmentation.
+
+    The local neighborhood of each pixel consist of the pixels in a square of width
+    `_neighborhood_size` centered on the pixels. Pixel coordinates outside the boundary
+    of the movie are ignored.
+
+
+    Attributes:
+        _neighborhood_size (int): Width in pixels of the local neighborhood of a pixel.
+        _keep_fraction (float): Percentage of candidate seed pixels to attempt for
+            segmentation. All other candidate seed pixels are discarded.
+        _movie (Movie): Movie to segment.
+        _num_dims (int): Dimension of the movie to segment.
+    """
+
     def __init__(self, neighborhood_size, keep_fraction, padding):
+        """Initializes a LocalCorrelationSeeder object."""
         self._neighborhood_size = neighborhood_size
         self._keep_fraction = keep_fraction
         self._movie = None
@@ -20,6 +40,17 @@ class LocalCorrelationSeeder:
         self._excluded_pixels = set()
 
     def select_seeds(self, movie):
+        """Identifies candidate seeds in movie.
+
+        Initializes list of candidate seeds in the movie. See class description for
+        details. Seeds can be accessed via the `next` method.
+
+        Args:
+            movie (Movie): Movie object to segment.
+
+        Returns:
+            None
+        """
         self._movie = movie
         self._num_dims = self._movie.num_dimensions
         # helpful constants
@@ -65,6 +96,20 @@ class LocalCorrelationSeeder:
         self.reset()
 
     def exclude_pixels(self, pixels):
+        """Excludes pixels from being returned by `next` method.
+
+        All pixels within in the set `pixels` as well as pixels that are within an L-
+        infinity distance of `_padding` from any excluded pixel are excluded as seeds.
+
+        Method enables exclusion of pixels in previously segmented cells from serving
+        as new seeds. This may help to prevent repeated segmentation of the cell.
+
+        Args:
+            pixels (set): Set of pixel coordinates to exclude.
+
+        Returns:
+            None
+        """
         neighborhood = eight_neighborhood(self._num_dims, self._padding)
 
         padded_pixel_sets = [
@@ -76,6 +121,15 @@ class LocalCorrelationSeeder:
         )
 
     def next(self):
+        """Provides next seed pixel for segmentation.
+
+        Returns the movie coordinates of the next available seed pixel for
+        segmentation. Seed pixels that have previously been excluded will be ignored.
+        Returns None when all seeds are exhausted.
+
+        Returns:
+            tuple or None: Coordinates of next seed pixel. None if no seeds remaining.
+        """
         while self._current_index < len(self._seeds):
             center_seed = self._seeds[self._current_index]
             self._current_index += 1
@@ -86,5 +140,6 @@ class LocalCorrelationSeeder:
         return None
 
     def reset(self):
+        """Reinitialize the sequence of seed pixels and empties the exclusion set."""
         self._current_index = 0
         self._excluded_pixels = set()
