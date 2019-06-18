@@ -5,7 +5,7 @@ from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
 from hnccorr.graph import GraphConstructor
 from hnccorr.seeds import PositiveSeedSelector, NegativeSeedSelector
 from hnccorr.edge_selection import SparseComputationEmbeddingWrapper
-from hnccorr.hnc import HncParametric
+from hnccorr.hnc import HncParametricWrapper
 from hnccorr.seeder import LocalCorrelationSeeder
 from hnccorr.postprocessor import SizePostprocessor
 
@@ -91,7 +91,7 @@ class HNCcorr:
                 config.postprocessor_max_cell_size,
                 config.postprocessor_preferred_cell_size,
             ),
-            HncParametric(0, 1),
+            HncParametricWrapper(0, 1),
             PositiveSeedSelector(config.positive_seed_radius),
             NegativeSeedSelector(
                 config.negative_seed_circle_radius, config.negative_seed_circle_count

@@ -13,7 +13,7 @@ from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
 from hnccorr.graph import GraphConstructor
 from hnccorr.seeds import PositiveSeedSelector, NegativeSeedSelector
 from hnccorr.edge_selection import SparseComputationEmbeddingWrapper
-from hnccorr.hnc import HncParametric
+from hnccorr.hnc import HncParametricWrapper
 from hnccorr.seeder import LocalCorrelationSeeder
 from hnccorr.postprocessor import SizePostprocessor
 from hnccorr.candidate import Candidate
@@ -115,7 +115,7 @@ def matlab_segmentation():
 def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
     seeder = LocalCorrelationSeeder(3, 0.4, 4)
     postprocessor = SizePostprocessor(40, 200, 80)
-    segmentor = HncParametric(0, 100000)
+    segmentor = HncParametricWrapper(0, 100000)
     positive_seed_selector = PositiveSeedSelector(0)
 
     # negative seed selector is mocked due to a bug in the matlab code.

@@ -24,7 +24,9 @@ def mock_neg_seed_selector(mocker, dummy):
 
 @pytest.fixture
 def mock_segmentor(mocker, dummy):
-    segmentor = mocker.patch("hnccorr.hnc.HncParametric", autospec=True)(dummy, dummy)
+    segmentor = mocker.patch("hnccorr.hnc.HncParametricWrapper", autospec=True)(
+        dummy, dummy
+    )
     return segmentor
 
 

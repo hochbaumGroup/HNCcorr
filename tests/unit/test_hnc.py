@@ -1,14 +1,14 @@
 import pytest
 import networkx as nx
 
-from hnccorr.hnc import HncParametric
+from hnccorr.hnc import HncParametricWrapper
 
 
 def test_hnc():
     G = nx.Graph()
     G.add_nodes_from((i,) for i in range(7))
 
-    h = HncParametric(0, 2)
+    h = HncParametricWrapper(0, 2)
 
     segmentations = h.solve(G, {(2,), (3,), (4,)}, {(1,), (5,)})
 
