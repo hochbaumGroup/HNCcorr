@@ -4,16 +4,16 @@ class Candidate:
     Attributes:
         best_segmentation (Segmentation): Segmentation of a cell's spatial footprint as
             selected by the postprocessor.
+        center_seed (tuple): Seed pixel coordinates.
         clean_segmentations (list[Segmentation]): List of segmentation after calling
             `clean()` on each segmentation.
         segmentations (list[Segmentation]): List of segmentations returned by HNC.
-        _center_seed (tuple): Seed pixel coordinates.
         _hnccorr (HNCcorr): HNCcorr object.
     """
 
     def __init__(self, center_seed, hnccorr):
         """Initialize Candidate object."""
-        self._center_seed = center_seed
+        self.center_seed = center_seed
         self._hnccorr = hnccorr
         self.segmentations = None
         self.clean_segmentations = None
@@ -23,7 +23,7 @@ class Candidate:
         """Compare Candidate object."""
         # pylint: disable=W0212
         if isinstance(other, Candidate):
-            return (self._center_seed == other._center_seed) and (
+            return (self.center_seed == other.center_seed) and (
                 self._hnccorr == other._hnccorr
             )
         else:
@@ -41,14 +41,10 @@ class Candidate:
             Segmentation or None: Best segmentation or None if no cell is found.
         """
         movie = self._hnccorr.movie
-        pos_seeds = self._hnccorr.positive_seed_selector.select(
-            self._center_seed, movie
-        )
-        neg_seeds = self._hnccorr.negative_seed_selector.select(
-            self._center_seed, movie
-        )
+        pos_seeds = self._hnccorr.positive_seed_selector.select(self.center_seed, movie)
+        neg_seeds = self._hnccorr.negative_seed_selector.select(self.center_seed, movie)
         patch = self._hnccorr.patch_class(
-            movie, self._center_seed, self._hnccorr.patch_size
+            movie, self.center_seed, self._hnccorr.patch_size
         )
         embedding = self._hnccorr.embedding_class(patch)
         graph = self._hnccorr.graph_constructor.construct(patch, embedding)

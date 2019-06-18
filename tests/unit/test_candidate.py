@@ -159,6 +159,10 @@ def test_candidate_segmentations(hnccorr, mock_segmentor):
     assert c.segmentations == mock_segmentor.solve.return_value
 
 
+def test_candidate_center_seed():
+    assert Candidate(1, "a").center_seed == 1
+
+
 def test_candidate_segmentations(
     dummy, mock_segmentor, mock_segmentation_class, hnccorr
 ):
