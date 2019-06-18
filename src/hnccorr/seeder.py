@@ -144,6 +144,6 @@ class LocalCorrelationSeeder:
         return None
 
     def reset(self):
-        """Reinitialize the sequence of seed pixels and empties the exclusion set."""
+        """Reinitialize the sequence of seed pixels and empties `_excluded_seeds`."""
         self._current_index = 0
         self._excluded_pixels = set()
