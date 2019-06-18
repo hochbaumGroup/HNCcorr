@@ -23,7 +23,10 @@ class Segmentation:
 
     def __eq__(self, other):
         """Compares two Segmentation objects."""
-        return (self.selection == other.selection) and (self.weight == other.weight)
+        if isinstance(other, Segmentation):
+            return (self.selection == other.selection) and (self.weight == other.weight)
+        else:
+            return False
 
     def clean(self, positive_seeds, movie_pixel_shape):
         """Cleans Segmentation by selecting a connected component and filling holes.

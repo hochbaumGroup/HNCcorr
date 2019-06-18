@@ -13,6 +13,13 @@ def test_selection():
     assert Segmentation({(0, 1)}, 0.5).selection == {(0, 1)}
 
 
+def test_equality_wrong_class():
+    class FakeSegmentation:
+        pass
+
+    assert Segmentation({(0, 1)}, 0.5) != FakeSegmentation()
+
+
 def test_clean_fill_hole():
     selection = {(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)}
     weight = 1
