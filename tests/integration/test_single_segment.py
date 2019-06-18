@@ -12,7 +12,7 @@ from hnccorr.patch import Patch
 from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
 from hnccorr.graph import GraphConstructor
 from hnccorr.seeds import PositiveSeedSelector, NegativeSeedSelector
-from hnccorr.edge_selection import SparseComputation
+from hnccorr.edge_selection import SparseComputationEmbeddingWrapper
 from hnccorr.hnc import HncParametric
 from hnccorr.seeder import LocalCorrelationSeeder
 from hnccorr.postprocessor import SizePostprocessor
@@ -137,7 +137,9 @@ def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
         (278, 427),
     }
 
-    edge_selector = SparseComputation(3, 1 / 35.0, dimension_reducer=PCA(3))
+    edge_selector = SparseComputationEmbeddingWrapper(
+        3, 1 / 35.0, dimension_reducer=PCA(3)
+    )
     graph_constructor = GraphConstructor(
         edge_selector, lambda a, b: exponential_distance_decay(a, b, 1.0)
     )

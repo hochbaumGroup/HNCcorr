@@ -4,7 +4,7 @@ from hnccorr.patch import Patch
 from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
 from hnccorr.graph import GraphConstructor
 from hnccorr.seeds import PositiveSeedSelector, NegativeSeedSelector
-from hnccorr.edge_selection import SparseComputation
+from hnccorr.edge_selection import SparseComputationEmbeddingWrapper
 from hnccorr.hnc import HncParametric
 from hnccorr.seeder import LocalCorrelationSeeder
 from hnccorr.postprocessor import SizePostprocessor
@@ -76,7 +76,7 @@ class HNCcorr:
         else:
             config = DEFAULT_CONFIG + config
 
-        edge_selector = SparseComputation(
+        edge_selector = SparseComputationEmbeddingWrapper(
             config.sparse_computation_dimension, config.sparse_computation_grid_distance
         )
 

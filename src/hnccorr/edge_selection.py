@@ -3,7 +3,7 @@ from sparsecomputation import SparseComputation as SC
 from sparsecomputation import ApproximatePCA
 
 
-class SparseComputation:
+class SparseComputationEmbeddingWrapper:
     def __init__(self, dim_low, distance, dimension_reducer=None):
         self._dim_low = int(dim_low)
         self._distance = distance

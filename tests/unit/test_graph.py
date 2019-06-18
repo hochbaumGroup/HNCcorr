@@ -9,9 +9,9 @@ def mock_patch(mocker, dummy):
 
 @pytest.fixture
 def mock_edge_selector(mocker, dummy):
-    return mocker.patch("hnccorr.edge_selection.SparseComputation", autospec=True)(
-        dummy, dummy
-    )
+    return mocker.patch(
+        "hnccorr.edge_selection.SparseComputationEmbeddingWrapper", autospec=True
+    )(dummy, dummy)
 
 
 @pytest.fixture
