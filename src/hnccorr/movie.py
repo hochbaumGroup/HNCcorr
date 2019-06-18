@@ -28,7 +28,10 @@ class Movie:
     def from_tiff_images(cls, name, image_dir, num_images):
         """Loads tiff images into numpy array.
 
-        Data is assumed to be stored in 16-bit unsigned integers. Frame numbers are assumed to be padded with zeros: 00000, 00001, 00002, etc. This is required such that Python sorts the images correctly. Frame numbers can start from 0, 1, or any other number. Files must have the extension ``.tiff``.
+        Data is assumed to be stored in 16-bit unsigned integers. Frame numbers are
+        assumed to be padded with zeros: 00000, 00001, 00002, etc. This is required
+        such that Python sorts the images correctly. Frame numbers can start from 0, 1,
+        or any other number. Files must have the extension ``.tiff``.
 
         Args:
             name (str): Movie name.
@@ -45,7 +48,10 @@ class Movie:
     def _load_tiff_images(image_dir, num_images):
         """Loads tiff images into numpy array.
 
-        Data is assumed to be stored in 16-bit unsigned integers. Frame numbers are assumed to be padded with zeros: 00000, 00001, 00002, etc. This is required such that Python sorts the images correctly. Frame numbers can start from 0, 1, or any other number. Files must have the extension ``.tiff``.
+        Data is assumed to be stored in 16-bit unsigned integers. Frame numbers are
+        assumed to be padded with zeros: 00000, 00001, 00002, etc. This is required
+        such that Python sorts the images correctly. Frame numbers can start from 0, 1,
+        or any other number. Files must have the extension ``.tiff``.
 
         Args:
             image_dir (str): Path of image folder.
