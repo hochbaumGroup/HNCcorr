@@ -9,17 +9,28 @@ from conftest import TEST_DATA_DIR
 
 @pytest.fixture
 def M():
-    """Simple movie for testing.
+    data = np.zeros((3, 5, 10), np.uint16)
+    data[0, :, :] = np.ones((5, 10))
+    data[1, :, :] = np.ones((5, 10)) * 2
+    data[2, :, :] = np.ones((5, 10)) * 3
 
+    return Movie("Simple", data)
+
+
+def test_movie_from_tiff_images(M):
+    """
     Movie consists of three images of 5 x 10 pixels. All pixels in the first
     image have value 1, all pixels in the second image have value 2, and all
     pixels in the third image have value 3.
     """
-    return Movie.from_tiff_images(
+    movie_from_tiff = Movie.from_tiff_images(
         "Simple",
         image_dir=str(os.path.join(TEST_DATA_DIR, "simple_movie")),
         num_images=3,
     )
+
+    # compare data of movie from_tiff and direct initialization.
+    np.testing.assert_allclose(movie_from_tiff[:], M[:])
 
 
 def test_name(M):
