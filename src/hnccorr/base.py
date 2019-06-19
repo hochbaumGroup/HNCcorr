@@ -1,3 +1,6 @@
+"""Base components of HNCcorr."""
+
+
 from copy import deepcopy
 
 from hnccorr.movie import Patch

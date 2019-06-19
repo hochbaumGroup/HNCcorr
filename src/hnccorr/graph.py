@@ -1,3 +1,5 @@
+"""HNCcorr components related to the similarity graph."""
+
 import networkx as nx
 import numpy as np
 from sparsecomputation import SparseComputation as SC

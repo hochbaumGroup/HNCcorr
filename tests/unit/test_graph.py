@@ -1,5 +1,3 @@
-"""HNCcorr components related to the similarity graph."""
-
 import pytest
 import numpy as np
 from hnccorr.graph import (
