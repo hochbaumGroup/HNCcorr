@@ -1,4 +1,26 @@
 import networkx as nx
+import numpy as np
+from sparsecomputation import SparseComputation as SC
+from sparsecomputation import ApproximatePCA
+
+from hnccorr.utils import add_time_index
+
+
+class CorrelationEmbedding:
+    """Represents each pixel as a vector of correlations to other pixels."""
+
+    def __init__(self, patch):
+        data = patch[:].reshape(-1, np.product(patch.pixel_shape))
+        self.embedding = np.corrcoef(data.T).reshape(-1, *patch.pixel_shape)
+        self.embedding[np.isnan(self.embedding)] = 0
+        self._length = self.embedding.shape[0]
+
+    def get_vector(self, pixel):
+        return self.embedding[add_time_index(pixel)]
+
+
+def exponential_distance_decay(feature_vec1, feature_vec2, alpha):
+    return np.exp(-alpha * np.mean(np.power(feature_vec1 - feature_vec2, 2)))
 
 
 class GraphConstructor:
@@ -48,3 +70,53 @@ class GraphConstructor:
             )
 
         return graph
+
+
+class SparseComputationEmbeddingWrapper:
+    """Wrapper for SparseComputation that accepts an embedding.
+
+    Attributes:
+        _sc (SparseComputation): SparseComputation object.
+    """
+
+    def __init__(self, dim_low, distance, dimension_reducer=None):
+        """Initializes a SparseComputationEmbeddingWrapper instance.
+
+        Args:
+            dim_low (int): Dimension of the low-dimensional space in sparse computation.
+            distance (float): 1 / grid_resolution. Defines the size of the grid blocks
+                in sparse computation.
+            dimension_reducer (DimReducer): Provides dimension reduction for sparse
+                computation. By default, approximate principle component analysis is
+                used.
+
+        Returns:
+            SparseComputationEmbeddingWrapper
+
+        """
+        if dimension_reducer is None:
+            dimension_reducer = ApproximatePCA(int(dim_low))
+
+        self._sc = SC(dimension_reducer, distance=distance)
+
+    def select_edges(self, embedding):
+        """Selects relevant pairwise similarities with sparse computation.
+
+        Determines the set of relevant pairwise similarities based on the sparse
+        computation algorithm. See sparse computation for details. Pixel coordinates
+        are with respect to the index of the embedding.
+
+        Args:
+            embedding (CorrelationEmbedding): Embedding of pixels into feature vectors.
+
+        Returns:
+            list(tuple): List of relevant pixel pairs.
+        """
+        shape = embedding.embedding.shape[1:]
+        data = embedding.embedding.reshape(-1, np.product(shape)).T
+
+        pairs = self._sc.select_pairs(data)
+
+        return set(
+            (np.unravel_index(a, shape), np.unravel_index(b, shape)) for a, b in pairs
+        )

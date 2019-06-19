@@ -12,6 +12,13 @@ def mock_candidate_class(mocker):
 
 
 @pytest.fixture
+def mock_seeder(mocker, dummy):
+    return mocker.patch("hnccorr.seeds.LocalCorrelationSeeder", autospec=True)(
+        dummy, dummy, dummy
+    )
+
+
+@pytest.fixture
 def H(
     dummy,
     seeder_fixed_val,
@@ -144,13 +151,6 @@ def test_hnccorr_segment_none_is_not_added_to_segmentations(
     H.segment(MM)
 
     assert H.segmentations == []
-
-
-@pytest.fixture
-def mock_seeder(mocker, dummy):
-    return mocker.patch("hnccorr.seeds.LocalCorrelationSeeder", autospec=True)(
-        dummy, dummy, dummy
-    )
 
 
 def test_hnccor_exclude_previously_segmented_pixels(

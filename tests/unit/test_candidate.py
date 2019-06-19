@@ -57,9 +57,7 @@ def mock_patch_class(mocker, dummy):
 
 @pytest.fixture
 def mock_embedding_class(mocker, dummy):
-    embedding_class = mocker.patch(
-        "hnccorr.embedding.CorrelationEmbedding", autospec=True
-    )
+    embedding_class = mocker.patch("hnccorr.graph.CorrelationEmbedding", autospec=True)
     embedding_class.return_value = "embedding_class"
     return embedding_class
 

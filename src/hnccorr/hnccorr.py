@@ -1,14 +1,17 @@
 from hnccorr.config import DEFAULT_CONFIG
 from hnccorr.candidate import Candidate
 from hnccorr.movie import Patch
-from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
-from hnccorr.graph import GraphConstructor
+from hnccorr.graph import (
+    CorrelationEmbedding,
+    exponential_distance_decay,
+    GraphConstructor,
+    SparseComputationEmbeddingWrapper,
+)
 from hnccorr.seeds import (
     PositiveSeedSelector,
     NegativeSeedSelector,
     LocalCorrelationSeeder,
 )
-from hnccorr.edge_selection import SparseComputationEmbeddingWrapper
 from hnccorr.segmentation import HncParametricWrapper
 from hnccorr.postprocessor import SizePostprocessor
 
