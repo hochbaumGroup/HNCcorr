@@ -8,9 +8,20 @@ def add_offset_set_coordinates(iterable, offset):
     return set(add_offset_coordinates(c, offset) for c in iterable)
 
 
-def add_offset_coordinates(coordinates, offset):
-    """Add offset"""
-    return tuple(a + b for a, b in zip(coordinates, offset))
+def add_offset_to_coordinate(coordinate, offset):
+    """Offsets pixel coordinate by another coordinate.
+
+    Args:
+        coordinate (tuple): Pixel coordinate to offset.
+        offset (tuple): Offset to add to coordinate. Must be of the same length.
+
+    Example:
+        .. code-block:: python
+
+            >>> add_offset_to_coordinate((5, 3, 4), (1, -1, 3))
+            (6, 2, 7)
+    """
+    return tuple(a + b for a, b in zip(coordinate, offset))
 
 
 def add_time_index(index):

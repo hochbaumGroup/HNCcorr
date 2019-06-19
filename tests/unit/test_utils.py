@@ -5,7 +5,7 @@ from conftest import TEST_DATA_DIR
 from hnccorr.utils import (
     four_neighborhood,
     generate_pixels,
-    add_offset_coordinates,
+    add_offset_to_coordinate,
     add_offset_set_coordinates,
     add_time_index,
     list_images,
@@ -14,7 +14,7 @@ from hnccorr.utils import (
 
 
 def test_add_offset():
-    assert add_offset_coordinates((1, 2), (3, 4)) == (4, 6)
+    assert add_offset_to_coordinate((1, 2), (3, 4)) == (4, 6)
 
 
 def test_add_set_offset():

@@ -1,5 +1,5 @@
 from hnccorr.utils import (
-    add_offset_coordinates,
+    add_offset_to_coordinate,
     add_time_index,
     generate_pixels,
     add_offset_set_coordinates,
@@ -64,14 +64,14 @@ class Patch:
         """
         half_width = int((self._patch_size - 1) / 2)
 
-        topleft_coordinates = add_offset_coordinates(
+        topleft_coordinates = add_offset_to_coordinate(
             self._center_seed, (-half_width,) * self._num_dimensions
         )
         # shift left such that top left corner exists
         topleft_coordinates = list(max(x, 0) for x in topleft_coordinates)
 
         # bottomright corners (python-style index so not included)
-        bottomright_coordinates = add_offset_coordinates(
+        bottomright_coordinates = add_offset_to_coordinate(
             topleft_coordinates, (self._patch_size,) * self._num_dimensions
         )
         # shift right such that bottom right corner exists
@@ -80,7 +80,7 @@ class Patch:
             for x, max_value in zip(bottomright_coordinates, self._movie.pixel_shape)
         )
 
-        topleft_coordinates = add_offset_coordinates(
+        topleft_coordinates = add_offset_to_coordinate(
             bottomright_coordinates, (-self._patch_size,) * self._num_dimensions
         )
 
@@ -93,7 +93,7 @@ class Patch:
         method returns ``(:, 5:10, 5:10)`` which can be used to acccess the data
         corresponding to the patch in the movie.
         """
-        bottomright_coordinates = add_offset_coordinates(
+        bottomright_coordinates = add_offset_to_coordinate(
             self._coordinate_offset, (self._patch_size,) * self._num_dimensions
         )
 
@@ -112,7 +112,7 @@ class Patch:
         Returns:
             tuple: Coordinate of pixel in movie coordinate system.
         """
-        return add_offset_coordinates(patch_coordinate, self._coordinate_offset)
+        return add_offset_to_coordinate(patch_coordinate, self._coordinate_offset)
 
     def to_patch_coordinate(self, movie_coordinate):
         """Converts a movie coordinate into a patch coordinate.
@@ -123,7 +123,7 @@ class Patch:
         Returns:
             tuple: Coordinate of pixel in patch coordinate system.
         """
-        return add_offset_coordinates(
+        return add_offset_to_coordinate(
             movie_coordinate, [-x for x in self._coordinate_offset]
         )
 
