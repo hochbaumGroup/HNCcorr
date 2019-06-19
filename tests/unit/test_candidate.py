@@ -1,7 +1,6 @@
 import pytest
 
-from hnccorr.hnccorr import HNCcorr
-from hnccorr.candidate import Candidate
+from hnccorr.base import HNCcorr, Candidate
 
 
 @pytest.fixture

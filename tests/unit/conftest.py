@@ -4,7 +4,7 @@ import numpy as np
 
 from hnccorr.movie import Patch
 from hnccorr.segmentation import Segmentation
-from hnccorr.candidate import Candidate
+from hnccorr.base import Candidate
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test_data")
 

@@ -1,14 +1,12 @@
 import pytest
 
-from hnccorr.hnccorr import HNCcorr
-from hnccorr.candidate import Candidate
+from hnccorr.base import HNCcorr, Candidate, HNCcorrConfig
 from hnccorr.segmentation import Segmentation
-from hnccorr.config import HNCcorrConfig
 
 
 @pytest.fixture
 def mock_candidate_class(mocker):
-    return mocker.patch("hnccorr.candidate.Candidate", autospec=True)
+    return mocker.patch("hnccorr.base.Candidate", autospec=True)
 
 
 @pytest.fixture
