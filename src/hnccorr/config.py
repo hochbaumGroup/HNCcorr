@@ -2,13 +2,36 @@ from copy import deepcopy
 
 
 class HNCcorrConfig:
+    """Configuration class for HNCcorr algorithm.
+
+    Enables tweaking the parameters of HNCcorr when used with the default components.
+    Configurations are modular and can be combined using the addition operation.
+
+    Each parameter is accessible as an attribute.
+
+    Attributes:
+        _entries (dict): Dict with parameter keys and values. Each parameter value
+            (when defined) is also accessible as an attribute.
+    """
+
     def __init__(self, **entries):
+        """Initializes HNCcorrConfig object."""
         self._entries = entries
 
         for key, value in self._entries.items():
             setattr(self, key, value)
 
     def __add__(self, other):
+        """Combines two configurations and returns a new one.
+
+        If parameters are defined in both configurations, then `other` takes precedence.
+
+        Args:
+            other (HNCcorrConfig): Another configuration object.
+
+        Returns:
+            HNCcorrConfig: Configuration with combined parameter sets.
+        """
         entries = deepcopy(self._entries)
         entries.update(other._entries)  # pylint: disable=W0212
 
