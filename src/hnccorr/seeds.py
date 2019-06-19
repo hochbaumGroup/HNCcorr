@@ -1,7 +1,7 @@
 """Seed related components of HNCcorr."""
 
-import numpy as np
 from math import sin, cos, pi
+import numpy as np
 
 from hnccorr.utils import (
     add_offset_set_coordinates,

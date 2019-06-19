@@ -1,3 +1,5 @@
+"""Helper functions for HNCcorr."""
+
 import glob
 import os
 from itertools import product

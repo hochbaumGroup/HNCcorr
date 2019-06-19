@@ -4,8 +4,9 @@ from copy import deepcopy
 from itertools import product
 import networkx as nx
 import numpy as np
-from closure.hnc import HNC as HNC_Closure
 from scipy.ndimage.morphology import binary_fill_holes
+
+from closure.hnc import HNC as HNC_Closure
 
 from hnccorr.utils import four_neighborhood
 
