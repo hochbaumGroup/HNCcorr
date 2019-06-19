@@ -17,10 +17,10 @@ class HNCcorr:
     segmenting the movie. How each candidate seed / location is evaluated is specified
     in the Candidate class.
 
-    **Reference**:
-    Q Spaen, R Asín-Achá, SN Chettih, M Minderer, C Harvey, and DS Hochbaum (2019).
-    HNCcorr: A Novel Combinatorial Approach for Cell Identification in Calcium-Imaging
-    Movies. eNeuro, 6(2).
+    References:
+        Q Spaen, R Asín-Achá, SN Chettih, M Minderer, C Harvey, and DS Hochbaum (2019).
+        HNCcorr: A Novel Combinatorial Approach for Cell Identification in
+        Calcium-Imaging Movies. eNeuro, 6(2).
 
     """
 
