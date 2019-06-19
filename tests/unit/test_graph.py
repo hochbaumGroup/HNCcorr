@@ -4,7 +4,7 @@ from hnccorr.graph import GraphConstructor
 
 @pytest.fixture
 def mock_patch(mocker, dummy):
-    return mocker.patch("hnccorr.patch.Patch", autospec=True)(dummy, dummy, dummy)
+    return mocker.patch("hnccorr.movie.Patch", autospec=True)(dummy, dummy, dummy)
 
 
 @pytest.fixture

@@ -50,7 +50,7 @@ def mock_graph_constructor(mocker, dummy):
 
 @pytest.fixture
 def mock_patch_class(mocker, dummy):
-    patch_class = mocker.patch("hnccorr.patch.Patch", autospec=True)
+    patch_class = mocker.patch("hnccorr.movie.Patch", autospec=True)
     patch_class.return_value = "patch"
     return patch_class
 

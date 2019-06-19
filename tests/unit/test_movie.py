@@ -1,8 +1,10 @@
 import pytest
 import os
 import numpy as np
+from copy import copy, deepcopy
+from pytest_mock import mocker
 
-from hnccorr.movie import Movie
+from hnccorr.movie import Movie, Patch
 
 from conftest import TEST_DATA_DIR
 
@@ -15,6 +17,11 @@ def M():
     data[2, :, :] = np.ones((5, 10)) * 3
 
     return Movie("Simple", data)
+
+
+@pytest.fixture
+def simple_patch(MM):
+    return Patch(MM, (9,), 7)
 
 
 def test_movie_from_tiff_images(M):
@@ -33,37 +40,87 @@ def test_movie_from_tiff_images(M):
     np.testing.assert_allclose(movie_from_tiff[:], M[:])
 
 
-def test_name(M):
+def test_movie_name(M):
     assert M.name == "Simple"
 
 
-def test_num_frames(M):
+def test_movie_num_frames(M):
     assert M.num_frames == 3
 
 
-def test_num_pixels(M):
+def test_movie_num_pixels(M):
     assert M.num_pixels == 50
 
 
-def test_data_size(M):
+def test_movie_data_size(M):
     assert M.data_size == (3, 5, 10)
 
 
-def test_pixel_shape(M):
+def test_movie_pixel_shape(M):
     assert M.pixel_shape == (5, 10)
 
 
-def test_is_valid_pixel_coordinate(M):
+def test_movie_is_valid_pixel_coordinate(M):
     assert not M.is_valid_pixel_coordinate((0, -1))
     assert not M.is_valid_pixel_coordinate((4, 11))
     assert not M.is_valid_pixel_coordinate((4,))
     assert M.is_valid_pixel_coordinate((4, 9))
 
 
-def test_extract_valid_pixels(M):
+def test_movie_extract_valid_pixels(M):
     assert M.extract_valid_pixels({(0, 0), (-1, 0), (4, 10)}) == {(0, 0)}
 
 
 def test_movie_get_item(M):
     assert M[0, 0, 0] == 1.0
     np.testing.assert_allclose(M[2, :, :], np.ones((5, 10)) * 3)
+
+
+def test_patch_even_windowsize(MM):
+    with pytest.raises(ValueError):
+        Patch(MM, (5,), 6)
+
+
+def test_patch_pixel_shape(simple_patch):
+    assert simple_patch.pixel_shape == (7,)
+
+
+def test_patch_num_frames(simple_patch):
+    assert simple_patch.num_frames == 3
+
+
+def test_patch_data(simple_patch, MM):
+    np.testing.assert_equal(simple_patch[:], MM[:, 3:10])
+
+
+def test_patch_enumerate_pixels(simple_patch, MM2):
+    assert simple_patch.enumerate_pixels() == {(3,), (4,), (5,), (6,), (7,), (8,), (9,)}
+    assert Patch(MM2, (5, 5), 3).enumerate_pixels() == {
+        (4, 4),
+        (4, 5),
+        (4, 6),
+        (5, 4),
+        (5, 5),
+        (5, 6),
+        (6, 4),
+        (6, 5),
+        (6, 6),
+    }
+
+
+@pytest.mark.parametrize(
+    "movie_coordinate, patch_coordinate", [((6,), (3,)), ((3,), (0,))]
+)
+def test_patch_to_movie_coordinate(
+    movie_coordinate, patch_coordinate, simple_patch, MM
+):
+    assert simple_patch.to_movie_coordinate(patch_coordinate) == movie_coordinate
+
+
+@pytest.mark.parametrize(
+    "movie_coordinate, patch_coordinate", [((9,), (6,)), ((3,), (0,))]
+)
+def test_patch_to_patch_coordinate(
+    movie_coordinate, patch_coordinate, simple_patch, MM
+):
+    assert simple_patch.to_patch_coordinate(movie_coordinate) == patch_coordinate

@@ -2,12 +2,11 @@ import pytest
 import numpy as np
 
 from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
-from hnccorr.patch import Patch
 
 
 @pytest.fixture
 def mock_patch(mocker, dummy):
-    return mocker.patch("hnccorr.patch.Patch", autospec=True)(dummy, dummy, dummy)
+    return mocker.patch("hnccorr.movie.Patch", autospec=True)(dummy, dummy, dummy)
 
 
 @pytest.fixture

@@ -2,7 +2,7 @@ import pytest
 import os
 import numpy as np
 
-from hnccorr.patch import Patch
+from hnccorr.movie import Patch
 from hnccorr.segmentation import Segmentation
 from hnccorr.candidate import Candidate
 
