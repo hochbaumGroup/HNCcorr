@@ -9,7 +9,7 @@ from hnccorr.seeds import (
     LocalCorrelationSeeder,
 )
 from hnccorr.edge_selection import SparseComputationEmbeddingWrapper
-from hnccorr.hnc import HncParametricWrapper
+from hnccorr.segmentation import HncParametricWrapper
 from hnccorr.postprocessor import SizePostprocessor
 
 
