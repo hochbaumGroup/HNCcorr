@@ -11,10 +11,13 @@ from hnccorr.candidate import Candidate
 from hnccorr.patch import Patch
 from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
 from hnccorr.graph import GraphConstructor
-from hnccorr.seeds import PositiveSeedSelector, NegativeSeedSelector
+from hnccorr.seeds import (
+    PositiveSeedSelector,
+    NegativeSeedSelector,
+    LocalCorrelationSeeder,
+)
 from hnccorr.edge_selection import SparseComputationEmbeddingWrapper
 from hnccorr.hnc import HncParametricWrapper
-from hnccorr.seeder import LocalCorrelationSeeder
 from hnccorr.postprocessor import SizePostprocessor
 from hnccorr.candidate import Candidate
 from hnccorr.segmentation import Segmentation

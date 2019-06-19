@@ -1,12 +1,65 @@
 import pytest
 
-from hnccorr.seeds import PositiveSeedSelector, NegativeSeedSelector
+from hnccorr.seeds import (
+    PositiveSeedSelector,
+    NegativeSeedSelector,
+    LocalCorrelationSeeder,
+)
 
 
 @pytest.fixture
 def mock_movie(mocker, dummy):
     movie = mocker.patch("hnccorr.movie.Movie", autospec=True)(dummy, dummy)
     return movie
+
+
+@pytest.fixture
+def LCS():
+    return LocalCorrelationSeeder(3, 0.2, 2)
+
+
+def test_local_corr_seeder(LCS, MM):
+    LCS.select_seeds(MM)
+    assert LCS.next() == (9,)
+    assert LCS.next() == (8,)
+    assert LCS.next() is None
+
+
+def test_local_corr_seeder_reset(LCS, MM):
+    LCS.select_seeds(MM)
+    assert LCS.next() == (9,)
+
+    LCS.reset()
+    assert LCS.next() == (9,)
+
+
+def test_seeder_exclude_pixels(LCS, MM):
+    LCS.select_seeds(MM)
+    assert LCS.next() == (9,)
+    LCS.exclude_pixels({(8,)})
+    assert LCS.next() is None
+
+
+def test_seeder_exclude_pixels_boundary(LCS, MM):
+    LCS.select_seeds(MM)
+    assert LCS.next() == (9,)
+    LCS.exclude_pixels({(6,)})
+    assert LCS.next() is None
+
+
+def test_seeder_reset_excluded_pixels(LCS, MM):
+    LCS.select_seeds(MM)
+    assert LCS.next() == (9,)
+    LCS.exclude_pixels({(9,)})
+    LCS.reset()
+    assert LCS.next() == (9,)
+
+
+def test_seeder_select_seeds_should_reset_excluded_pixels(LCS, MM):
+    LCS.select_seeds(MM)
+    LCS.exclude_pixels({(9,)})
+    LCS.select_seeds(MM)
+    assert LCS.next() == (9,)
 
 
 def extract_valid_pixels_10_10(pixels):

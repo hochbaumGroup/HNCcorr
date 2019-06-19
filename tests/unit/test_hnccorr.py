@@ -148,7 +148,7 @@ def test_hnccorr_segment_none_is_not_added_to_segmentations(
 
 @pytest.fixture
 def mock_seeder(mocker, dummy):
-    return mocker.patch("hnccorr.seeder.LocalCorrelationSeeder", autospec=True)(
+    return mocker.patch("hnccorr.seeds.LocalCorrelationSeeder", autospec=True)(
         dummy, dummy, dummy
     )
 
