@@ -247,7 +247,7 @@ class HNCcorrConfig:
             HNCcorrConfig: Configuration with combined parameter sets.
 
         Raises:
-            TypeError when other is not an instance of HNCcorrConfig.
+            TypeError: When other is not an instance of HNCcorrConfig.
         """
         if not isinstance(other, HNCcorrConfig):
             raise TypeError(
