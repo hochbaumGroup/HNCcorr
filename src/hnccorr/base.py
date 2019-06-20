@@ -214,6 +214,20 @@ class HNCcorr:
         print("Completed - Total cells identified: %d" % len(self.segmentations))
         return self
 
+    def segmentations_to_list(self):
+        """Exports segmentations to a list of dictionaries.
+
+        Each dictionary in the list corresponds to the footprint of a cell. Each dictionary contains the key `coordinates` containing a list of pixel coordinates. Each pixel coordinate is a tuple with the zero-indexed coordinates of the pixel. Pixels are indexed like matrix coordinates.
+
+        Returns
+            list[dict[tuple]]: List of cell coordinates.
+
+        """
+        output = []
+        for segmentation in self.segmentations:
+            output.append({"coordinates": list(segmentation.selection)})
+        return output
+
 
 class HNCcorrConfig:
     """Configuration class for HNCcorr algorithm.

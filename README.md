@@ -17,7 +17,7 @@ H = HNCcorr.from_config()  # Initialize HNCcorr with default configuration
 H.segment(movie)  # Identify cells in movie
 
 H.segmentations  # List of identified cells
-H.segmentations_to_json_file()  # Export list of cells to JSON (for Neurofinder)
+H.segmentations_to_list()  # Export list of cells (for Neurofinder)
 ```
 
 ## Installation Instructions (Python 3)

@@ -1,4 +1,5 @@
 import pytest
+from copy import deepcopy
 
 from hnccorr.base import HNCcorr, Candidate, HNCcorrConfig, DEFAULT_CONFIG
 from hnccorr.segmentation import Segmentation
@@ -337,6 +338,19 @@ class TestHNCcorr:
         H.segment(dummy)
 
         mock_seeder.exclude_pixels.assert_called_once_with({"pixel"})
+
+    def test_segmentations_to_list(self, H, dummy, mock_segmentation_class):
+        # selections are stored as lists to fix order.
+        ms1 = mock_segmentation_class(dummy, dummy)
+        ms1.selection = [(0, 1), (1, 0)]
+        ms2 = deepcopy(ms1)
+        ms2.selection = [(8, 3), (3, 10), (138, 23)]
+        H.segmentations = [ms1, ms2]
+
+        assert H.segmentations_to_list() == [
+            {"coordinates": [(0, 1), (1, 0)]},
+            {"coordinates": [(8, 3), (3, 10), (138, 23)]},
+        ]
 
 
 class TestHnccorrConfig:
