@@ -6,17 +6,10 @@ Submodules
 
 .. toctree::
 
-   hnccorr.candidate
-   hnccorr.config
-   hnccorr.edge_selection
-   hnccorr.embedding
+   hnccorr.base
    hnccorr.graph
-   hnccorr.hnc
-   hnccorr.hnccorr
    hnccorr.movie
-   hnccorr.patch
    hnccorr.postprocessor
-   hnccorr.seeder
    hnccorr.seeds
    hnccorr.segmentation
    hnccorr.utils
