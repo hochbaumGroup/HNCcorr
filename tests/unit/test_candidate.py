@@ -100,85 +100,83 @@ def hnccorr(
     return H
 
 
-def test_candidate_segment(
-    hnccorr,
-    dummy,
-    mock_movie,
-    mock_postprocessor,
-    mock_segmentor,
-    mock_pos_seed_selector,
-    mock_neg_seed_selector,
-    mock_graph_constructor,
-    mock_patch_class,
-    mock_embedding_class,
-    mock_segmentation_class,
-):
-    center_seed = 1
-    mock_segmentor.solve.return_value = [
-        mock_segmentation_class(dummy, dummy),
-        mock_segmentation_class(dummy, dummy),
-    ]
+class TestCandidate:
+    def test_candidate_segment(
+        self,
+        hnccorr,
+        dummy,
+        mock_movie,
+        mock_postprocessor,
+        mock_segmentor,
+        mock_pos_seed_selector,
+        mock_neg_seed_selector,
+        mock_graph_constructor,
+        mock_patch_class,
+        mock_embedding_class,
+        mock_segmentation_class,
+    ):
+        center_seed = 1
+        mock_segmentor.solve.return_value = [
+            mock_segmentation_class(dummy, dummy),
+            mock_segmentation_class(dummy, dummy),
+        ]
 
-    assert (
-        Candidate(center_seed, hnccorr).segment()
-        == mock_postprocessor.select.return_value
-    )
-    mock_pos_seed_selector.select.assert_called_once_with(center_seed, mock_movie)
-    mock_neg_seed_selector.select.assert_called_once_with(center_seed, mock_movie)
-    mock_patch_class.assert_called_once_with(mock_movie, center_seed, "patch_size")
-    mock_embedding_class.assert_called_once_with(mock_patch_class.return_value)
-    mock_graph_constructor.construct.assert_called_once_with(
-        mock_patch_class.return_value, mock_embedding_class.return_value
-    )
-    mock_segmentor.solve.assert_called_once_with(
-        mock_graph_constructor.construct.return_value,
-        mock_pos_seed_selector.select.return_value,
-        mock_neg_seed_selector.select.return_value,
-    )
-    mock_postprocessor.select.assert_called_once_with(mock_segmentor.solve.return_value)
+        assert (
+            Candidate(center_seed, hnccorr).segment()
+            == mock_postprocessor.select.return_value
+        )
+        mock_pos_seed_selector.select.assert_called_once_with(center_seed, mock_movie)
+        mock_neg_seed_selector.select.assert_called_once_with(center_seed, mock_movie)
+        mock_patch_class.assert_called_once_with(mock_movie, center_seed, "patch_size")
+        mock_embedding_class.assert_called_once_with(mock_patch_class.return_value)
+        mock_graph_constructor.construct.assert_called_once_with(
+            mock_patch_class.return_value, mock_embedding_class.return_value
+        )
+        mock_segmentor.solve.assert_called_once_with(
+            mock_graph_constructor.construct.return_value,
+            mock_pos_seed_selector.select.return_value,
+            mock_neg_seed_selector.select.return_value,
+        )
+        mock_postprocessor.select.assert_called_once_with(
+            mock_segmentor.solve.return_value
+        )
 
+    def test_candidate_equality(self):
+        assert Candidate(1, "a") == Candidate(1, "a")
+        assert Candidate(1, "a") != Candidate(2, "a")
+        assert Candidate(1, "a") != Candidate(1, "b")
 
-def test_candidate_equality():
-    assert Candidate(1, "a") == Candidate(1, "a")
-    assert Candidate(1, "a") != Candidate(2, "a")
-    assert Candidate(1, "a") != Candidate(1, "b")
+    def test_candidate_equality_wrong_class(self):
+        class FakeCandidate:
+            pass
 
+        assert Candidate(1, "a") != FakeCandidate()
 
-def test_candidate_equality_wrong_class():
-    class FakeCandidate:
-        pass
+    def test_candidate_segmentations(self, hnccorr, mock_segmentor):
+        c = Candidate(1, hnccorr)
+        assert c.segmentations is None
+        c.segment()
+        assert c.segmentations == mock_segmentor.solve.return_value
 
-    assert Candidate(1, "a") != FakeCandidate()
+    def test_candidate_center_seed(self):
+        assert Candidate(1, "a").center_seed == 1
 
+    def test_candidate_segmentations(
+        self, dummy, mock_segmentor, mock_segmentation_class, hnccorr
+    ):
+        mock_segmentor.solve.return_value = [
+            mock_segmentation_class(dummy, dummy),
+            mock_segmentation_class(dummy, dummy),
+        ]
+        mock_segmentation_class.return_value.clean.return_value = "clean"
 
-def test_candidate_segmentations(hnccorr, mock_segmentor):
-    c = Candidate(1, hnccorr)
-    assert c.segmentations is None
-    c.segment()
-    assert c.segmentations == mock_segmentor.solve.return_value
+        c = Candidate(1, hnccorr)
+        assert c.clean_segmentations is None
+        c.segment()
+        assert c.clean_segmentations == ["clean", "clean"]
 
-
-def test_candidate_center_seed():
-    assert Candidate(1, "a").center_seed == 1
-
-
-def test_candidate_segmentations(
-    dummy, mock_segmentor, mock_segmentation_class, hnccorr
-):
-    mock_segmentor.solve.return_value = [
-        mock_segmentation_class(dummy, dummy),
-        mock_segmentation_class(dummy, dummy),
-    ]
-    mock_segmentation_class.return_value.clean.return_value = "clean"
-
-    c = Candidate(1, hnccorr)
-    assert c.clean_segmentations is None
-    c.segment()
-    assert c.clean_segmentations == ["clean", "clean"]
-
-
-def test_candidate_best_segmentations(hnccorr, mock_postprocessor):
-    c = Candidate(1, hnccorr)
-    assert c.best_segmentation is None
-    c.segment()
-    assert c.best_segmentation == mock_postprocessor.select.return_value
+    def test_candidate_best_segmentations(self, hnccorr, mock_postprocessor):
+        c = Candidate(1, hnccorr)
+        assert c.best_segmentation is None
+        c.segment()
+        assert c.best_segmentation == mock_postprocessor.select.return_value
