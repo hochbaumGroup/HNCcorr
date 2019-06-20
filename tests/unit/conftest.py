@@ -15,24 +15,28 @@ def dummy():
 
 
 @pytest.fixture
-def MM():
-    class MockMovie:
-        def __init__(self):
-            self.num_frames = 3
-            self.pixel_shape = (10,)
-            self.num_dimensions = 1
+def mock_movie(mocker, dummy):
+    movie = mocker.patch("hnccorr.movie.Movie", autospec=True)(dummy, dummy)
+    return movie
 
-        def __getitem__(self, key):
-            A = np.zeros((3, 10))
-            A[0, :] = 1
-            A[1, :] = -1
-            A[2, :] = np.arange(10) / 10
-            return A.__getitem__(key)
 
-        def is_valid_pixel_index(self, index):
-            return index[0] >= 0 and index[0] < 10
+@pytest.fixture
+def MM(mock_movie):
+    mock_movie.num_frames = 3
+    mock_movie.pixel_shape = (10,)
+    mock_movie.num_dimensions = 1
 
-    return MockMovie()
+    def data(self, key):
+        A = np.zeros((3, 10))
+        A[0, :] = 1
+        A[1, :] = -1
+        A[2, :] = np.arange(10) / 10
+        return A.__getitem__(key)
+
+    mock_movie.__getitem__ = data
+    mock_movie.is_valid_pixel_coordinate = lambda x: x[0] >= 0 and x[0] < 10
+
+    return mock_movie
 
 
 @pytest.fixture

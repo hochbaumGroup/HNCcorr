@@ -79,7 +79,7 @@ class LocalCorrelationSeeder:
             # extract data for valid neighbors
             neighbors_data = []
             for neighbor in neighbors:
-                if self._movie.is_valid_pixel_index(neighbor):
+                if self._movie.is_valid_pixel_coordinate(neighbor):
                     neighbors_data.append(
                         self._movie[add_time_index(neighbor)].reshape(1, -1)
                     )

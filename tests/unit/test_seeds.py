@@ -8,12 +8,6 @@ from hnccorr.seeds import (
 
 
 @pytest.fixture
-def mock_movie(mocker, dummy):
-    movie = mocker.patch("hnccorr.movie.Movie", autospec=True)(dummy, dummy)
-    return movie
-
-
-@pytest.fixture
 def LCS():
     return LocalCorrelationSeeder(3, 0.2, 2)
 

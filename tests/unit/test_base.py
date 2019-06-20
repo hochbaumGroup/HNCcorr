@@ -80,12 +80,6 @@ def mock_embedding_class(mocker, dummy):
 
 
 @pytest.fixture
-def mock_movie(mocker, dummy):
-    movie = mocker.patch("hnccorr.movie.Movie", autospec=True)(dummy, dummy)
-    return movie
-
-
-@pytest.fixture
 def mock_segmentation_class(mocker):
     return mocker.patch("hnccorr.segmentation.Segmentation", autospec=True)
 
