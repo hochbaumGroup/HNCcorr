@@ -16,3 +16,6 @@ test:
 
 integration:
 	pytest tests/integration
+
+tags:
+	ctags -R language-force=python src
