@@ -9,19 +9,49 @@ from hnccorr.utils import add_time_index
 
 
 class CorrelationEmbedding:
-    """Represents each pixel as a vector of correlations to other pixels."""
+    """Computes correlation feature vector for each pixel.
+
+    Embedding provides a representation of a pixel in terms of feature vector. The
+    feature vector for the CorrelationEmbedding is a vector of pairwise correlations to
+    each (or some) pixel in the patch.
+
+    If the correlation is not defined due to a pixel with zero variance, then the
+    corelation is set to zero.
+
+
+    Attributes:
+        embedding (np.array): (D, N_1, N_2, ..) array of pairwise correlations, where D
+            is the dimension of the embedding and N_1, N_2, .. are the pixel shape of
+            the patch.
+    """
 
     def __init__(self, patch):
+        """Initializes a CorrelationEmbedding object.
+
+        See class description for details.
+
+        Args:
+            patch (Patch): Subregion of movie for which the correlation embedding is
+                computed.
+        """
         data = patch[:].reshape(-1, np.product(patch.pixel_shape))
         self.embedding = np.corrcoef(data.T).reshape(-1, *patch.pixel_shape)
         self.embedding[np.isnan(self.embedding)] = 0
-        self._length = self.embedding.shape[0]
 
     def get_vector(self, pixel):
+        """Retrieve feature vector of pixel.
+
+        Args:
+            pixel (tuple): Coordinate of pixel.
+
+        Returns:
+            np.array: Feature vector of pixel.
+        """
         return self.embedding[add_time_index(pixel)]
 
 
 def exponential_distance_decay(feature_vec1, feature_vec2, alpha):
+    """Computes ``exp(- alpha / n || x_1 - x_2 ||^2_2)`` for x_1, x_2 in R^n."""
     return np.exp(-alpha * np.mean(np.power(feature_vec1 - feature_vec2, 2)))
 
 
