@@ -6,17 +6,19 @@ from conftest import TEST_DATA_DIR
 
 from sparsecomputation import PCA
 from hnccorr.movie import Movie, Patch
-from hnccorr.hnccorr import HNCcorr
-from hnccorr.candidate import Candidate
-from hnccorr.embedding import CorrelationEmbedding, exponential_distance_decay
-from hnccorr.graph import GraphConstructor, SparseComputationEmbeddingWrapper
+from hnccorr.base import HNCcorr, Candidate
+from hnccorr.graph import (
+    GraphConstructor,
+    SparseComputationEmbeddingWrapper,
+    CorrelationEmbedding,
+    exponential_distance_decay,
+)
 from hnccorr.seeds import (
     PositiveSeedSelector,
     NegativeSeedSelector,
     LocalCorrelationSeeder,
 )
 from hnccorr.postprocessor import SizePostprocessor
-from hnccorr.candidate import Candidate
 from hnccorr.segmentation import HncParametricWrapper, Segmentation
 
 

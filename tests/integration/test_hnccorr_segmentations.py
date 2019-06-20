@@ -5,9 +5,8 @@ import matplotlib.pyplot as plt
 
 from conftest import TEST_DATA_DIR
 
-from hnccorr.config import HNCcorrConfig
+from hnccorr.base import HNCcorr, HNCcorrConfig
 from hnccorr.movie import Movie
-from hnccorr.hnccorr import HNCcorr
 
 
 @pytest.fixture
