@@ -19,9 +19,7 @@ def test_select_no_valid_candidates(postprocessor):
         postprocessor.select(
             [
                 Segmentation({(0, 1)}, 0.5),
-                Segmentation(
-                    {(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2)}, 0.5
-                ),
+                Segmentation({(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2)}, 0.5),
             ]
         )
         is None

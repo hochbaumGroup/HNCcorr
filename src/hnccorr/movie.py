@@ -1,3 +1,5 @@
+"""Components for calcium-imaging movies in HNCcorr."""
+
 import numpy as np
 from PIL import Image
 from PIL.TiffTags import TAGS

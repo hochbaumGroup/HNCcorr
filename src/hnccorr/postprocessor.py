@@ -1,3 +1,5 @@
+"""Postprocesser component for selecting the best segmentation in HNCcorr."""
+
 import numpy as np
 
 
