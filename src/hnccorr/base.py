@@ -245,7 +245,15 @@ class HNCcorrConfig:
 
         Returns:
             HNCcorrConfig: Configuration with combined parameter sets.
+
+        Raises:
+            TypeError when other is not an instance of HNCcorrConfig.
         """
+        if not isinstance(other, HNCcorrConfig):
+            raise TypeError(
+                "other is an instance of %s instead of %s." % (type(other), type(self))
+            )
+
         entries = deepcopy(self._entries)
         entries.update(other._entries)  # pylint: disable=W0212
 

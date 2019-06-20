@@ -350,6 +350,13 @@ class TestHnccorrConfig:
         assert config.patch_size == 31
         assert config.negative_seed_radius == 10
 
+    def test_config_add_wrong_class(self, config):
+        class WrongClass:
+            pass
+
+        with pytest.raises(TypeError):
+            config + WrongClass()
+
     def test_config_add_config(self, config):
         config2 = HNCcorrConfig(patch_size=21, positive_seed_size=5)
 
