@@ -6,7 +6,7 @@ from hnccorr.segmentation import Segmentation
 
 @pytest.fixture
 def config():
-    return HNCcorrConfig(patch_size=31, negative_seed_radius=10)
+    return HNCcorrConfig(patch_size=31, negative_seed_circle_radius=10)
 
 
 @pytest.fixture
@@ -348,7 +348,11 @@ class TestHNCcorr:
 class TestHnccorrConfig:
     def test_config_attributes(self, config):
         assert config.patch_size == 31
-        assert config.negative_seed_radius == 10
+        assert config.negative_seed_circle_radius == 10
+
+    def test_invalid_parameter(self):
+        with pytest.raises(ValueError):
+            HNCcorrConfig(wrong_parameter=10)
 
     def test_config_add_wrong_class(self, config):
         class WrongClass:
@@ -358,7 +362,7 @@ class TestHnccorrConfig:
             config + WrongClass()
 
     def test_config_add_config(self, config):
-        config2 = HNCcorrConfig(patch_size=21, positive_seed_size=5)
+        config2 = HNCcorrConfig(patch_size=21, positive_seed_radius=5)
 
         config3 = config + config2
         assert config.patch_size == 31
@@ -366,14 +370,14 @@ class TestHnccorrConfig:
         assert config3.patch_size == 21
 
         with pytest.raises(AttributeError):
-            config2.negative_seed_radius
-        assert config.negative_seed_radius == 10
-        assert config3.negative_seed_radius == 10
+            config2.negative_seed_circle_radius
+        assert config.negative_seed_circle_radius == 10
+        assert config3.negative_seed_circle_radius == 10
 
         with pytest.raises(AttributeError):
-            config.positive_seed_size == 5
-        assert config2.positive_seed_size == 5
-        assert config3.positive_seed_size == 5
+            config.positive_seed_radius == 5
+        assert config2.positive_seed_radius == 5
+        assert config3.positive_seed_radius == 5
 
     def test_config_default_config(self):
         assert DEFAULT_CONFIG.seeder_mask_size == 3

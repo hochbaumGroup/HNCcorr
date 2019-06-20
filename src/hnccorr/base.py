@@ -221,15 +221,53 @@ class HNCcorrConfig:
     Enables tweaking the parameters of HNCcorr when used with the default components.
     Configurations are modular and can be combined using the addition operation.
 
-    Each parameter is accessible as an attribute.
+    Each parameter is accessible as an attribute when specified.
 
     Attributes:
+        seeder_mask_size (int): Width in pixels of the region used by the seeder to
+            compute the average correlation between a pixel and its neighbors.
+        seeder_exclusion_padding (int): Distance for excluding additional pixels
+            surrounding segmented cells.
+        percentage_of_seeds (float[0, 1]): Fraction of candidate seeds to evaluate.
+        postprocessor_min_cell_size (int): Lower bound on pixel count of a cell.
+        postprocessor_max_cell_size (int): Upper bound on pixel count of a cell.
+        postprocessor_preferred_cell_size (int): Pixel count of a typical cell.
+        positive_seed_radius (int): Radius of the positive seed square / superpixel.
+        negative_seed_circle_radius (int): Radius in pixels of the circle with negative
+            seeds.
+        negative_seed_circle_count (int): Number of negative seeds.
+        gaussian_similarity_alpha (alpha): Decay factor in gaussian similarity function.
+        sparse_computation_grid_distance (float): 1 / grid_resolution. Width of each
+            block in sparse computation.
+        sparse_computation_dimension (int): Dimension of the low-dimensional space in
+            sparse computation.
+        patch_size (int): Size in pixel of each dimension of the patch.
         _entries (dict): Dict with parameter keys and values. Each parameter value
             (when defined) is also accessible as an attribute.
     """
 
     def __init__(self, **entries):
         """Initializes HNCcorrConfig object."""
+
+        allowed_parameters = {
+            "seeder_mask_size",
+            "seeder_exclusion_padding",
+            "percentage_of_seeds",
+            "postprocessor_min_cell_size",
+            "postprocessor_max_cell_size",
+            "postprocessor_preferred_cell_size",
+            "positive_seed_radius",
+            "negative_seed_circle_radius",
+            "negative_seed_circle_count",
+            "gaussian_similarity_alpha",
+            "sparse_computation_grid_distance",
+            "sparse_computation_dimension",
+            "patch_size",
+        }
+
+        for param in entries:
+            if param not in allowed_parameters:
+                raise ValueError("Parameter %s is not valid." % param)
         self._entries = entries
 
         for key, value in self._entries.items():
