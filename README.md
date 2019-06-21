@@ -10,9 +10,9 @@ We provide a Python 3 (recommended) implementation as well as a Matlab implement
 ### Example (Python)
 ```python
 from hnccorr import HNCcorr, Movie
-from hnccorr.sample_data import sample_numpy_movie
+from hnccorr.example import example_numpy_movie
 
-movie = Movie("Sample movie", sample_numpy_movie)  # See documentation for alternatives
+movie = Movie("Example movie", example_numpy_movie)  # See documentation for alternatives
 H = HNCcorr.from_config()  # Initialize HNCcorr with default configuration
 H.segment(movie)  # Identify cells in movie
 
