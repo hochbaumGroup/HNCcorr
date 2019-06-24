@@ -69,11 +69,6 @@ class TestMovie:
         np.testing.assert_allclose(M[2, :, :], np.ones((5, 10)) * 3)
 
 
-def test_patch_even_windowsize(MM):
-    with pytest.raises(ValueError):
-        Patch(MM, (5,), 6)
-
-
 class TestPatch:
     def test_patch_pixel_shape(self, simple_patch):
         assert simple_patch.pixel_shape == (7,)
@@ -83,6 +78,10 @@ class TestPatch:
 
     def test_patch_data(self, simple_patch, MM):
         np.testing.assert_equal(simple_patch[:], MM[:, 3:10])
+
+    def test_patch_even_windowsize(self, MM):
+        with pytest.raises(ValueError):
+            Patch(MM, (5,), 6)
 
     def test_patch_enumerate_pixels(self, simple_patch, MM2):
         assert simple_patch.enumerate_pixels() == {
