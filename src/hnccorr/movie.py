@@ -1,5 +1,6 @@
 """Components for calcium-imaging movies in HNCcorr."""
 
+import os
 import numpy as np
 from PIL import Image
 from PIL.TiffTags import TAGS
@@ -33,28 +34,37 @@ class Movie:
         self.data_size = data.shape
 
     @classmethod
-    def from_tiff_images(cls, name, image_dir, num_images):
-        """Loads tiff images into numpy array.
+    def from_tiff_images(cls, name, image_dir, num_images, memmap=False):
+        """Loads tiff images into a numpy array.
 
         Data is assumed to be stored in 16-bit unsigned integers. Frame numbers are
         assumed to be padded with zeros: 00000, 00001, 00002, etc. This is required
         such that Python sorts the images correctly. Frame numbers can start from 0, 1,
         or any other number. Files must have the extension ``.tiff``.
+
+        If memmap is True, the data is not loaded into memory bot a memory mapped file
+        on disk is used. The file is named ``$name.npy`` and is placed in the
+        `image_dir` folder.
 
         Args:
             name (str): Movie name.
             image_dir (str): Path of image folder.
             num_images (int): Number of images in the folder.
+            memmap (bool): If True, a memory-mapped file is used. (*Default: False*)
 
         Returns:
             Movie: Movie created from image files.
         """
-        data = cls._load_tiff_images(image_dir, num_images)
+        if memmap:
+            data = cls._load_tiff_images_memmap(name, image_dir, num_images)
+        else:
+            data = cls._load_tiff_images_in_memory(image_dir, num_images)
+
         return cls(name, data)
 
     @staticmethod
-    def _load_tiff_images(image_dir, num_images):
-        """Loads tiff images into numpy array.
+    def _get_tiff_images_and_size(image_dir, num_images):
+        """ Provides a sorted list of images and computes the required array size.
 
         Data is assumed to be stored in 16-bit unsigned integers. Frame numbers are
         assumed to be padded with zeros: 00000, 00001, 00002, etc. This is required
@@ -66,7 +76,7 @@ class Movie:
             num_images (int): Number of images in the folder.
 
         Returns:
-            np.array: Data with shape (T, N_1, N_2, N_3) where T is # of images.
+            tuple[List[Str], tuple]: Tuple of the list of images and the array size.
         """
         images = list_images(image_dir)
 
@@ -80,12 +90,83 @@ class Movie:
         # set size of data
         data_size = (len(images), meta["ImageLength"][0], meta["ImageWidth"][0])
 
+        return images, data_size
+
+    @classmethod
+    def _load_tiff_images_in_memory(cls, image_dir, num_images):
+        """Loads tiff images into an in-memory numpy array.
+
+        Data is assumed to be stored in 16-bit unsigned integers. Frame numbers are
+        assumed to be padded with zeros: 00000, 00001, 00002, etc. This is required
+        such that Python sorts the images correctly. Frame numbers can start from 0, 1,
+        or any other number. Files must have the extension ``.tiff``.
+
+        Args:
+            image_dir (str): Path of image folder.
+            num_images (int): Number of images in the folder.
+
+        Returns:
+            np.array: Data with shape (T, N_1, N_2, N_3) where T is # of images.
+        """
+        images, data_size = cls._get_tiff_images_and_size(image_dir, num_images)
+
         data = np.zeros(data_size, np.uint16)
 
+        cls._read_images(images, data)
+
+        return data
+
+    @staticmethod
+    def _read_images(images, array):
+        """ Loads images and copies them into the provided array.
+
+        Args:
+            images (list[Str]): Sorted list image paths.
+            array (np.array like): T x N_1 x N_2 array-like object into which images
+                should be loaded. T must equal the number of images in `images`. Each
+                image should be of size N_1 x N_2.
+
+        Returns:
+            np.array like: The input array `array`.
+
+        """
         for i, filename in enumerate(images):
             with Image.open(filename) as image:
-                data[i, :, :] = np.array(image)
-        return data
+                array[i, :, :] = np.array(image)
+
+        return array
+
+    @classmethod
+    def _load_tiff_images_memmap(cls, name, image_dir, num_images):
+        """Loads tiff images into a memory-mapped numpy array.
+
+        The data is not loaded into memory bot a memory mapped file
+        on disk is used. The file is named ``$name.npy`` and is placed in the
+        `image_dir` folder.
+
+        Data is assumed to be stored in 16-bit unsigned integers. Frame numbers are
+        assumed to be padded with zeros: 00000, 00001, 00002, etc. This is required
+        such that Python sorts the images correctly. Frame numbers can start from 0, 1,
+        or any other number. Files must have the extension ``.tiff``.
+
+        Args:
+            name (str): Movie name.
+            image_dir (str): Path of image folder.
+            num_images (int): Number of images in the folder.
+
+        Returns:
+            np.memmap: Memory-mapped numpy array with movie data.
+        """
+        images, data_size = cls._get_tiff_images_and_size(image_dir, num_images)
+
+        memmap_filename = os.path.join(image_dir, name + ".npy")
+        memmap_array = np.memmap(
+            memmap_filename, dtype=np.uint16, mode="w+", shape=data_size
+        )
+
+        cls._read_images(images, memmap_array)
+
+        return memmap_array
 
     def __getitem__(self, key):
         """Provides direct access to the movie data.

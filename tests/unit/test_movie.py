@@ -10,13 +10,17 @@ from conftest import TEST_DATA_DIR
 
 
 @pytest.fixture
-def M():
+def movie_data():
     data = np.zeros((3, 5, 10), np.uint16)
     data[0, :, :] = np.ones((5, 10))
     data[1, :, :] = np.ones((5, 10)) * 2
     data[2, :, :] = np.ones((5, 10)) * 3
+    return data
 
-    return Movie("Simple", data)
+
+@pytest.fixture
+def M(movie_data):
+    return Movie("Simple", movie_data)
 
 
 @pytest.fixture
@@ -39,6 +43,22 @@ class TestMovie:
 
         # compare data of movie from_tiff and direct initialization.
         np.testing.assert_allclose(movie_from_tiff[:], M[:])
+
+    def test_movie_from_tiff_images_memmap(self, movie_data):
+        """
+        Movie consists of three images of 5 x 10 pixels. All pixels in the first
+        image have value 1, all pixels in the second image have value 2, and all
+        pixels in the third image have value 3.
+        """
+        movie_from_tiff = Movie.from_tiff_images(
+            "Simple",
+            image_dir=str(os.path.join(TEST_DATA_DIR, "simple_movie")),
+            num_images=3,
+            memmap=True,
+        )
+
+        # compare data of movie from_tiff and direct initialization.
+        np.testing.assert_allclose(movie_from_tiff[:], movie_data)
 
     def test_movie_name(self, M):
         assert M.name == "Simple"
@@ -64,9 +84,23 @@ class TestMovie:
     def test_movie_extract_valid_pixels(self, M):
         assert M.extract_valid_pixels({(0, 0), (-1, 0), (4, 10)}) == {(0, 0)}
 
-    def test_movie_get_item(self, M):
+    def test_movie_get_item(self, M, movie_data):
         assert M[0, 0, 0] == 1.0
-        np.testing.assert_allclose(M[2, :, :], np.ones((5, 10)) * 3)
+        np.testing.assert_allclose(M[2, :, :], movie_data[2, :, :])
+
+    def test_movie_init_with_memmap(self, movie_data):
+        # prepare memmapped file
+        filename = os.path.join(TEST_DATA_DIR, "test_memdata.npy")
+        mem_data = np.memmap(filename, dtype=np.uint16, mode="w+", shape=(3, 5, 10))
+        mem_data[:] = movie_data[:]
+
+        del mem_data
+
+        # load memmapped file
+        mem_data = np.memmap(filename, dtype=np.uint16, mode="r", shape=(3, 5, 10))
+        movie = Movie("Memmap", mem_data)
+
+        np.testing.assert_allclose(movie[:], movie_data)
 
 
 class TestPatch:

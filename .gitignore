@@ -111,3 +111,7 @@ prof/
 
 # exclude tags
 tags
+
+# exclude binary file movie
+tests/unit/test_data/simple_movie/Simple.npy
+tests/unit/test_data/test_memdata.npy 
