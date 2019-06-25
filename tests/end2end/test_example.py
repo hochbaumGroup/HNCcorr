@@ -21,14 +21,22 @@
 # SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED HEREUNDER IS PROVIDED "AS
 # IS". REGENTS HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 # ENHANCEMENTS, OR MODIFICATIONS.
-def test_example():
-    from hnccorr import HNCcorr, Movie
-    from hnccorr.example import example_numpy_data
+from conftest import TEST_DATA_DIR
 
+from hnccorr import HNCcorr, Movie, HNCcorrConfig
+from hnccorr.example import load_example_data
+
+
+def test_example():
     movie = Movie(
-        "Example movie", example_numpy_data
+        "Example movie",
+        load_example_data(
+            filedir=TEST_DATA_DIR
+        ),  # downloads sample Neurofinder dataset.
     )  # See documentation for alternatives
-    H = HNCcorr.from_config()  # Initialize HNCcorr with default configuration
+    H = HNCcorr.from_config(
+        HNCcorrConfig(percentage_of_seeds=0.001)
+    )  # Initialize HNCcorr with default configuration
     H.segment(movie)  # Identify cells in movie
 
     H.segmentations  # List of identified cells
