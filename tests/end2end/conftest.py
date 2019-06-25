@@ -23,6 +23,7 @@
 # ENHANCEMENTS, OR MODIFICATIONS.
 import pytest
 import os
+import numpy as np
 
 TEST_DATA_DIR = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "../test_data"
@@ -32,3 +33,10 @@ TEST_DATA_DIR = os.path.join(
 @pytest.fixture
 def dummy():
     return "Dummy"
+
+
+@pytest.fixture
+def neurofinder_data():
+    return np.load(
+        os.path.join(TEST_DATA_DIR, "neurofinder.02.00_agg10.npy"), mmap_mode="r"
+    )

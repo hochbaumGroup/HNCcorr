@@ -22,25 +22,17 @@
 # IS". REGENTS HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 # ENHANCEMENTS, OR MODIFICATIONS.
 import pytest
-import os
 import numpy as np
 import matplotlib.pyplot as plt
-
-from conftest import TEST_DATA_DIR
 
 from hnccorr.base import HNCcorr, HNCcorrConfig
 from hnccorr.movie import Movie
 
 
-@pytest.fixture
-def data():
-    return np.load(os.path.join(TEST_DATA_DIR, "neurofinder.02.00_agg10.npy"))
-
-
-def test_hnccorr_single_segment(data):
+def test_hnccorr_single_segment(neurofinder_data):
     H = HNCcorr.from_config(HNCcorrConfig(percentage_of_seeds=0.0005))
 
-    movie = Movie("Neurofinder02.00", data)
+    movie = Movie("Neurofinder02.00", neurofinder_data)
 
     H.segment(movie)
 

@@ -22,10 +22,6 @@
 # IS". REGENTS HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 # ENHANCEMENTS, OR MODIFICATIONS.
 import pytest
-import os
-import numpy as np
-
-from conftest import TEST_DATA_DIR
 
 from sparsecomputation import PCA
 from hnccorr.movie import Movie, Patch
@@ -43,11 +39,6 @@ from hnccorr.seeds import (
 )
 from hnccorr.postprocessor import SizePostprocessor
 from hnccorr.segmentation import HncParametricWrapper, Segmentation
-
-
-@pytest.fixture
-def data():
-    return np.load(os.path.join(TEST_DATA_DIR, "neurofinder.02.00_agg10.npy"))
 
 
 @pytest.fixture
@@ -137,7 +128,7 @@ def matlab_segmentation():
     )
 
 
-def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
+def test_hnccorr_single_segment(mocker, dummy, neurofinder_data, matlab_segmentation):
     seeder = LocalCorrelationSeeder(3, 0.4, 4)
     postprocessor = SizePostprocessor(40, 200, 80)
     segmentor = HncParametricWrapper(0, 100000)
@@ -183,7 +174,7 @@ def test_hnccorr_single_segment(mocker, dummy, data, matlab_segmentation):
         patch_size,
     )
 
-    H.movie = Movie("Neurofinder02.00", data)
+    H.movie = Movie("Neurofinder02.00", neurofinder_data)
 
     center_seed = (282, 436)
     c = Candidate(center_seed, H)
