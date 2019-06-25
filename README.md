@@ -10,9 +10,11 @@ We provide a Python 3 (recommended) implementation as well as a Matlab implement
 ### Example (Python)
 ```python
 from hnccorr import HNCcorr, Movie
-from hnccorr.example import example_numpy_movie
+from hnccorr.example import load_example_data
 
-movie = Movie("Example movie", example_numpy_movie)  # See documentation for alternatives
+movie = Movie(
+    "Example movie", load_example_data()  # downloads sample Neurofinder dataset
+)  # See documentation for alternative methods to load movies
 H = HNCcorr.from_config()  # Initialize HNCcorr with default configuration
 H.segment(movie)  # Identify cells in movie
 
