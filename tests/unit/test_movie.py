@@ -95,6 +95,9 @@ class TestMovie:
     def test_movie_data_size(self, M):
         assert M.data_size == (3, 5, 10)
 
+    def test_data_access_float64(self, M):
+        assert M[:].dtype == np.float64
+
     def test_movie_pixel_shape(self, M):
         assert M.pixel_shape == (5, 10)
 

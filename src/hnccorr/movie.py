@@ -204,7 +204,7 @@ class Movie:
         Returns:
             np.array
         """
-        return self._data.__getitem__(key)
+        return self._data.__getitem__(key).astype(np.float64)
 
     def is_valid_pixel_coordinate(self, coordinate):
         """Checks if coordinate is a coordinate for a pixel in the movie."""
