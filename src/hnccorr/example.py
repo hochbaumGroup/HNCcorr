@@ -1,3 +1,4 @@
+"""Provides example data for HNCcorr."""
 import numpy as np
 
 

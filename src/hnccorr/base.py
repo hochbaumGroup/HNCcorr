@@ -217,7 +217,10 @@ class HNCcorr:
     def segmentations_to_list(self):
         """Exports segmentations to a list of dictionaries.
 
-        Each dictionary in the list corresponds to the footprint of a cell. Each dictionary contains the key `coordinates` containing a list of pixel coordinates. Each pixel coordinate is a tuple with the zero-indexed coordinates of the pixel. Pixels are indexed like matrix coordinates.
+        Each dictionary in the list corresponds to the footprint of a cell. Each
+        dictionary contains the key `coordinates` containing a list of pixel
+        coordinates. Each pixel coordinate is a tuple with the zero-indexed coordinates
+        of the pixel. Pixels are indexed like matrix coordinates.
 
         Returns
             list[dict[tuple]]: List of cell coordinates.
