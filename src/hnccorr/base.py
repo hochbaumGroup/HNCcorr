@@ -225,8 +225,8 @@ class HNCcorr:
             candidate = self._candidate_class(seed, self)
             self.candidates.append(candidate)
             print(
-                "Candidate: %d, Cells identified: %d"
-                % (len(self.candidates), len(self.segmentations))
+                "Cells identified: %d, Next candidate: %d"
+                % (len(self.segmentations), len(self.candidates))
             )
             best_segmentation = candidate.segment()
             if best_segmentation is not None:
