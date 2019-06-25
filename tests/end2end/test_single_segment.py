@@ -47,7 +47,7 @@ from hnccorr.segmentation import HncParametricWrapper, Segmentation
 
 @pytest.fixture
 def data():
-    return np.load(os.path.join(TEST_DATA_DIR, "neurofinder.02.00_10.npy"))
+    return np.load(os.path.join(TEST_DATA_DIR, "neurofinder.02.00_agg10.npy"))
 
 
 @pytest.fixture
