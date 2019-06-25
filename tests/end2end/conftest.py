@@ -37,6 +37,4 @@ def dummy():
 
 @pytest.fixture
 def neurofinder_data():
-    return np.load(
-        os.path.join(TEST_DATA_DIR, "neurofinder.02.00_agg10.npy"), mmap_mode="r"
-    )
+    return np.load(os.path.join(TEST_DATA_DIR, "neurofinder.02.00_agg10.npy"))
