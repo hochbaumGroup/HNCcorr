@@ -30,7 +30,7 @@ from six.moves import urllib
 
 
 def load_example_data(
-    filedir=".", filename="neurofinder.02.00_agg10.npy", download=True, memmap=True
+    filedir=".", filename="neurofinder.02.00_agg10.npy", download=True, memmap=False
 ):
     url = "https://hnccorr-example-data.s3-us-west-2.amazonaws.com/neurofinder.02.00_agg10.npy"  # pylint: disable=C0303
 
