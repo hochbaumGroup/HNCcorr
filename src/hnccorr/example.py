@@ -86,7 +86,7 @@ def gen_bar_updater():
     # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
     # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-    pbar = tqdm(total=None, unit="MB")
+    pbar = tqdm(total=None, unit="MB", mininterval=0.5)
 
     def bar_update(count, block_size, total_size):
         if pbar.total is None and total_size:
