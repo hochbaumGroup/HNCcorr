@@ -1,6 +1,7 @@
 # HNCcorr
 
-**2019/06/25 the HNCcorr software is currently being updated.**
+**2019/06/25 the HNCcorr software is currently being updated. The missing parts will be completey in the next few days.**
+
 The HNCcorr algorithm identifies cell bodies in two-photon calcium imaging movies.
 
 HNCcorr is described in detail in our [eNeuro paper](http://www.eneuro.org/content/6/2/ENEURO.0304-18.2019):
