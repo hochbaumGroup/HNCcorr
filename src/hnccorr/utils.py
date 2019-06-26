@@ -147,7 +147,10 @@ def eight_neighborhood(num_dims, max_radius):
             >>> eight_neighborhood(1, 1)
             [(-1,), (0,), (1,)]
             >>> eight_neighborhood(2, 1)
-            [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0), (0, 1), (1, -1), (1, 0), (1, 1)]
+            [
+                (-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0),
+                (0, 1), (1, -1), (1, 0), (1, 1)
+            ]
 
     """
     return set(product(range(-max_radius, max_radius + 1), repeat=num_dims))

@@ -29,10 +29,9 @@ from tqdm import tqdm
 from six.moves import urllib
 
 
-def load_example_data(
+def load_example_data(  # pylint: disable=C0330
     filedir=".", filename="neurofinder.02.00_agg10.npy", download=True, memmap=False
 ):
-    url = "https://hnccorr-example-data.s3-us-west-2.amazonaws.com/neurofinder.02.00_agg10.npy"  # pylint: disable=C0303
     """Downloads a subsampled copy of the Neurofinder 02.00 dataset.
 
     Dataset is subsampled in the time dimension, where every 10 frames are replaced by
@@ -50,6 +49,7 @@ def load_example_data(
     Returns:
         np.array: Returns Numpy array like copy of the movie data.
     """
+    url = "https://hnccorr-example-data.s3-us-west-2.amazonaws.com/neurofinder.02.00_agg10.npy"  # pylint: disable=C0301
 
     if memmap:
         memmap_mode = "r"
@@ -163,8 +163,8 @@ def download_url(url, root, filename=None):
     # check if path exists.
     try:
         os.makedirs(root)
-    except OSError as e:
-        if e.errno == errno.EEXIST:
+    except OSError as error:
+        if error.errno == errno.EEXIST:
             pass
         else:
             raise
@@ -183,6 +183,3 @@ def download_url(url, root, filename=None):
             urllib.request.urlretrieve(url, fpath, reporthook=gen_bar_updater())
         else:
             raise error
-
-
-example_numpy_data = np.zeros((10, 10, 10))
