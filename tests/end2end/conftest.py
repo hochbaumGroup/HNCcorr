@@ -25,6 +25,8 @@ import pytest
 import os
 import numpy as np
 
+from hnnccorr.example import load_example_data
+
 TEST_DATA_DIR = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), "../test_data"
 )
@@ -37,4 +39,4 @@ def dummy():
 
 @pytest.fixture
 def neurofinder_data():
-    return np.load(os.path.join(TEST_DATA_DIR, "neurofinder.02.00_agg10.npy"))
+    return load_example_data(filedir=TEST_DATA_DIR)
