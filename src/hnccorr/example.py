@@ -33,6 +33,23 @@ def load_example_data(
     filedir=".", filename="neurofinder.02.00_agg10.npy", download=True, memmap=False
 ):
     url = "https://hnccorr-example-data.s3-us-west-2.amazonaws.com/neurofinder.02.00_agg10.npy"  # pylint: disable=C0303
+    """Downloads a subsampled copy of the Neurofinder 02.00 dataset.
+
+    Dataset is subsampled in the time dimension, where every 10 frames are replaced by
+    a single frame with average intensity values. Resulting data has 800 frames, each
+    of 512 x 512 pixels.
+
+    Args:
+        filedir (str): Directory for data file. Default is current directory.
+        filename (str): Filename for data file.
+        download (bool): If True and file does not exist, a new copy is downloaded. If
+            False, data array is only loaded.
+        memmap (bool): If True, a array-like memory map for the data is returned. If
+            False, the data is loaded into memory. Default is False.
+
+    Returns:
+        np.array: Returns Numpy array like copy of the movie data.
+    """
 
     if memmap:
         memmap_mode = "r"
