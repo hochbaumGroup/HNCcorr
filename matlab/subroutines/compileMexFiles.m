@@ -1,0 +1,1 @@
+% --------------------------------% Compile all mexfiles to use c-code within matlab% --------------------------------mex -O -largeArrayDims './subroutines/simSelectMethods/sparseComputation/getBoxes.c'mex -O ./subroutines/hpf/hpfMatlab.c;
