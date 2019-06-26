@@ -1,4 +1,6 @@
 # HNCcorr
+
+**2019/06/25 the HNCcorr software is currently being updated.**
 The HNCcorr algorithm identifies cell bodies in two-photon calcium imaging movies.
 
 HNCcorr is described in detail in our [eNeuro paper](http://www.eneuro.org/content/6/2/ENEURO.0304-18.2019):
@@ -14,9 +16,9 @@ from hnccorr.example import load_example_data
 
 movie = Movie(
     "Example movie", load_example_data()  # downloads sample Neurofinder dataset
-)  # See documentation for alternative methods to load movies
+)
 H = HNCcorr.from_config()  # Initialize HNCcorr with default configuration
-H.segment(movie)  # Identify cells in movie
+H.segment(movie)
 
 H.segmentations  # List of identified cells
 H.segmentations_to_list()  # Export list of cells (for Neurofinder)
@@ -41,7 +43,7 @@ The Matlab implementation was used to generate the results in the eNeuro manuscr
 The documentation is hosted at [ReadTheDocs](TBD).
 
 ## Hyperparameters
-TBD
+TO DO
 
 ## Tests
 The tests for HNCcorr use the `pytest` package. You can execute them with the `pytest` command in the main directory.
