@@ -4,13 +4,13 @@
 [![Documentation](https://readthedocs.org/projects/hnccorr/badge/?version=latest&style=flat)](https://hnccorr.readthedocs.io)
 ![Travis-CI status](https://travis-ci.com/hochbaumGroup/HNCcorr.svg?branch=master)
 
-**2019/06/25 the HNCcorr software is currently being updated. The missing parts will be completey in the next few days.**
+**2019/06/25 the HNCcorr software is currently being updated. The missing parts will be completed in the next few days.**
 
 The HNCcorr algorithm identifies cell bodies in two-photon calcium imaging movies. We provide a Python 3 implementation as well as a legacy Matlab implementation. The software is freely available for non-commercial use. See license for details.
 
-The HNCcorr algorithm is described in detail in our [eNeuro paper](http://www.eneuro.org/content/6/2/ENEURO.0304-18.2019):
+The HNCcorr algorithm is described in our [eNeuro paper](http://www.eneuro.org/content/6/2/ENEURO.0304-18.2019):
 
-Spaen, Q., Asín-Achá, R., Chettih, S. N., Minderer, M., Harvey, C., and Hochbaum, D. S. (2019). HNCcorr: A novel combinatorial approach for cell identification in calcium-imaging movies. eNeuro, 6(2).
+> Spaen, Q., Asín-Achá, R., Chettih, S. N., Minderer, M., Harvey, C., and Hochbaum, D. S. (2019). HNCcorr: A novel combinatorial approach for cell identification in calcium-imaging movies. eNeuro, 6(2).
 
 ### Example (Python)
 ```python
