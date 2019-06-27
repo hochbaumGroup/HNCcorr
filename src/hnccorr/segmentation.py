@@ -186,7 +186,7 @@ class Segmentation:
         """
         mask = np.full(movie_pixel_shape, False, dtype=np.bool)
 
-        indices = list(zip(*self.selection))
+        indices = tuple(zip(*self.selection))
         mask[indices] = True
 
         filled_mask = binary_fill_holes(mask)
