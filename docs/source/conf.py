@@ -46,7 +46,7 @@ class Mock(MagicMock):
         return Mock()
 
 
-MOCK_MODULES = ["numpy", "scipy"]
+MOCK_MODULES = ["numpy", "scipy", "libtiff"]
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 # Add any paths that contain templates here, relative to this directory.
