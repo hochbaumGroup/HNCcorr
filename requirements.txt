@@ -12,7 +12,6 @@ cycler==0.10.0
 decorator==4.4.0
 docutils==0.14
 gprof2dot==2017.9.19
-HNCcorr==2019.6.1
 idna==2.8
 imagesize==1.1.0
 importlib-metadata==0.18
