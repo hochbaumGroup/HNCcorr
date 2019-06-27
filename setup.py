@@ -21,40 +21,37 @@
 # SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED HEREUNDER IS PROVIDED "AS
 # IS". REGENTS HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 # ENHANCEMENTS, OR MODIFICATIONS.
-from setuptools import setup
-from setuptools import find_packages
-import unittest
+from setuptools import setup, find_packages
 
-
-def readme():
-    with open("README.md") as f:
-        return f.read()
-
-
-def license():
-    with open("LICENSE.md") as f:
-        return f.read()
+with open("README.md") as f:
+    readme = f.read()
 
 
 setup(
     name="HNCcorr",
-    version="0.1dev",
+    version="2019.6.1",
     classifiers=[
         "Development Status :: 3 - Alpha",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3",
     ],
-    description=None,
+    description="HNCcorr algorithm for cell detection in calcium-imaging.",
     keywords=["Cell detection", "Neuroscience", "Calcium imaging"],
-    url="https://github.com/quic0/HNCcorr-python",
+    url="https://github.com/hochbaumGroup/HNCcorr",
     author="Quico Spaen",
     author_email="qspaen@berkeley.edu",
-    license=license(),
-    long_description=readme(),
+    license="Non-commercial license. Not an open-source license.",
+    long_description=readme,
+    long_description_content_type="text/markdown",
     packages=find_packages("src"),
     package_dir={"": "src"},
-    install_requires=["numpy", "pillow"],  # required packages here
-    setup_requires=["pytest-runner"],
-    tests_require=["pytest", "mock"],
-    zip_safe=False,
+    install_requires=[
+        "closure-problem",
+        "networkx",
+        "numpy",
+        "pillow",
+        "six",
+        "sparsecomputation",
+        "scipy",
+        "tqdm",
+    ],  # required packages here
 )
