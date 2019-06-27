@@ -28,7 +28,7 @@ with open("README.md") as f:
 
 
 setup(
-    name="HNCcorr",
+    name="hnccorr",
     version="2019.6.1",
     classifiers=[
         "Development Status :: 3 - Alpha",
