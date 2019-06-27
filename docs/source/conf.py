@@ -3,8 +3,6 @@
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # http://www.sphinx-doc.org/en/master/config
-import sys
-from unittest.mock import MagicMock
 
 # -- Path setup --------------------------------------------------------------
 
@@ -40,14 +38,7 @@ extensions = [
 ]
 
 # Mock imports for doc build
-class Mock(MagicMock):
-    @classmethod
-    def __getattr__(cls, name):
-        return Mock()
-
-
-MOCK_MODULES = ["numpy", "scipy"]
-sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+autodoc_mock_imports = ["numpy"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
