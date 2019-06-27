@@ -21,3 +21,5 @@ python:
   version: 3.5
   install:
     - requirements: requirements.txt
+    - method: pip
+      path: .
