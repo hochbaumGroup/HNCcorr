@@ -29,7 +29,7 @@ with open("README.md") as f:
 
 setup(
     name="hnccorr",
-    version="2019.6.1",
+    version="2019.6.2dev",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3",
