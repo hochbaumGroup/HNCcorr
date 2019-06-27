@@ -39,7 +39,7 @@ On Windows you may need to install a [C-compiler for Python](https://wiki.python
 The Matlab implementation was used to generate the results in the eNeuro manuscript and is now superseded by the Python implementation. The Matlab implementation is available in the `matlab` folder. See the README file in this folder for instructions.
 
 ## Documentation
-The documentation is hosted at [ReadTheDocs](TBD).
+The documentation is hosted at [ReadTheDocs](https://hncccorr.readthedocs.io).
 
 ## Hyperparameters
 TO DO
