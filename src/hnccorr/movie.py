@@ -75,6 +75,7 @@ class Movie:
             image_dir (str): Path of image folder.
             num_images (int): Number of images in the folder.
             memmap (bool): If True, a memory-mapped file is used. (*Default: False*)
+            subsample (int): Number of frames to average into a single frame.
 
         Returns:
             Movie: Movie created from image files.
