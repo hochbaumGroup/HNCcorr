@@ -376,7 +376,24 @@ class Patch:
 
 
 class Subsampler:
+    """Subsampler for averaging frames.
+
+    Averages `subsample_frequency` into a single frame. Stores averaged frames in a buffer and writes buffer to an output array.
+
+    Attributes:
+        buffer_size (int): Number of averaged frames to store in buffer. Short: b.
+            Default is 10.
+        buffer (np.array): (b, N_1, N_2) array where the frame averages are compiled.
+        _buffer_frame_count: (b, ) array with the number of frames used in each
+            averaged frame.
+        _current_index (int): Index of current frame in buffer.
+        _movie_shape (int): Shape of input movie.
+        _num_effective_frames (int): Number of frames in the averaged movie.
+        _subsample_frequency (int): Number of frames to average into a single frame.
+    """
+
     def __init__(self, movie_shape, subsample_frequency, buffer_size=10):
+        """Initializes a subsampler object."""
         self._movie_shape = movie_shape
         self._subsample_frequency = subsample_frequency
         self._num_effective_frames = int(
@@ -393,13 +410,28 @@ class Subsampler:
 
     @property
     def output_shape(self):
+        """Shape of average movie array."""
         return (self._num_effective_frames, *self._movie_shape[1:])
 
     @property
     def buffer_full(self):
+        """True if buffer is full."""
         return self._current_index >= self.buffer_size
 
     def add_frame(self, frame):
+        """ Adds frame to average.
+
+        Frames should be provided in order of appearance in the movie.
+
+        Args:
+            frame (np.array): (N_1, N_2) array with pixel intensities.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError: If buffer is full.
+        """
         if self.buffer_full:
             raise ValueError("Buffer is full. Cannot add current frame.")
 
