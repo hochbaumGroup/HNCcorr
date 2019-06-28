@@ -200,8 +200,11 @@ class TestSubsampler:
             Subsampler((80, 512, 512), 10).buffer, np.zeros((8, 512, 512))
         )
 
-    def test_buffer_size(self, subsampler):
-        assert subsampler.buffer_size == 10
+    def test_buffer_last_frames(self, subsampler):
+        subsampler = Subsampler((21, 10, 10), 2)
+        subsampler.advance_buffer()
+
+        assert subsampler.buffer.shape[0] == 1
 
     def test_add_frame(self, subsampler):
         subsampler.add_frame(np.ones((10, 10)))
@@ -232,6 +235,34 @@ class TestSubsampler:
             assert subsampler.buffer_full == False
             subsampler.add_frame(np.ones((10, 10)))
         assert subsampler.buffer_full == True
+
+    def test_buffer_indices(self, subsampler):
+        assert subsampler.buffer_indices == (0, 10)
+
+    def test_advance_buffer(self, subsampler):
+        for i in range(100):
+            subsampler.add_frame(np.ones((10, 10)))
+
+        subsampler.advance_buffer()
+        np.testing.assert_allclose(subsampler.buffer, np.zeros((10, 10, 10)))
+        assert subsampler.buffer_full == False
+        assert subsampler.buffer_indices == (10, 20)
+
+    def test_advance_buffer_resets_frame_count(self, subsampler):
+        for i in range(100):
+            subsampler.add_frame(np.ones((10, 10)))
+
+        subsampler.advance_buffer()
+
+        subsampler.add_frame(np.ones((10, 10)))
+
+        np.testing.assert_allclose(subsampler.buffer[0, :, :], np.ones((10, 10)))
+
+    def test_buffer_indices_last_frames(self):
+        subsampler = Subsampler((21, 10, 10), 2)
+
+        subsampler.advance_buffer()
+        assert subsampler.buffer_indices == (10, 11)
 
     def test_prevent_buffer_overflow(self, subsampler):
         for i in range(100):

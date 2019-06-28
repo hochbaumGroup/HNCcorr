@@ -381,11 +381,11 @@ class Subsampler:
     Averages `subsample_frequency` into a single frame. Stores averaged frames in a buffer and writes buffer to an output array.
 
     Attributes:
-        buffer_size (int): Number of averaged frames to store in buffer. Short: b.
-            Default is 10.
-        buffer (np.array): (b, N_1, N_2) array where the frame averages are compiled.
+        _buffer (np.array): (b, N_1, N_2) array where the frame averages are compiled.
         _buffer_frame_count: (b, ) array with the number of frames used in each
             averaged frame.
+        _buffer_size (int): Number of averaged frames to store in buffer. Short: b.
+            Default is 10.
         _current_index (int): Index of current frame in buffer.
         _movie_shape (int): Shape of input movie.
         _num_effective_frames (int): Number of frames in the averaged movie.
@@ -399,14 +399,15 @@ class Subsampler:
         self._num_effective_frames = int(
             math.ceil(self._movie_shape[0] / float(self._subsample_frequency))
         )
-        self.buffer_size = min(buffer_size, self._num_effective_frames)
+        self._buffer_size = min(buffer_size, self._num_effective_frames)
         self._current_index = 0
 
-        self.buffer = np.zeros(
-            (self.buffer_size, *self._movie_shape[1:]), dtype=np.float32
+        self._buffer = np.zeros(
+            (self._buffer_size, *self._movie_shape[1:]), dtype=np.float32
         )
 
-        self._buffer_frame_count = np.zeros((self.buffer_size,))
+        self._buffer_frame_count = np.zeros((self._buffer_size,))
+        self._buffer_start_index = 0
 
     @property
     def output_shape(self):
@@ -414,9 +415,25 @@ class Subsampler:
         return (self._num_effective_frames, *self._movie_shape[1:])
 
     @property
+    def buffer(self):
+        # x % 10 takes values in 0...9 whereas x - 1 % 10 + 1 takes values 1, .. 10
+        max_index = ((self.buffer_indices[1] - 1) % self._buffer_size) + 1
+        return self._buffer[:max_index, :, :]
+
+    @property
     def buffer_full(self):
         """True if buffer is full."""
-        return self._current_index >= self.buffer_size
+        return self._current_index >= self._buffer_size
+
+    @property
+    def buffer_indices(self):
+        """Indices in average movie corresponding to current buffer"""
+        return (
+            self._buffer_start_index,
+            min(
+                self._buffer_start_index + self._buffer_size, self._num_effective_frames
+            ),
+        )
 
     def add_frame(self, frame):
         """ Adds frame to average.
@@ -437,8 +454,10 @@ class Subsampler:
 
         current_num_frames = self._buffer_frame_count[self._current_index]
         new_num_frames = float(current_num_frames + 1)
-        self.buffer[self._current_index, :, :] = (
-            current_num_frames / new_num_frames * self.buffer[self._current_index, :, :]
+        self._buffer[self._current_index, :, :] = (
+            current_num_frames
+            / new_num_frames
+            * self._buffer[self._current_index, :, :]
             + frame / new_num_frames
         )
         self._buffer_frame_count[self._current_index] += 1
@@ -446,3 +465,9 @@ class Subsampler:
         # advance to next frame in buffer if current frame is full
         if self._buffer_frame_count[self._current_index] == self._subsample_frequency:
             self._current_index += 1
+
+    def advance_buffer(self):
+        self._buffer_frame_count[:] = 0
+        self._buffer[:] = 0
+        self._current_index = 0
+        self._buffer_start_index += self._buffer_size
