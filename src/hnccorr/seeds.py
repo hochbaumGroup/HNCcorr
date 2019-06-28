@@ -24,8 +24,8 @@
 """Seed related components of HNCcorr."""
 
 from math import sin, cos, pi
-import numpy as np
 import itertools
+import numpy as np
 
 from hnccorr.utils import (
     add_offset_set_coordinates,
@@ -78,7 +78,8 @@ class LocalCorrelationSeeder:
         """Identifies candidate seeds in movie.
 
         Initializes list of candidate seeds in the movie. See class description for
-        details. Seeds can be accessed via the :meth:`~.LocalCorrelationSeeder.next` method.
+        details. Seeds can be accessed via the :meth:`~.LocalCorrelationSeeder.next`
+        method.
 
         Args:
             movie (Movie): Movie object to segment.

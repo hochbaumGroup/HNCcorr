@@ -45,6 +45,7 @@ The adjustable parameters and their default values are:
 * **positive_seed_radius** = 0: Radius of the positive seed square / superpixel.
 * **negative_seed_circle_radius** = 10: Radius in pixels of the circle with negative seeds.
 * **seeder_mask_size** = 3: Width in pixels of the region used by the seeder to compute the average correlation between a pixel and its neighbors.
+* **seeder_grid_size (int)**: Size of grid bloc per dimension. Seeder maintains only the best candidate pixel for each grid block.
 * **seeder_exclusion_padding** = 4: Distance for excluding additional pixels surrounding segmented cells.
 * **percentage_of_seeds** = 0.40: Fraction of candidate seeds to evaluate.
 * **negative_seed_circle_count** = 10: Number of negative seeds.
