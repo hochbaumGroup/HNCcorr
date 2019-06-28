@@ -386,6 +386,8 @@ class Subsampler:
             averaged frame.
         _buffer_size (int): Number of averaged frames to store in buffer. Short: b.
             Default is 10.
+        _buffer_start_index (int): Index of averaged movie corresponding with first
+            frame in the buffer.
         _current_index (int): Index of current frame in buffer.
         _movie_shape (int): Shape of input movie.
         _num_effective_frames (int): Number of frames in the averaged movie.
@@ -416,6 +418,7 @@ class Subsampler:
 
     @property
     def buffer(self):
+        """Provides access to data in buffer. Corrects last buffer for movie length."""
         # x % 10 takes values in 0...9 whereas x - 1 % 10 + 1 takes values 1, .. 10
         max_index = ((self.buffer_indices[1] - 1) % self._buffer_size) + 1
         return self._buffer[:max_index, :, :]
@@ -467,6 +470,7 @@ class Subsampler:
             self._current_index += 1
 
     def advance_buffer(self):
+        """Empties buffer and advances the buffer indices for new frames"""
         self._buffer_frame_count[:] = 0
         self._buffer[:] = 0
         self._current_index = 0
