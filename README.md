@@ -28,6 +28,7 @@ H.segmentations_to_list()  # Export list of cells (for Neurofinder)
 ```
 
 See the [quickstart](https://hnccorr.readthedocs.io/en/latest/quickstart.html) guide for more details.
+
 ## Installation Instructions for Python 3
 You can install HNCcorr directly from the Python Package Index with pip:
 ```bash
