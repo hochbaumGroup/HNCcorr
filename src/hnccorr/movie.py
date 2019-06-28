@@ -145,7 +145,7 @@ class Movie:
             np.array like: The input array `array`.
 
         """
-        for i, filename in enumerate(images):
+        for filename in images:
             if subsampler.buffer_full:
                 output_array[subsampler.buffer_indices, :, :] = subsampler.buffer
                 subsampler.advance_buffer()
@@ -343,7 +343,8 @@ class Patch:
 class Subsampler:
     """Subsampler for averaging frames.
 
-    Averages `subsample_frequency` into a single frame. Stores averaged frames in a buffer and writes buffer to an output array.
+    Averages `subsample_frequency` into a single frame. Stores averaged frames in a
+    buffer and writes buffer to an output array.
 
     Attributes:
         _buffer (np.array): (b, N_1, N_2) array where the frame averages are compiled.
