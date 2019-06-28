@@ -34,7 +34,7 @@ from conftest import TEST_DATA_DIR
 
 @pytest.fixture
 def movie_data():
-    data = np.zeros((3, 5, 10), np.uint16)
+    data = np.zeros((3, 5, 10), np.float32)
     data[0, :, :] = np.ones((5, 10))
     data[1, :, :] = np.ones((5, 10)) * 2
     data[2, :, :] = np.ones((5, 10)) * 3
@@ -57,7 +57,7 @@ def subsampler():
 
 
 class TestMovie:
-    def test_movie_from_tiff_images(self, M):
+    def test_movie_from_tiff_images(self, movie_data):
         """
         Movie consists of three images of 5 x 10 pixels. All pixels in the first
         image have value 1, all pixels in the second image have value 2, and all
@@ -67,10 +67,31 @@ class TestMovie:
             "Simple",
             image_dir=str(os.path.join(TEST_DATA_DIR, "simple_movie")),
             num_images=3,
+            subsample=1,
         )
 
         # compare data of movie from_tiff and direct initialization.
-        np.testing.assert_allclose(movie_from_tiff[:], M[:])
+        np.testing.assert_allclose(movie_from_tiff[:], movie_data)
+
+    def test_movie_from_tiff_images_with_subsampling(self, movie_data):
+        """
+        Movie consists of three images of 5 x 10 pixels. All pixels in the first
+        image have value 1, all pixels in the second image have value 2, and all
+        pixels in the third image have value 3.
+        """
+        movie_from_tiff = Movie.from_tiff_images(
+            "Simple",
+            image_dir=str(os.path.join(TEST_DATA_DIR, "simple_movie")),
+            num_images=3,
+            subsample=2,
+        )
+
+        # compare data of movie from_tiff and direct initialization.
+
+        data = np.zeros((2, 5, 10), np.float32)
+        data[0, :, :] = np.ones((5, 10)) * 1.5
+        data[1, :, :] = np.ones((5, 10)) * 3
+        np.testing.assert_allclose(movie_from_tiff[:], data)
 
     def test_movie_from_tiff_images_memmap(self, movie_data):
         """
@@ -83,6 +104,7 @@ class TestMovie:
             image_dir=str(os.path.join(TEST_DATA_DIR, "simple_movie")),
             num_images=3,
             memmap=True,
+            subsample=1,
         )
 
         # compare data of movie from_tiff and direct initialization.
