@@ -101,26 +101,20 @@ class LocalCorrelationSeeder:
         mean_neighbor_corr = {}
 
         for pixel in generate_pixels(self._movie.pixel_shape):
-            pixel_data = self._movie[add_time_index(pixel)].reshape(1, -1)
-
             # compute neighbors
             neighbors = add_offset_set_coordinates(neighbor_offsets, pixel)
 
             # extract data for valid neighbors
-            neighbors_data = []
-            for neighbor in neighbors:
-                if self._movie.is_valid_pixel_coordinate(neighbor):
-                    neighbors_data.append(
-                        self._movie[add_time_index(neighbor)].reshape(1, -1)
-                    )
-            neighbors_data = np.concatenate(neighbors_data, axis=0)
-
-            # compute correlation to each neighbor (corrcoef concatenates the
-            # two vectors so we extract last row except for last element)
-            neighbors_corr = np.corrcoef(neighbors_data, pixel_data)[-1, :-1]
+            valid_neighbors = [
+                neighbor
+                for neighbor in neighbors
+                if self._movie.is_valid_pixel_coordinate(neighbor)
+            ]
 
             # store average correlation
-            mean_neighbor_corr[pixel] = np.mean(neighbors_corr)
+            mean_neighbor_corr[pixel] = self._compute_average_local_correlation(
+                pixel, valid_neighbors
+            )
 
         best_per_grid_block = self._select_best_per_grid_block(mean_neighbor_corr)
 
@@ -135,6 +129,23 @@ class LocalCorrelationSeeder:
         # store best seeds
         self._seeds = [seed for seed, _ in best_per_grid_block_sorted[:num_keep]]
         self.reset()
+
+    def _compute_average_local_correlation(self, pixel, valid_neighbors):
+        """Compute average correlation between pixel and neighbors."""
+        pixel_data = self._movie[add_time_index(pixel)].reshape(1, -1)
+
+        # extract data for valid neighbors
+        neighbors_data = []
+        for neighbor in valid_neighbors:
+            neighbors_data.append(self._movie[add_time_index(neighbor)].reshape(1, -1))
+        neighbors_data = np.concatenate(neighbors_data, axis=0)
+
+        # compute correlation to each neighbor (corrcoef concatenates the
+        # two vectors so we extract last row except for last element)
+        neighbors_corr = np.corrcoef(neighbors_data, pixel_data)[-1, :-1]
+
+        # store average correlation
+        return np.mean(neighbors_corr)
 
     def _select_best_per_grid_block(self, scores):
         """Selects pixel with highest score in a block of grid_size pixels per dim.
