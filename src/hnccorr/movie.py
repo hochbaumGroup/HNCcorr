@@ -24,6 +24,7 @@
 """Components for calcium-imaging movies in HNCcorr."""
 
 import os
+import math
 import numpy as np
 from PIL import Image
 from PIL.TiffTags import TAGS
@@ -372,3 +373,44 @@ class Patch:
     def __getitem__(self, key):
         """Access data for pixels in the patch. Indexed in patch coordinates."""
         return self._data[key]
+
+
+class Subsampler:
+    def __init__(self, movie_shape, subsample_frequency, buffer_size=10):
+        self._movie_shape = movie_shape
+        self._subsample_frequency = subsample_frequency
+        self._num_effective_frames = int(
+            math.ceil(self._movie_shape[0] / float(self._subsample_frequency))
+        )
+        self.buffer_size = min(buffer_size, self._num_effective_frames)
+        self._current_index = 0
+
+        self.buffer = np.zeros(
+            (self.buffer_size, *self._movie_shape[1:]), dtype=np.float32
+        )
+
+        self._buffer_frame_count = np.zeros((self.buffer_size,))
+
+    @property
+    def output_shape(self):
+        return (self._num_effective_frames, *self._movie_shape[1:])
+
+    @property
+    def buffer_full(self):
+        return self._current_index >= self.buffer_size
+
+    def add_frame(self, frame):
+        if self.buffer_full:
+            raise ValueError("Buffer is full. Cannot add current frame.")
+
+        current_num_frames = self._buffer_frame_count[self._current_index]
+        new_num_frames = float(current_num_frames + 1)
+        self.buffer[self._current_index, :, :] = (
+            current_num_frames / new_num_frames * self.buffer[self._current_index, :, :]
+            + frame / new_num_frames
+        )
+        self._buffer_frame_count[self._current_index] += 1
+
+        # advance to next frame in buffer if current frame is full
+        if self._buffer_frame_count[self._current_index] == self._subsample_frequency:
+            self._current_index += 1

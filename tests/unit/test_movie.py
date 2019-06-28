@@ -27,7 +27,7 @@ import numpy as np
 from copy import copy, deepcopy
 from pytest_mock import mocker
 
-from hnccorr.movie import Movie, Patch
+from hnccorr.movie import Movie, Patch, Subsampler
 
 from conftest import TEST_DATA_DIR
 
@@ -49,6 +49,11 @@ def M(movie_data):
 @pytest.fixture
 def simple_patch(MM):
     return Patch(MM, (9,), 7)
+
+
+@pytest.fixture
+def subsampler():
+    return Subsampler((800, 10, 10), 10)
 
 
 class TestMovie:
@@ -180,3 +185,57 @@ class TestPatch:
         self, movie_coordinate, patch_coordinate, simple_patch, MM
     ):
         assert simple_patch.to_patch_coordinate(movie_coordinate) == patch_coordinate
+
+
+class TestSubsampler:
+    def test_output_shape(self):
+        assert Subsampler((800, 512, 512), 10).output_shape == (80, 512, 512)
+        assert Subsampler((589, 128, 256), 10).output_shape == (59, 128, 256)
+        assert Subsampler((589, 128, 256), 25).output_shape == (24, 128, 256)
+
+    def test_buffer(self, subsampler):
+        np.testing.assert_allclose(subsampler.buffer, np.zeros((10, 10, 10)))
+
+        np.testing.assert_allclose(
+            Subsampler((80, 512, 512), 10).buffer, np.zeros((8, 512, 512))
+        )
+
+    def test_buffer_size(self, subsampler):
+        assert subsampler.buffer_size == 10
+
+    def test_add_frame(self, subsampler):
+        subsampler.add_frame(np.ones((10, 10)))
+
+        np.testing.assert_allclose(subsampler.buffer[0, :, :], np.ones((10, 10)))
+        np.testing.assert_allclose(subsampler.buffer[1:, :, :], np.zeros((9, 10, 10)))
+
+        subsampler.add_frame(np.ones((10, 10)) * 2)
+
+        np.testing.assert_allclose(subsampler.buffer[0, :, :], 1.5 * np.ones((10, 10)))
+        np.testing.assert_allclose(subsampler.buffer[1:, :, :], np.zeros((9, 10, 10)))
+
+    def test_advance_to_next_frame_(self, subsampler):
+        for i in range(10):
+            subsampler.add_frame(np.ones((10, 10)))
+
+        np.testing.assert_allclose(subsampler.buffer[0, :, :], np.ones((10, 10)))
+        np.testing.assert_allclose(subsampler.buffer[1:, :, :], np.zeros((9, 10, 10)))
+
+        subsampler.add_frame(np.ones((10, 10)) * 2)
+
+        np.testing.assert_allclose(subsampler.buffer[0, :, :], np.ones((10, 10)))
+        np.testing.assert_allclose(subsampler.buffer[1, :, :], 2 * np.ones((10, 10)))
+        np.testing.assert_allclose(subsampler.buffer[2:, :, :], np.zeros((8, 10, 10)))
+
+    def test_buffer_full(self, subsampler):
+        for i in range(100):
+            assert subsampler.buffer_full == False
+            subsampler.add_frame(np.ones((10, 10)))
+        assert subsampler.buffer_full == True
+
+    def test_prevent_buffer_overflow(self, subsampler):
+        for i in range(100):
+            subsampler.add_frame(np.ones((10, 10)))
+
+        with pytest.raises(ValueError):
+            subsampler.add_frame(np.ones((10, 10)))
