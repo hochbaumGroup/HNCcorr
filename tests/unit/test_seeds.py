@@ -46,6 +46,13 @@ class TestLocalCorrelationSeeder:
         assert LCS.next() == (8,)
         assert LCS.next() is None
 
+    def test_local_corr_seeder_grid_size(self, MM):
+        lcs = LocalCorrelationSeeder(3, 1.0, 2, 5)
+        lcs.select_seeds(MM)
+        assert lcs.next() == (9,)
+        assert lcs.next() == (4,)
+        assert lcs.next() is None
+
     def test_local_corr_seeder_reset(self, LCS, MM):
         LCS.select_seeds(MM)
         assert LCS.next() == (9,)
