@@ -175,6 +175,7 @@ class HNCcorr:
                 config.seeder_mask_size,
                 config.percentage_of_seeds,
                 config.seeder_exclusion_padding,
+                1,
             ),
             SizePostprocessor(
                 config.postprocessor_min_cell_size,

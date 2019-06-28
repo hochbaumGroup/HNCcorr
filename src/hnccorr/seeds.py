@@ -58,7 +58,7 @@ class LocalCorrelationSeeder:
         _seeds (list[tuple]): List of candidate seed coordinates to return.
     """
 
-    def __init__(self, neighborhood_size, keep_fraction, padding):
+    def __init__(self, neighborhood_size, keep_fraction, padding, grid_size):
         """Initializes a LocalCorrelationSeeder object."""
         self._current_index = None
         self._excluded_pixels = set()

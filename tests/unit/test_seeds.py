@@ -32,7 +32,7 @@ from hnccorr.seeds import (
 
 @pytest.fixture
 def LCS():
-    return LocalCorrelationSeeder(3, 0.2, 2)
+    return LocalCorrelationSeeder(3, 0.2, 2, 1)
 
 
 def extract_valid_pixels_10_10(pixels):

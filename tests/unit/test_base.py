@@ -46,7 +46,7 @@ def mock_candidate_class(mocker):
 @pytest.fixture
 def mock_seeder(mocker, dummy):
     return mocker.patch("hnccorr.seeds.LocalCorrelationSeeder", autospec=True)(
-        dummy, dummy, dummy
+        dummy, dummy, dummy, dummy
     )
 
 
