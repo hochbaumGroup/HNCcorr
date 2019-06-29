@@ -129,7 +129,7 @@ def matlab_segmentation():
 
 
 def test_hnccorr_single_segment(mocker, dummy, neurofinder_data, matlab_segmentation):
-    seeder = LocalCorrelationSeeder(3, 0.4, 4)
+    seeder = LocalCorrelationSeeder(3, 0.4, 4, 5)
     postprocessor = SizePostprocessor(40, 200, 80)
     segmentor = HncParametricWrapper(0, 100000)
     positive_seed_selector = PositiveSeedSelector(0)
