@@ -173,6 +173,7 @@ class LocalCorrelationSeeder:
                 [
                     (coordinate, scores[coordinate])
                     for coordinate in coordinates_in_block
+                    if coordinate in scores
                 ],
                 key=lambda x: x[1],
             )
