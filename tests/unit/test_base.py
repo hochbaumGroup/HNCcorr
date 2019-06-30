@@ -180,6 +180,7 @@ class TestCandidate:
         mock_postprocessor.select.return_value = "best segmentation"
         mock_graph_constructor.construct.return_value = "graph"
         mock_patch_class.return_value = "patch"
+        mock_segmentation_class.return_value.clean.return_value = "clean"
 
         center_seed = 1
         mock_segmentor.solve.return_value = [
@@ -187,10 +188,8 @@ class TestCandidate:
             mock_segmentation_class(dummy, dummy),
         ]
 
-        assert (
-            Candidate(center_seed, hnccorr).segment()
-            == mock_postprocessor.select.return_value
-        )
+        candidate = Candidate(center_seed, hnccorr)
+        assert candidate.segment() == mock_postprocessor.select.return_value
         mock_pos_seed_selector.select.assert_called_once_with(center_seed, mock_movie)
         mock_neg_seed_selector.select.assert_called_once_with(center_seed, mock_movie)
         mock_patch_class.assert_called_once_with(mock_movie, center_seed, "patch_size")
@@ -203,9 +202,7 @@ class TestCandidate:
             mock_pos_seed_selector.select.return_value,
             mock_neg_seed_selector.select.return_value,
         )
-        mock_postprocessor.select.assert_called_once_with(
-            mock_segmentor.solve.return_value
-        )
+        mock_postprocessor.select.assert_called_once_with(["clean", "clean"])
 
     def test_candidate_equality(self):
         assert Candidate(1, "a") == Candidate(1, "a")

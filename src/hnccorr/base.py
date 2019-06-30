@@ -96,7 +96,9 @@ class Candidate:
         self.clean_segmentations = [
             s.clean(pos_seeds, movie.pixel_shape) for s in self.segmentations
         ]
-        self.best_segmentation = self._hnccorr.postprocessor.select(self.segmentations)
+        self.best_segmentation = self._hnccorr.postprocessor.select(
+            self.clean_segmentations
+        )
         return self.best_segmentation
 
 
