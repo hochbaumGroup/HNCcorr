@@ -147,7 +147,9 @@ class Movie:
         """
         for filename in images:
             if subsampler.buffer_full:
-                output_array[subsampler.buffer_indices, :, :] = subsampler.buffer
+                output_array[
+                    slice(*subsampler.buffer_indices), :, :
+                ] = subsampler.buffer
                 subsampler.advance_buffer()
 
             with Image.open(filename) as image:

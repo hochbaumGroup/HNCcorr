@@ -81,16 +81,17 @@ class TestMovie:
         """
         movie_from_tiff = Movie.from_tiff_images(
             "Simple",
-            image_dir=str(os.path.join(TEST_DATA_DIR, "simple_movie")),
-            num_images=3,
+            image_dir=str(os.path.join(TEST_DATA_DIR, "simple_movie_long")),
+            num_images=21,
             subsample=2,
         )
 
         # compare data of movie from_tiff and direct initialization.
 
-        data = np.zeros((2, 5, 10), np.float32)
+        data = np.zeros((11, 5, 10), np.float32)
         data[0, :, :] = np.ones((5, 10)) * 1.5
-        data[1, :, :] = np.ones((5, 10)) * 3
+        for i in range(1, 11):
+            data[i, :, :] = np.ones((5, 10)) * 2
         np.testing.assert_allclose(movie_from_tiff[:], data)
 
     def test_movie_from_tiff_images_memmap(self, movie_data):
