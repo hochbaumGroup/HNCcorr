@@ -35,7 +35,7 @@ def test_example():
         ),  # downloads sample Neurofinder dataset.
     )  # See documentation for alternatives
     H = HNCcorr.from_config(
-        HNCcorrConfig(percentage_of_seeds=0.001)
+        HNCcorrConfig(percentage_of_seeds=0.025)
     )  # Initialize HNCcorr with default configuration
     H.segment(movie)  # Identify cells in movie
 
