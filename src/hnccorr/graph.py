@@ -75,7 +75,10 @@ class CorrelationEmbedding:
 
 def exponential_distance_decay(feature_vec1, feature_vec2, alpha):
     """Computes ``exp(- alpha / n || x_1 - x_2 ||^2_2)`` for x_1, x_2 in R^n."""
-    return np.exp(-alpha * np.mean(np.power(feature_vec1 - feature_vec2, 2)))
+    num_frames = float(feature_vec1.shape[0])
+    return np.exp(
+        -alpha * np.linalg.norm(feature_vec1 - feature_vec2) ** 2 / num_frames
+    )
 
 
 class GraphConstructor:
