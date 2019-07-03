@@ -45,7 +45,7 @@ setup(
     packages=find_packages("src"),
     package_dir={"": "src"},
     install_requires=[
-        "closure-problem",
+        "closure-problem>=2019.6.3",
         "networkx",
         "numpy",
         "pillow",
