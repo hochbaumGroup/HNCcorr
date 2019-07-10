@@ -45,7 +45,7 @@ setup(
     packages=find_packages("src"),
     package_dir={"": "src"},
     install_requires=[
-        "closure-problem>=2019.6.3",
+        "closure-problem>=2019.6.3",  # Uses https://github.com/hochbaumGroup/pseudoflow-parametric-cut
         "networkx",
         "numpy",
         "pillow",
