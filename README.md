@@ -4,7 +4,7 @@
 [![Documentation](https://readthedocs.org/projects/hnccorr/badge/?version=latest&style=flat)](https://hnccorr.readthedocs.io)
 ![Travis-CI status](https://travis-ci.com/hochbaumGroup/HNCcorr.svg?branch=master)
 
-The HNCcorr algorithm identifies cell bodies in two-photon calcium imaging movies. We provide a Python 3 implementation as well as a legacy Matlab implementation. The software is freely available for non-commercial use. See license for details.
+The HNCcorr algorithm identifies cell bodies in two-photon calcium imaging movies. We provide a Python 3 implementation as well as a legacy Matlab implementation. The software is freely available for non-commercial use. See license file for details.
 
 The HNCcorr algorithm is described in our [ArXiv paper](https://arxiv.org/abs/1703.01999):
 
