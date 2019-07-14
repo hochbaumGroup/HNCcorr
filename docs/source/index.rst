@@ -3,7 +3,7 @@ Welcome to HNCcorr's documentation!
 
 This implementation of the HNCcorr algorithm identifies cell bodies in two-photon calcium imaging movies. HNCcorr is described in detail in our `arXiv paper <https://arxiv.org/abs/1703.01999>`_.
 
-The code consists of modular components that can be configured to your liking.
+The code consists of modular components that is configureable to your liking.
 
 If you use HNCcorr for academic purposes, please cite the following paper:
 
