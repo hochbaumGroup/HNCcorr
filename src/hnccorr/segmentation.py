@@ -84,15 +84,19 @@ class HncParametricWrapper:
         simultaneously. See class description for a definition of HNC.
 
         Args:
-            graph (nx.Graph): Undirected similarity graph with non-negative edge
-                weights. Edge weights must be defined via the attribute `weight`.
+            graph (nx.Graph): Directed similarity graph with non-negative edge
+                weights. Edge [i,j] is represented by two directed arcs (i,j) and
+                (j,i). Edge weights must be defined via the attribute `weight`.
             pos_seeds (set): Set of nodes in graph that must be part of the cluster.
             neg_seeds (set): Set of nodes in graph that must be part of the complement.
 
         Returns:
             list[Segmentation]: List of optimal clusters for each lambda range.
+
+        Caution:
+            Class modifies graph for performance. Pass a copy to prevent any issues.
         """
-        hnc = HNC_Closure(deepcopy(graph), pos_seeds, neg_seeds, arc_weight="weight")
+        hnc = HNC_Closure(graph, pos_seeds, neg_seeds, arc_weight="weight")
         source_sets, breakpoints = hnc.solve_parametric(
             self._lower_bound, self._upper_bound
         )
@@ -186,7 +190,7 @@ class Segmentation:
         """
         mask = np.full(movie_pixel_shape, False, dtype=np.bool)
 
-        indices = list(zip(*self.selection))
+        indices = tuple(zip(*self.selection))
         mask[indices] = True
 
         filled_mask = binary_fill_holes(mask)

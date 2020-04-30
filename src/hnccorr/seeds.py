@@ -24,6 +24,7 @@
 """Seed related components of HNCcorr."""
 
 from math import sin, cos, pi
+import itertools
 import numpy as np
 
 from hnccorr.utils import (
@@ -38,8 +39,11 @@ class LocalCorrelationSeeder:
     """Provide seeds based on the correlation of pixels to their local neighborhood.
 
     Seed pixels are selected based on the average correlation of the pixel to its local
-    neighborhood. Pixels with low correlation to their neighborhood are discarded and
-    only a fraction of `_seed_fraction` are kept and attempted for segmentation.
+    neighborhood.For each block of `grid_size` by `grid_size` pixels, the pixel with
+    the highest average local correlation is selected. The remaining pixels in each
+    block are discarded. From the remaining pixels, a fraction of `_seed_fraction`
+    pixels, those with the highest average local correlation, are kept and attempted
+    for segmentation.
 
     The local neighborhood of each pixel consist of the pixels in a square of width
     `_neighborhood_size` centered on the pixels. Pixel coordinates outside the boundary
@@ -49,6 +53,7 @@ class LocalCorrelationSeeder:
     Attributes:
         _current_index (int): Index of next seed in `_seeds` to return.
         _excluded_pixels (set): Set of pixel coordinates to excluded as future seeds.
+        _grid_size (int): Number of pixels per dimension in a block.
         _keep_fraction (float): Percentage of candidate seed pixels to attempt for
             segmentation. All other candidate seed pixels are discarded.
         _movie (Movie): Movie to segment.
@@ -58,7 +63,7 @@ class LocalCorrelationSeeder:
         _seeds (list[tuple]): List of candidate seed coordinates to return.
     """
 
-    def __init__(self, neighborhood_size, keep_fraction, padding):
+    def __init__(self, neighborhood_size, keep_fraction, padding, grid_size):
         """Initializes a LocalCorrelationSeeder object."""
         self._current_index = None
         self._excluded_pixels = set()
@@ -67,12 +72,14 @@ class LocalCorrelationSeeder:
         self._neighborhood_size = neighborhood_size
         self._padding = padding
         self._seeds = None
+        self._grid_size = grid_size
 
     def select_seeds(self, movie):
         """Identifies candidate seeds in movie.
 
         Initializes list of candidate seeds in the movie. See class description for
-        details. Seeds can be accessed via the `next()` method.
+        details. Seeds can be accessed via the :meth:`~.LocalCorrelationSeeder.next`
+        method.
 
         Args:
             movie (Movie): Movie object to segment.
@@ -91,39 +98,89 @@ class LocalCorrelationSeeder:
         # remove point as neighbor
         neighbor_offsets = neighbor_offsets - {(0,) * num_dimensions}
 
-        mean_neighbor_corr = []
+        mean_neighbor_corr = {}
 
         for pixel in generate_pixels(self._movie.pixel_shape):
-            pixel_data = self._movie[add_time_index(pixel)].reshape(1, -1)
-
             # compute neighbors
             neighbors = add_offset_set_coordinates(neighbor_offsets, pixel)
 
             # extract data for valid neighbors
-            neighbors_data = []
-            for neighbor in neighbors:
-                if self._movie.is_valid_pixel_coordinate(neighbor):
-                    neighbors_data.append(
-                        self._movie[add_time_index(neighbor)].reshape(1, -1)
-                    )
-            neighbors_data = np.concatenate(neighbors_data, axis=0)
-
-            # compute correlation to each neighbor (corrcoef concatenates the
-            # two vectors so we extract last row except for last element)
-            neighbors_corr = np.corrcoef(neighbors_data, pixel_data)[-1, :-1]
+            valid_neighbors = [
+                neighbor
+                for neighbor in neighbors
+                if self._movie.is_valid_pixel_coordinate(neighbor)
+            ]
 
             # store average correlation
-            mean_neighbor_corr.append((pixel, np.mean(neighbors_corr)))
+            mean_neighbor_corr[pixel] = self._compute_average_local_correlation(
+                pixel, valid_neighbors
+            )
 
-        mean_neighbor_corr = sorted(
-            mean_neighbor_corr, key=lambda x: x[1], reverse=True
+        best_per_grid_block = self._select_best_per_grid_block(mean_neighbor_corr)
+
+        best_per_grid_block_sorted = sorted(
+            [(key, val) for key, val in best_per_grid_block.items()],
+            key=lambda x: x[1],
+            reverse=True,
         )
 
-        num_keep = int(self._keep_fraction * len(mean_neighbor_corr))
+        num_keep = int(self._keep_fraction * len(best_per_grid_block_sorted))
 
         # store best seeds
-        self._seeds = [seed for seed, _ in mean_neighbor_corr[:num_keep]]
+        self._seeds = [seed for seed, _ in best_per_grid_block_sorted[:num_keep]]
         self.reset()
+
+    def _compute_average_local_correlation(self, pixel, valid_neighbors):
+        """Compute average correlation between pixel and neighbors."""
+        pixel_data = self._movie[add_time_index(pixel)].reshape(1, -1)
+
+        # extract data for valid neighbors
+        neighbors_data = []
+        for neighbor in valid_neighbors:
+            neighbors_data.append(self._movie[add_time_index(neighbor)].reshape(1, -1))
+        neighbors_data = np.concatenate(neighbors_data, axis=0)
+
+        # compute correlation to each neighbor (corrcoef concatenates the
+        # two vectors so we extract last row except for last element)
+        neighbors_corr = np.corrcoef(neighbors_data, pixel_data)[-1, :-1]
+
+        # store average correlation
+        return np.mean(neighbors_corr)
+
+    def _select_best_per_grid_block(self, scores):
+        """Selects pixel with highest score in a block of grid_size pixels per dim.
+
+        """
+        pixel_shape = self._movie.pixel_shape
+        num_dimensions = self._movie.num_dimensions
+
+        best_pixels = {}
+
+        # identify all pixels in a block relatve to top left pixel as base coordinate
+        shifts = set(
+            itertools.product(*(range(self._grid_size) for _ in range(num_dimensions)))
+        )
+
+        # loop over all base coordinates of the grid, e.g. (0, 0), (5, 0), (0, 5),
+        # (5, 5), (10, 0), ... for grid_size = 5
+        for base_coordinate in itertools.product(
+            *(range(0, pixel_shape[i], self._grid_size) for i in range(num_dimensions))
+        ):
+            # list of all coordinates in the block
+            coordinates_in_block = add_offset_set_coordinates(shifts, base_coordinate)
+            # select coordinate in block with highest score
+            best_coordinate, best_value = max(
+                [
+                    (coordinate, scores[coordinate])
+                    for coordinate in coordinates_in_block
+                    if coordinate in scores
+                ],
+                key=lambda x: x[1],
+            )
+
+            best_pixels[best_coordinate] = best_value
+
+        return best_pixels
 
     def exclude_pixels(self, pixels):
         """Excludes pixels from being returned by `next()` method.

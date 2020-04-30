@@ -116,11 +116,15 @@ class TestGraphConstructor:
         for i in range(num_nodes):
             assert (i,) in G.nodes
 
-        assert len(G.edges) == 2
+        assert len(G.edges) == 4
         assert ((0,), (1,)) in G.edges
         assert ((0,), (2,)) in G.edges
+        assert ((2,), (0,)) in G.edges
+        assert ((1,), (0,)) in G.edges
         assert G[(0,)][(1,)]["weight"] == 1
-        assert G[(0,)][(2,)]["weight"] == 2
+        assert G[(0,)][(1,)]["weight"] == 1
+        assert G[(2,)][(0,)]["weight"] == 2
+        assert G[(2,)][(0,)]["weight"] == 2
 
     def test_graph_constructor_nodes_offset_from_zero(
         self, mock_patch, mock_edge_selector, mock_embedding

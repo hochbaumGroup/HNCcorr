@@ -22,6 +22,8 @@
 # IS". REGENTS HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 # ENHANCEMENTS, OR MODIFICATIONS.
 from conftest import TEST_DATA_DIR
+import numpy as np
+import matplotlib.pyplot as plt
 
 from hnccorr import HNCcorr, Movie, HNCcorrConfig
 from hnccorr.example import load_example_data
@@ -35,9 +37,20 @@ def test_example():
         ),  # downloads sample Neurofinder dataset.
     )  # See documentation for alternatives
     H = HNCcorr.from_config(
-        HNCcorrConfig(percentage_of_seeds=0.001)
+        HNCcorrConfig(percentage_of_seeds=0.025)
     )  # Initialize HNCcorr with default configuration
     H.segment(movie)  # Identify cells in movie
 
     H.segmentations  # List of identified cells
-    H.segmentations_to_list()  # Export list of cells (for Neurofinder)
+    H.segmentations_to_list()  # Export list of cells (for Neurofinder)]
+
+    A = np.zeros(movie.pixel_shape)
+    for segmentation in H.segmentations:
+        for i, j in segmentation.selection:
+            A[i, j] += 1
+
+    plt.figure(figsize=(6, 6))
+    plt.imshow(A)
+    plt.savefig("test cells neurofinder02.00.png")
+
+    assert len(H.segmentations) >= 10

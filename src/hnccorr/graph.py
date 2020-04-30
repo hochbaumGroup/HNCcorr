@@ -75,7 +75,10 @@ class CorrelationEmbedding:
 
 def exponential_distance_decay(feature_vec1, feature_vec2, alpha):
     """Computes ``exp(- alpha / n || x_1 - x_2 ||^2_2)`` for x_1, x_2 in R^n."""
-    return np.exp(-alpha * np.mean(np.power(feature_vec1 - feature_vec2, 2)))
+    num_frames = float(feature_vec1.shape[0])
+    return np.exp(
+        -alpha * np.linalg.norm(feature_vec1 - feature_vec2) ** 2 / num_frames
+    )
 
 
 class GraphConstructor:
@@ -84,6 +87,8 @@ class GraphConstructor:
     Constructs a similarity graph over the set of pixels in a patch. Edges are selected
     by an edge_selector and the similarity weight associated with each edge is computed
     with the weight_function. Edge weights are stored under the attribute ``weight``.
+
+    A directed graph is used for efficiency. That is, arcs (i,j) and (j,i) are used to represent edge [i,j].
 
     Attributes:
         _edge_selector (EdgeSelector): Object that constructs the edge set of the graph.
@@ -109,20 +114,21 @@ class GraphConstructor:
                 each pixel in the patch.
 
         Returns:
-            nx.Graph: Similarity graph over pixels in patch.
+            nx.DiGraph: Similarity graph over pixels in patch.
         """
-        graph = nx.Graph()
+        graph = nx.DiGraph()
 
         graph.add_nodes_from(patch.enumerate_pixels())
 
         for node1, node2 in self._edge_selector.select_edges(embedding):
-            graph.add_edge(
-                patch.to_movie_coordinate(node1),
-                patch.to_movie_coordinate(node2),
-                weight=self._weight_function(
-                    embedding.get_vector(node1), embedding.get_vector(node2)
-                ),
+            node1_movie = patch.to_movie_coordinate(node1)
+            node2_movie = patch.to_movie_coordinate(node2)
+            weight = self._weight_function(
+                embedding.get_vector(node1), embedding.get_vector(node2)
             )
+            # add arc in both directions
+            graph.add_edge(node1_movie, node2_movie, weight=weight)
+            graph.add_edge(node2_movie, node1_movie, weight=weight)
 
         return graph
 

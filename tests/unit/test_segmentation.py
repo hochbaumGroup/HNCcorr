@@ -32,7 +32,7 @@ from hnccorr.segmentation import HncParametricWrapper, Segmentation
 
 class TestHNC:
     def test_hnc(self):
-        G = nx.Graph()
+        G = nx.DiGraph()
         G.add_nodes_from((i,) for i in range(7))
 
         h = HncParametricWrapper(0, 2)

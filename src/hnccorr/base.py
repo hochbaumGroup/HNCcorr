@@ -96,7 +96,9 @@ class Candidate:
         self.clean_segmentations = [
             s.clean(pos_seeds, movie.pixel_shape) for s in self.segmentations
         ]
-        self.best_segmentation = self._hnccorr.postprocessor.select(self.segmentations)
+        self.best_segmentation = self._hnccorr.postprocessor.select(
+            self.clean_segmentations
+        )
         return self.best_segmentation
 
 
@@ -175,6 +177,7 @@ class HNCcorr:
                 config.seeder_mask_size,
                 config.percentage_of_seeds,
                 config.seeder_exclusion_padding,
+                config.seeder_grid_size,
             ),
             SizePostprocessor(
                 config.postprocessor_min_cell_size,
@@ -268,6 +271,8 @@ class HNCcorrConfig:
             compute the average correlation between a pixel and its neighbors.
         seeder_exclusion_padding (int): Distance for excluding additional pixels
             surrounding segmented cells.
+        seeder_grid_size (int): Size of grid bloc per dimension. Seeder maintains only
+            the best candidate pixel for each grid block.
         percentage_of_seeds (float[0, 1]): Fraction of candidate seeds to evaluate.
         postprocessor_min_cell_size (int): Lower bound on pixel count of a cell.
         postprocessor_max_cell_size (int): Upper bound on pixel count of a cell.
@@ -292,6 +297,7 @@ class HNCcorrConfig:
         allowed_parameters = {
             "seeder_mask_size",
             "seeder_exclusion_padding",
+            "seeder_grid_size",
             "percentage_of_seeds",
             "postprocessor_min_cell_size",
             "postprocessor_max_cell_size",
@@ -341,6 +347,7 @@ class HNCcorrConfig:
 DEFAULT_CONFIG = HNCcorrConfig(
     seeder_mask_size=3,
     seeder_exclusion_padding=4,
+    seeder_grid_size=5,
     percentage_of_seeds=0.40,
     postprocessor_min_cell_size=40,
     postprocessor_max_cell_size=200,

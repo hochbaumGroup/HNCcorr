@@ -29,7 +29,7 @@ with open("README.md") as f:
 
 setup(
     name="hnccorr",
-    version="2019.6.2dev",
+    version="2019.7.1",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3",
@@ -45,7 +45,7 @@ setup(
     packages=find_packages("src"),
     package_dir={"": "src"},
     install_requires=[
-        "closure-problem",
+        "closure-problem>=2019.6.3",  # Uses https://github.com/hochbaumGroup/pseudoflow-parametric-cut
         "networkx",
         "numpy",
         "pillow",

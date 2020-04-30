@@ -32,7 +32,7 @@ from hnccorr.seeds import (
 
 @pytest.fixture
 def LCS():
-    return LocalCorrelationSeeder(3, 0.2, 2)
+    return LocalCorrelationSeeder(3, 0.2, 2, 1)
 
 
 def extract_valid_pixels_10_10(pixels):
@@ -45,6 +45,21 @@ class TestLocalCorrelationSeeder:
         assert LCS.next() == (9,)
         assert LCS.next() == (8,)
         assert LCS.next() is None
+
+    def test_local_corr_seeder_grid_size(self, MM):
+        lcs = LocalCorrelationSeeder(3, 1.0, 2, 5)
+        lcs.select_seeds(MM)
+        assert lcs.next() == (9,)
+        assert lcs.next() == (4,)
+        assert lcs.next() is None
+
+    def test_local_corr_seeder_width_not_divisable_by_grid_size(self, MM):
+        lcs = LocalCorrelationSeeder(3, 1.0, 2, 4)
+        lcs.select_seeds(MM)
+        assert lcs.next() == (9,)
+        assert lcs.next() == (7,)
+        assert lcs.next() == (3,)
+        assert lcs.next() is None
 
     def test_local_corr_seeder_reset(self, LCS, MM):
         LCS.select_seeds(MM)
