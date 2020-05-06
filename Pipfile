@@ -8,6 +8,7 @@ pytest = "*"
 pytest-mock = "*"
 matplotlib = "*"
 pytest-runner = "*"
+twine = "*"
 
 [packages]
 hnccorr = {editable = true,path = "."}
